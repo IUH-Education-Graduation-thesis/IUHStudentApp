@@ -7,6 +7,7 @@ import { AnnounceScreen, HomeScreen, ProfileScreen } from '../screen/TabScreen';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { COLORS } from '../themes/color';
+import { SignInScreen } from '../screen/StackScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,6 +54,7 @@ const Rootnavigation = () => {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={screenName.signIn} component={SignInScreen} />
             <Stack.Screen name={screenName.homeTab} component={RootTab} />
         </Stack.Navigator >
     );
