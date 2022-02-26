@@ -1,5 +1,5 @@
 export const screenName = {
-    login: "Login",
+    signIn: "SignInScreen",
     profile: "ProfileScreen",
     announce: "AnnounceScreen",
     homeScreen: "HomeScreen",

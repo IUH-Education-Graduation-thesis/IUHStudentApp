@@ -1,2 +1,3 @@
 import DiemHPScreen from "./DiemHPScreen";
-export { DiemHPScreen }
+import SignInScreen from './SignInScreen'
+export { DiemHPScreen, SignInScreen }

@@ -1,12 +1,12 @@
 import { Text, View } from 'react-native'
 import React, { Component } from 'react'
 
-const AnnounceScreen = () => {
+const DiemHPScreen = () => {
 
     return (
         <View>
-            <Text>AnnounceScreen</Text>
+            <Text>DiemHPScreen</Text>
         </View>
     )
 }
-export default AnnounceScreen
+export default DiemHPScreen
