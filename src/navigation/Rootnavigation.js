@@ -15,27 +15,38 @@ const screenOptions = ({ route }) => {
     return {
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: { backgroundColor: COLORS.lightBack },
+        tabBarStyle: { backgroundColor: COLORS.lightBlue },
         tabBarIcon: ({ focused }) => {
             let iconName;
             let typeIcon;
+            let textname;
             if (route.name === screenName.homeScreen) {
                 iconName = 'home';
                 typeIcon = 'Entypo';
+                textname = "Trang chủ"
             }
             else if (route.name === screenName.announce) {
                 iconName = 'notifications';
                 typeIcon = 'Ionicons';
+                textname = "Thông báo"
             }
             else {
                 iconName = 'user';
                 typeIcon = 'Entypo';
+                textname = "Tài khoản"
             }
             return (
-                <View style={[styles.styleIcon, { backgroundColor: focused ? COLORS.lightPurple : "transparen" }]}>
+                <View style={[styles.styleIcon,]}>
                     {typeIcon === 'Ionicons' ?
-                        <Ionicons name={iconName} color={COLORS.white} size={22} />
-                        : <Entypo name={iconName} color={COLORS.white} size={22} />}
+                        (<>
+                            <Ionicons name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                            <Text style={{ fontSize: 13, color: focused ? "#4070f3" : "gray" }}>{textname}</Text>
+                        </>)
+                        : (<>
+                            <Entypo name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                            <Text style={{ fontSize: 13, color: focused ? "#4070f3" : "gray" }}>{textname}</Text>
+                        </>
+                        )}
                 </View>
             );
         }
@@ -66,6 +77,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: "center",
         alignItems: "center"
-    }
+    },
+
 })
 export default Rootnavigation
