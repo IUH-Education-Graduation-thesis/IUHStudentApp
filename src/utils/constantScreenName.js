@@ -4,4 +4,6 @@ export const screenName = {
     announce: "AnnounceScreen",
     homeScreen: "HomeScreen",
     homeTab: "home",
+    calendar: "CalendarScreen",
+    mark: "MarkScreen"
 }
