@@ -5,5 +5,6 @@ export const screenName = {
     homeScreen: "HomeScreen",
     homeTab: "home",
     calendar: "CalendarScreen",
-    mark: "MarkScreen"
+    mark: "MarkScreen",
+    dkhp: "DangKyHP"
 }

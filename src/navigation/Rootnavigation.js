@@ -3,14 +3,54 @@ import React, { Component } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { screenName } from '../utils/constantScreenName';
-import { AnnounceScreen, HomeScreen, ProfileScreen } from '../screen/TabScreen';
+import { AnnounceScreen, CalendarScreen, DangKyHPScreen, HomeScreen, MarkScreen, ProfileScreen } from '../screen/TabScreen';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { COLORS } from '../themes/color';
-import { CalendarScreen, MarkScreen, SignInScreen } from '../screen/StackScreen';
+import { SignInScreen } from '../screen/StackScreen';
 
+export const Icon = {
+    entypo: "Entypo",
+    ionicons: "Ionicons",
+    materialIcons: "MaterialIcons",
+    fontAwesome: "FontAwesome"
+}
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const renderIcon = (typeIcon, focused, textname, iconName) => {
+    switch (typeIcon) {
+        case Icon.fontAwesome:
+            return (
+                <>
+                    <FontAwesome name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                    <Text style={{ fontSize: 12, color: focused ? "#4070f3" : "gray", width: 60, textAlign: "center" }}>{textname}</Text>
+                </>
+            )
+        case Icon.ionicons:
+            return (
+                <>
+                    <Ionicons name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                    <Text style={{ fontSize: 12, color: focused ? "#4070f3" : "gray", width: 60, textAlign: "center" }}>{textname}</Text>
+                </>
+            )
+        case Icon.materialIcons:
+            return (
+                <>
+                    <MaterialIcons name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                    <Text style={{ fontSize: 12, color: focused ? "#4070f3" : "gray", width: 60, textAlign: "center" }}>{textname}</Text>
+                </>
+            )
+        default:
+            return (
+                <>
+                    <Entypo name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
+                    <Text style={{ fontSize: 12, color: focused ? "#4070f3" : "gray", width: 60, textAlign: "center" }}>{textname}</Text>
+                </>
+            )
+    }
+}
 const screenOptions = ({ route }) => {
     return {
         headerShown: false,
@@ -25,10 +65,20 @@ const screenOptions = ({ route }) => {
                 typeIcon = 'Entypo';
                 textname = "Trang chủ"
             }
-            else if (route.name === screenName.announce) {
-                iconName = 'notifications';
-                typeIcon = 'Ionicons';
-                textname = "Thông báo"
+            else if (route.name === screenName.dkhp) {
+                iconName = 'app-registration';
+                typeIcon = 'MaterialIcons';
+                textname = "DKHP"
+            }
+            else if (route.name === screenName.calendar) {
+                iconName = 'calendar-check-o';
+                typeIcon = 'FontAwesome';
+                textname = "Lịch học"
+            }
+            else if (route.name === screenName.mark) {
+                iconName = 'stacked-bar-chart';
+                typeIcon = 'MaterialIcons';
+                textname = "Kết quả"
             }
             else {
                 iconName = 'user';
@@ -36,17 +86,10 @@ const screenOptions = ({ route }) => {
                 textname = "Tài khoản"
             }
             return (
-                <View style={[styles.styleIcon,]}>
-                    {typeIcon === 'Ionicons' ?
-                        (<>
-                            <Ionicons name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
-                            <Text style={{ fontSize: 13, color: focused ? "#4070f3" : "gray" }}>{textname}</Text>
-                        </>)
-                        : (<>
-                            <Entypo name={iconName} color="gray" size={22} style={{ color: focused ? "#4070f3" : "gray" }} />
-                            <Text style={{ fontSize: 13, color: focused ? "#4070f3" : "gray" }}>{textname}</Text>
-                        </>
-                        )}
+                <View style={[styles.styleIcon]}>
+                    {
+                        renderIcon(typeIcon, focused, textname, iconName)
+                    }
                 </View>
             );
         }
@@ -55,9 +98,11 @@ const screenOptions = ({ route }) => {
 const RootTab = () => {
     return (
         <Tab.Navigator screenOptions={screenOptions}>
-            <Stack.Screen name={screenName.homeScreen} component={HomeScreen} />
-            <Stack.Screen name={screenName.announce} component={AnnounceScreen} />
-            <Stack.Screen name={screenName.profile} component={ProfileScreen} />
+            <Tab.Screen name={screenName.homeScreen} component={HomeScreen} />
+            <Tab.Screen name={screenName.mark} component={MarkScreen} />
+            <Tab.Screen name={screenName.dkhp} component={DangKyHPScreen} />
+            <Tab.Screen name={screenName.calendar} component={CalendarScreen} />
+            <Tab.Screen name={screenName.profile} component={ProfileScreen} />
         </Tab.Navigator>
     )
 }
@@ -67,8 +112,6 @@ const Rootnavigation = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name={screenName.signIn} component={SignInScreen} />
             <Stack.Screen name={screenName.homeTab} component={RootTab} />
-            <Stack.Screen name={screenName.mark} component={MarkScreen} />
-            <Stack.Screen name={screenName.calendar} component={CalendarScreen} />
         </Stack.Navigator >
     );
 }
