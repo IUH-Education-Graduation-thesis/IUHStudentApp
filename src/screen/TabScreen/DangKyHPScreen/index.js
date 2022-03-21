@@ -1,21 +1,20 @@
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, VirtualizedList } from 'react-native'
 import React, { Component, useState } from 'react'
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import BackgroundView from '../../../components/BackgroundView';
 import CheckBox from '@react-native-community/checkbox';
-class DangKyHPScreen extends Component {
-    static navigationOptions = {
-        header: null,
-    };
+import DropDownHK from './components/DropDownHK';
+const DangKyHPScreen = () => {
 
-    defaultScrollViewProps = {
+
+    const defaultScrollViewProps = {
         keyboardShouldPersistTaps: 'handled',
         contentContainerStyle: {
             flex: 1,
             justifyContent: 'center'
         }
     };
-    monHoc = [{
+    const monHoc = [{
         mahp: 410000124561,
         tenMon: "Chung chi Toeic",
         tinChi: 5,
@@ -51,7 +50,7 @@ class DangKyHPScreen extends Component {
         batbuoc: true,
         mahp: 410000124561,
     }]
-    lopMonHoc = [{
+    const lopMonHoc = [{
         tenMon: "Pháp luật đại cương",
         tinChi: 3,
         batbuoc: false,
@@ -75,7 +74,7 @@ class DangKyHPScreen extends Component {
         batbuoc: false,
         mahp: 410000124563,
     }]
-    ctLop = [{
+    const ctLop = [{
         tenMon: "Pháp luật đại cương",
         tinChi: 3,
         batbuoc: false,
@@ -92,7 +91,7 @@ class DangKyHPScreen extends Component {
         tiet: "4-6",
         thu: "Thứ 5"
     }]
-    chonLop = [{
+    const chonLop = [{
         tenMon: "Pháp luật đại cương",
         tinChi: 3,
         batbuoc: false,
@@ -101,27 +100,40 @@ class DangKyHPScreen extends Component {
         tiet: "1-3",
         thu: "Thứ 5"
     }]
-    onNextStep = () => {
+    const onNextStep = () => {
         console.log('called next step');
     };
 
-    onPaymentStepComplete = () => {
+    const onPaymentStepComplete = () => {
         console.log('Payment step completed!');
     };
 
-    onPrevStep = () => {
+    const onPrevStep = () => {
         console.log('called previous step');
     };
 
-    onSubmitSteps = () => {
+    const onSubmitSteps = () => {
         console.log('called on submit step.');
     };
-    redernMonHoc = (item) => {
-        return <TouchableOpacity onPress={this.defaultScrollViewProps} style={{ backgroundColor: 'white', marginBottom: 10, marginHorizontal: 20, padding: 10, borderRadius: 10, }}>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>{item.mahp} - {item.tenMon}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Tín chỉ: {item.tinChi}</Text>
+    const onPress = () => {
+        console.log(click);
+        if (click === false) {
+            setClick(true);
+        }
+    }
+    const getItem = (data, index) => ({
+        id: Math.random().toString(12).substring(0),
+        title: `Item ${index + 1}`
+    });
+
+    const getItemCount = (data) => 50;
+
+    const redernMonHoc = (item) => {
+        return <TouchableOpacity onPress={onPress} style={{ backgroundColor: 'white', marginBottom: 10, marginHorizontal: 20, padding: 10, borderRadius: 10, }}>
+            <Text style={styles.txtRenderChonMH}>{item.mahp} - {item.tenMon}</Text>
+            <Text style={styles.txtRenderChonMH}>Tín chỉ: {item.tinChi}</Text>
             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Bắt buộc:</Text>
+                <Text style={styles.txtRenderChonMH}>Bắt buộc:</Text>
                 <CheckBox
                     value={item.batbuoc}
                 />
@@ -130,103 +142,115 @@ class DangKyHPScreen extends Component {
         </TouchableOpacity>
 
     }
-    redernCTMonHoc = (item) => {
+    const redernCTMonHoc = (item) => {
         return <TouchableOpacity style={{ backgroundColor: 'white', marginBottom: 10, marginHorizontal: 20, padding: 10, borderRadius: 10, }}>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>{item.mahp} - {item.tenMon}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Tín chỉ: {item.tinChi}</Text>
+            <Text style={styles.txtRenderChonMH}>{item.mahp} - {item.tenMon}</Text>
+            <Text style={styles.txtRenderChonMH}>Tín chỉ: {item.tinChi}</Text>
             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Bắt buộc:</Text>
+                <Text style={styles.txtRenderChonMH}>Bắt buộc:</Text>
                 <CheckBox
                     value={item.batbuoc}
                 />
             </View>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>GV: {item.tenGV}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Tiết: {item.tiet}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Thứ : {item.thu}</Text>
+            <Text style={styles.txtRenderChonMH}>GV: {item.tenGV}</Text>
+            <Text style={styles.txtRenderChonMH}>Tiết: {item.tiet}</Text>
+            <Text style={styles.txtRenderChonMH}>Thứ : {item.thu}</Text>
 
         </TouchableOpacity>
 
     }
-    redernChonMonHoc = (item) => {
+    const redernChonMonHoc = (item) => {
         return <TouchableOpacity style={{ backgroundColor: 'white', marginBottom: 10, marginHorizontal: 20, padding: 10, borderRadius: 10, }}>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>{item.mahp} - {item.tenMon}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Tín chỉ: {item.tinChi}</Text>
+            <Text style={styles.txtRenderChonMH}>{item.mahp} - {item.tenMon}</Text>
+            <Text style={styles.txtRenderChonMH}>Tín chỉ: {item.tinChi}</Text>
             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Bắt buộc:</Text>
+                <Text style={styles.txtRenderChonMH}>Bắt buộc:</Text>
                 <CheckBox
                     value={item.batbuoc}
                 />
             </View>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>GV: {item.tenGV}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Tiết: {item.tiet}</Text>
-            <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Thứ : {item.thu}</Text>
+            <Text style={styles.txtRenderChonMH}>GV: {item.tenGV}</Text>
+            <Text style={styles.txtRenderChonMH}>Tiết: {item.tiet}</Text>
+            <Text style={styles.txtRenderChonMH}>Thứ : {item.thu}</Text>
 
         </TouchableOpacity>
 
     }
-    render() {
-        return (
-            <BackgroundView>
-                <View style={{ flex: 1 }}>
-                    <ProgressSteps>
-                        <ProgressStep
-                            label="Môn học"
-                            onNext={this.onPaymentStepComplete}
-                            onPrevious={this.onPrevStep}
-                            scrollViewProps={this.defaultScrollViewProps}
-                        >
-                            < >
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start', marginVertical: 10 }}>
-                                    <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>Học kỳ</Text>
-                                    <Text style={{ color: 'black', fontWeight: "600", fontSize: 18 }}>HK2 (2019-2020)</Text>
-                                </View>
-                                <FlatList
-                                    data={this.monHoc}
-                                    renderItem={({ item }) => this.redernMonHoc(item)}
-                                />
-                            </>
-                        </ProgressStep>
-                        <ProgressStep
-                            label="Học phần"
-                            onNext={this.onNextStep}
-                            onPrevious={this.onPrevStep}
-                            scrollViewProps={this.defaultScrollViewProps}
-                        >
-                            {/* <View style={{ alignItems: 'center' }}> */}
-                            <FlatList
-                                data={this.lopMonHoc}
-                                renderItem={({ item }) => this.redernMonHoc(item)}
-                            />
-                            {/* </View> */}
-                        </ProgressStep>
-                        <ProgressStep
-                            label="Giờ học"
-                            onNext={this.onNextStep}
-                            onPrevious={this.onPrevStep}
-                            scrollViewProps={this.defaultScrollViewProps}
-                        >
-                            <FlatList
-                                data={this.ctLop}
-                                renderItem={({ item }) => this.redernCTMonHoc(item)}
-                            />
-                        </ProgressStep>
-                        <ProgressStep
-                            label="Hoàn thành"
-                            onPrevious={this.onPrevStep}
-                            onSubmit={this.onSubmitSteps}
-                            scrollViewProps={this.defaultScrollViewProps}
-                        >
-                            <FlatList
-                                data={this.chonLop}
-                                renderItem={({ item }) => this.redernCTMonHoc(item)}
-                            />
+    const renderFlatList = () => {
+        return <>
 
-                        </ProgressStep>
-                    </ProgressSteps>
-                </View>
-            </BackgroundView>
-        );
+            <FlatList
+                data={monHoc}
+                renderItem={({ item }) => redernMonHoc(item)}
+            />
+        </>
     }
+    const [click, setClick] = useState(false)
+    return (
+        <BackgroundView>
+            <View style={{ flex: 1 }}>
+                <ProgressSteps
+                    labelColor="black"
+                    disabledStepIconColor="#8e8e8e"
+                // completedProgressBarColor="#8e8e8e"
+                >
+                    <ProgressStep
+                        // nextBtnText={null}
+                        label="Môn học"
+                        onNext={click === true ? onPaymentStepComplete() : null}
+                        onPrevious={onPrevStep}
+                    >
+                        <View style={styles.viewStep1}>
+                            <Text style={styles.txtheader}>Học kỳ</Text>
+                            <DropDownHK />
+                        </View>
+                        {renderFlatList()}
+                    </ProgressStep>
+                    <ProgressStep
+                        label="Học phần"
+                        onNext={onNextStep}
+                        onPrevious={onPrevStep}
+                        scrollViewProps={defaultScrollViewProps}
+                    >
+                        <Text>aaa</Text>
+                        {/* <FlatList
+                            data={lopMonHoc}
+                            renderItem={({ item }) => redernMonHoc(item)}
+                        /> */}
+                    </ProgressStep>
+                    <ProgressStep
+                        label="Giờ học"
+                        onNext={onNextStep}
+                        onPrevious={onPrevStep}
+                        scrollViewProps={defaultScrollViewProps}
+                    >
+                        <Text>aaa</Text>
+                        {/* <FlatList
+                            data={ctLop}
+                            renderItem={({ item }) => redernCTMonHoc(item)}
+                        /> */}
+                    </ProgressStep>
+                    <ProgressStep
+                        label="Hoàn thành"
+                        onPrevious={onPrevStep}
+                        onSubmit={onSubmitSteps}
+                        scrollViewProps={defaultScrollViewProps}
+                    >
+                        <Text>aaa</Text>
+                        {/* <FlatList
+                            data={chonLop}
+                            renderItem={({ item }) => redernCTMonHoc(item)}
+                        /> */}
+                    </ProgressStep>
+                </ProgressSteps>
+            </View>
+        </BackgroundView>
+    );
+
 }
-
+const styles = StyleSheet.create({
+    viewStep1: { flexDirection: 'row', marginVertical: 10, height: 50, justifyContent: 'space-around', alignItems: "center" },
+    txtheader: { color: 'black', fontWeight: "600", fontSize: 18 },
+    txtRenderChonMH: { color: 'black', fontWeight: "600", fontSize: 18 }
+})
 export default DangKyHPScreen

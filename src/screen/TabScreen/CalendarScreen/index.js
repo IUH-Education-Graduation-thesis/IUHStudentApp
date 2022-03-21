@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import BackgroundView from '../../../components/BackgroundView';
 import DropDownItem from 'react-native-drop-down-item';
 import Calendar from './components/Calendar';
+import DropDownHK from '../DangKyHPScreen/components/DropDownHK';
 
 const CalendarScreen = () => {
 
@@ -11,6 +12,7 @@ const CalendarScreen = () => {
             <View style={styles.header}>
                 <View>
                     <Text style={{ fontSize: 25, textAlign: 'center' }}>Lịch theo tuần</Text>
+
                     <Calendar />
                 </View>
             </View>

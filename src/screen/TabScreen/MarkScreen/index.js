@@ -1,112 +1,136 @@
-import React, { useState } from 'react'
-import DropDownItem from 'react-native-drop-down-item';
-import { Platform, StyleSheet, Text, View, ScrollView, Image, } from 'react-native';
-import { IC_ARR_DOWN, IC_ARR_UP } from './icons';
-import BackgroundView from '../../../components/BackgroundView';
+import React, { useRef, useState } from "react";
+import {
+    StyleSheet,
+    Text,
+    View,
+    SafeAreaView,
+    ScrollView,
+    TouchableOpacity,
+    Image
+} from "react-native";
+import { IC_ARR_DOWN, IC_ARR_UP } from "./icons"
+import Accordion from "react-native-collapsible/Accordion";
+import BottomSheet from 'reanimated-bottom-sheet';
+const sample = [
+    {
+        title: "HK1(2018-2019)",
+        data: ["Pizza", "Burger", "Risotto"]
+    },
+    {
+        title: "HK2(2018-2019)",
+        data: ["French Fries", "Onion Rings", "Fried Shrimps", "Apple", "Banana"]
+    },
+    {
+        title: "HK3(2018-2019)",
+        data: ["Water", "Coke", "Beer"]
+    },
+    {
+        title: "HK1(2019-2020)",
+        data: ["Cheese Cake", "Ice Cream"]
+    }
+];
 
 const MarkScreen = () => {
-
-    const [state, SetState] = useState({
-        contents: [
-            {
-                title: 'Học kỳ 1( 2018-2019)',
-                body:
-                {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                }
-            },
-            {
-                title: 'Học kỳ 2( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-            {
-                title: 'Học kỳ 3( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-        ],
+    const sheetRef = useRef(null);
+    const [state, setState] = useState({
+        activeSections: [],
     });
-    const renderBody = (item) => {
-        return <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ paddingRight: 20 }}>{item.stt}</Text>
-            <Text style={{ paddingRight: 20 }}>{item.tenMonHoc}</Text>
-            <Text>{item.diemTB}</Text>
+    const _renderHeader = section => (
+        <View style={styles.item} >
+            <Text style={styles.title}>{section.title}</Text>
+            <Image source={IC_ARR_DOWN} />
         </View>
-    }
-    return (
-        <BackgroundView>
-            <View style={styles.container}>
-                <Text style={{ fontSize: 30, fontWeight: '600' }}>Kết quả học tập</Text>
-                <ScrollView style={{ alignSelf: 'stretch' }}
-                >
-                    {
-                        state.contents
-                            ? state.contents.map((param, i) => {
-                                return (
-                                    <DropDownItem
-                                        key={i}
-                                        style={styles.dropDownItem}
-                                        contentVisible={false}
-                                        invisibleImage={IC_ARR_DOWN}
-                                        visibleImage={IC_ARR_UP}
-                                        header={
-                                            <View style={styles.header}>
-                                                <Text style={{
-                                                    fontSize: 20,
-                                                    color: 'black',
+    );
+    const renderContent = () => (
+        <View
+            style={{
+                backgroundColor: 'white',
+                padding: 16,
+                height: 450,
+            }}
+        >
+            <Text>Swipe down to close</Text>
+        </View>
+    );
+    const _renderContent = section => {
+        return section.data.map((item, index) => {
+            if (index > -1) {
+                return (
+                    <TouchableOpacity onPress={() => sheetRef.current.snapTo(0)} style={styles.subitem}>
+                        <Text key={index} style={styles.subtitle}>{item}</Text>
+                    </TouchableOpacity>
+                );
+            }
+        });
+    };
 
-                                                }}>{param.title}</Text>
-                                            </View>
-                                        }
-                                    >
-                                        <View>
-                                            {renderBody(param.body)}
-                                        </View>
-                                    </DropDownItem>
-                                );
-                            })
-                            : null
-                    }
-                    <View style={{ height: 96 }} />
-                </ScrollView>
+    const _updateSections = activeSections => {
+        setState({ activeSections });
+    };
+
+    const onPress = () => { };
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.headerView}>
+                <Text style={styles.textHeader}>Kết quả học tập</Text>
             </View>
-        </BackgroundView>
-    )
-}
+            <ScrollView>
+                <Accordion
+                    sections={sample}
+                    activeSections={state.activeSections}
+                    renderHeader={_renderHeader}
+                    renderContent={_renderContent}
+                    onChange={_updateSections}
+                />
+                <BottomSheet
+                    ref={sheetRef}
+                    snapPoints={[450, 300, 0]}
+                    borderRadius={10}
+                    renderContent={renderContent}
+                />
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // backgroundColor: '#F5FCFF',
-        // paddingTop: 60,
+        // paddingHorizontal: 16
+    },
+    item: {
+        backgroundColor: "white",
+        height: 60,
+        paddingHorizontal: 8,
+        justifyContent: 'space-between',
+        marginBottom: 2,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    subitem: {
+        backgroundColor: "lightblue",
+        padding: 20,
+        marginVertical: 8
     },
     header: {
-        width: '100%',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        flexWrap: 'wrap',
-        flexDirection: 'row',
+        fontSize: 32,
+    },
+    title: {
+        fontSize: 20
+    },
+    headerView: {
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
-        height: 50
+        paddingHorizontal: 20,
+        backgroundColor: '#4baef9',
     },
-    headerTxt: {
-        fontSize: 12,
-        color: 'rgb(74,74,74)',
-        marginRight: 60,
-        flexWrap: 'wrap',
+    contentView: {
+        flex: 1.4,
     },
-    txt: {
-        fontSize: 14,
+    textHeader: {
+        fontSize: 30,
+        color: 'white'
     },
 });
+
 export default MarkScreen
