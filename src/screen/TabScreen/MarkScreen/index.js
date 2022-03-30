@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { IC_ARR_DOWN, IC_ARR_UP } from "./icons"
 import Accordion from "react-native-collapsible/Accordion";
-import BottomSheet from 'reanimated-bottom-sheet';
+// import BottomSheetBehavior from "reanimated-bottom-sheet";
 const sample = [
     {
         title: "HK1(2018-2019)",
@@ -36,7 +36,7 @@ const MarkScreen = () => {
         activeSections: [],
     });
     const _renderHeader = section => (
-        <View style={styles.item} >
+        <View key={section} style={styles.item} >
             <Text style={styles.title}>{section.title}</Text>
             <Image source={IC_ARR_DOWN} />
         </View>
@@ -56,8 +56,8 @@ const MarkScreen = () => {
         return section.data.map((item, index) => {
             if (index > -1) {
                 return (
-                    <TouchableOpacity onPress={() => sheetRef.current.snapTo(0)} style={styles.subitem}>
-                        <Text key={index} style={styles.subtitle}>{item}</Text>
+                    <TouchableOpacity key={index} onPress={() => sheetRef.current.snapTo(0)} style={styles.subitem}>
+                        <Text style={styles.subtitle}>{item}</Text>
                     </TouchableOpacity>
                 );
             }
@@ -77,17 +77,18 @@ const MarkScreen = () => {
             <ScrollView>
                 <Accordion
                     sections={sample}
+                    keyExtractory={(item, index) => index}
                     activeSections={state.activeSections}
                     renderHeader={_renderHeader}
                     renderContent={_renderContent}
                     onChange={_updateSections}
                 />
-                <BottomSheet
+                {/* <BottomSheetBehavior
                     ref={sheetRef}
                     snapPoints={[450, 300, 0]}
                     borderRadius={10}
                     renderContent={renderContent}
-                />
+                /> */}
             </ScrollView>
         </SafeAreaView>
     );
