@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { IC_ARR_DOWN, IC_ARR_UP } from "./icons"
 import Accordion from "react-native-collapsible/Accordion";
+import BackgroundView from "../../../components/BackgroundView";
 // import BottomSheetBehavior from "reanimated-bottom-sheet";
 const sample = [
     {
@@ -71,32 +72,27 @@ const MarkScreen = () => {
     const onPress = () => { };
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerView}>
-                <Text style={styles.textHeader}>Kết quả học tập</Text>
-            </View>
-            <ScrollView>
-                <Accordion
-                    sections={sample}
-                    keyExtractory={(item, index) => index}
-                    activeSections={state.activeSections}
-                    renderHeader={_renderHeader}
-                    renderContent={_renderContent}
-                    onChange={_updateSections}
-                />
-                {/* <BottomSheetBehavior
-                    ref={sheetRef}
-                    snapPoints={[450, 300, 0]}
-                    borderRadius={10}
-                    renderContent={renderContent}
-                /> */}
-            </ScrollView>
+            <BackgroundView>
+                <View style={styles.headerView}>
+                    <Text style={styles.textHeader}>Kết quả học tập</Text>
+                </View>
+                <ScrollView>
+                    <Accordion
+                        sections={sample}
+                        keyExtractory={(item, index) => index}
+                        activeSections={state.activeSections}
+                        renderHeader={_renderHeader}
+                        renderContent={_renderContent}
+                        onChange={_updateSections}
+                    />
+                </ScrollView>
+            </BackgroundView>
         </SafeAreaView>
     );
 };
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // paddingHorizontal: 16
     },
     item: {
         backgroundColor: "white",
@@ -130,7 +126,8 @@ const styles = StyleSheet.create({
     },
     textHeader: {
         fontSize: 30,
-        color: 'white'
+        color: 'white',
+        fontWeight: "600"
     },
 });
 

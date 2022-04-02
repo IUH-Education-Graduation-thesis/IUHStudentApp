@@ -7,7 +7,7 @@ const Button = (props) => {
     return (
         <TouchableOpacity style={styles.iconView} onPress={onPress}>
             <FontAwesome name={nameIcon} color={color} size={size} style={{ marginRight: 5 }} />
-            <Text>{textBtn}</Text>
+            <Text style={{ fontSize: 16, }}>{textBtn}</Text>
         </TouchableOpacity>
     )
 }

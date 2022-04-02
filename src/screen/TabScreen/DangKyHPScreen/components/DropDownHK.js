@@ -59,8 +59,7 @@ const DropDownHK = () => {
         <SelectCountry
             style={styles.dropdown}
             selectedTextStyle={styles.selectedTextStyle}
-            placeholderStyle={styles.placeholderStyle}
-            containerStyle={styles.containerStyle}
+            imageStyle={styles.imageStyle}
             maxHeight={150}
             value={country}
             data={local_data}
@@ -75,7 +74,7 @@ const DropDownHK = () => {
 const styles = StyleSheet.create({
     dropdown: {
         height: 40,
-        width: 170,
+        width: 145,
         backgroundColor: 'white',
         borderRadius: 22,
     },
@@ -84,11 +83,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     selectedTextStyle: {
-        fontSize: 16,
-        marginLeft: 8,
+        fontSize: 14,
+        paddingHorizontal: 8,
+        textAlign: 'center'
     },
     containerStyle: {
         paddingLeft: 0,
+    }, imageStyle: {
+        width: 0,
+        margin: 0
     }
 });
 export default DropDownHK

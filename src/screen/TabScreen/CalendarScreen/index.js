@@ -4,6 +4,7 @@ import BackgroundView from '../../../components/BackgroundView';
 import DropDownItem from 'react-native-drop-down-item';
 import Calendar from './components/Calendar';
 import DropDownHK from '../DangKyHPScreen/components/DropDownHK';
+import Button from './components/Button';
 
 const CalendarScreen = () => {
 
@@ -13,15 +14,9 @@ const CalendarScreen = () => {
                 <View>
                     <View style={styles.viewHeader}>
                         <Text style={{ fontSize: 25, height: 50 }}>Lịch theo tuần</Text>
-                        <TouchableOpacity style={styles.styleBtn}>
-                            <Text style={{ color: "white" }}>Trở về</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.styleBtn}>
-                            <Text style={{ color: "white" }}>Hiện tại</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.styleBtn}>
-                            <Text style={{ color: "white" }}>Tiếp</Text>
-                        </TouchableOpacity>
+                        <Button textBtn="Lịch học" />
+                        <Button textBtn="Lịch thi" />
+                        <Button textBtn="Hiện tại" />
                     </View>
                     <Calendar isDate={true} />
                 </View>
@@ -49,15 +44,6 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         justifyContent: 'space-between',
         height: 50,
-    },
-    styleBtn: {
-        backgroundColor: "#1da1f2",
-        borderRadius: 5,
-        width: 60,
-        height: 30,
-        justifyContent: "center",
-        alignItems: 'center',
-        marginHorizontal: 4
     }
 })
 export default CalendarScreen
