@@ -21,7 +21,7 @@ const IconBtn = (props) => {
     return (
         <TouchableOpacity style={styles.btnStyle}>
             {renderIcon()}
-            <Text style={{ textAlign: 'center' }}>{text}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 16, }}>{text}</Text>
         </TouchableOpacity>
     )
 }

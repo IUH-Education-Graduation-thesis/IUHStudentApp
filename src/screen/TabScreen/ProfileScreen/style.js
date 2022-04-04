@@ -28,7 +28,8 @@ export const styles = StyleSheet.create({
     },
     textHeader: {
         fontSize: 25,
-        color: "white"
+        color: "white",
+        fontWeight: "600"
     },
     textSVHeader: {
         fontSize: 22,
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
     wrapper: { flexDirection: 'row' },
     title: { flex: 1, alignItems: 'flex-start' },
     row: { height: 28 },
-    text: { textAlign: 'center', fontSize: 15 },
+    text: { textAlign: 'center', fontSize: 16 },
     btnStyle: {
         width: "90%",
         height: 60,

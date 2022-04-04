@@ -3,5 +3,5 @@ import ProfileScreen from "./ProfileScreen";
 import DangKyHPScreen from "./DangKyHPScreen";
 import MarkScreen from "./MarkScreen";
 import CalendarScreen from "./CalendarScreen";
-
-export { HomeScreen, ProfileScreen, MarkScreen, DangKyHPScreen, CalendarScreen };
+import ProgressStepsUI from "./ProgressStepsUI"
+export { HomeScreen, ProfileScreen, MarkScreen, ProgressStepsUI, DangKyHPScreen, CalendarScreen };

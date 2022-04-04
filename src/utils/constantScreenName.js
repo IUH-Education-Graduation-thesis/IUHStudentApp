@@ -6,5 +6,6 @@ export const screenName = {
     homeTab: "home",
     calendar: "CalendarScreen",
     mark: "MarkScreen",
-    dkhp: "DangKyHP"
+    dkhp: "DangKyHP",
+    stepDKHP: "ProgressStepsUI"
 }
