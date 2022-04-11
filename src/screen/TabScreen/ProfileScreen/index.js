@@ -5,9 +5,17 @@ import BackgroundView from '../../../components/BackgroundView'
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
 import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../../../utils/constantScreenName'
+import { useSelector } from 'react-redux'
+import { getSinhVienSelectors } from '../../../redux/selectors/selectorStudents'
+import { useQuery } from '@apollo/client'
+import queries from "../../../core/GraphQl"
+import { SINHVIEN_FRAGMENT } from './fragment'
+
+const getAllSinhVien = queries.query.findSinhVien(SINHVIEN_FRAGMENT)
 
 const ProfileScreen = () => {
     const nav = useNavigation()
+    const { data: dataGetSV, loading: loadingGetSV } = useQuery(getAllSinhVien);
     const table = useState({
         tableTitle: ['Trạng thái:', 'Ngày sinh:', 'MSSV:', 'Lớp:', "Bậc đào tạo:", "Khoa:", "Chuyên ngành:", "Địa chỉ:", "Số điện thoại:", "Nơi sinh:"],
         student: {
@@ -24,6 +32,16 @@ const ProfileScreen = () => {
             placeOfBirth: "Lâm Đồng",
         }
     })
+    // const infoStudent = useSelector(getSinhVienSelectors);
+    console.log("sinhvien", dataGetSV);
+    // useEffect(() => {
+    //     const _listSV =
+    //     dataGetSV?.info_sv?.data?.map((item) => ({
+    //         ...item,
+    //         key: item?.id,
+    //       })) || [];
+    //     setData(_listDayNha);
+    //   }, [dataGetSV]);
     const student = Object.values(table[0].student);
     return (
         <BackgroundView>

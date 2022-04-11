@@ -1,10 +1,13 @@
+import { useQuery } from "@apollo/client";
+import { info_sv } from "../../core/GraphQl/findSinhVien";
 import { getSinhVienFail, getSinhVienSuccess } from "../actions/studentActions";
 
 export const getRequestSinhVien = () => {
     return async dispatch => {
         try {
-            // const res = await getSinhVien();
-            dispatch(getSinhVienSuccess(res?.data?.content));
+            const { loading, error, data } = useQuery(info_sv);
+            console.log("dataSV", data);
+            dispatch(getSinhVienSuccess(data));
         }
         catch (error) {
             console.log(error);

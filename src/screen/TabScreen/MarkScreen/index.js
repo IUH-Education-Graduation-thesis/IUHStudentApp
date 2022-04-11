@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { createRef, useRef, useState } from "react";
 import {
     StyleSheet,
     Text,
@@ -6,12 +6,13 @@ import {
     SafeAreaView,
     ScrollView,
     TouchableOpacity,
-    Image
+    Image,
+    TouchableWithoutFeedback
 } from "react-native";
 import { IC_ARR_DOWN, IC_ARR_UP } from "./icons"
 import Accordion from "react-native-collapsible/Accordion";
 import BackgroundView from "../../../components/BackgroundView";
-// import BottomSheetBehavior from "reanimated-bottom-sheet";
+import BottomPopup from "./components/BottomPopup";
 const sample = [
     {
         title: "HK1(2018-2019)",
@@ -31,8 +32,9 @@ const sample = [
     }
 ];
 
-const MarkScreen = () => {
-    const sheetRef = useRef(null);
+const MarkScreen = (props) => {
+    const popRef = createRef()
+    const sheetRef = useRef();
     const [state, setState] = useState({
         activeSections: [],
     });
@@ -57,19 +59,23 @@ const MarkScreen = () => {
         return section.data.map((item, index) => {
             if (index > -1) {
                 return (
-                    <TouchableOpacity key={index} onPress={() => sheetRef.current.snapTo(0)} style={styles.subitem}>
-                        <Text style={styles.subtitle}>{item}</Text>
-                    </TouchableOpacity>
+                    <TouchableWithoutFeedback key={index} onPress={onShowUp} style={styles.subitem}>
+                        <Text style={styles.subtitle1}>{item}</Text>
+                    </TouchableWithoutFeedback>
                 );
             }
         });
     };
-
+    const onShowUp = () => {
+        popRef.show()
+    }
+    const onClosePopup = () => {
+        popRef.close()
+    }
     const _updateSections = activeSections => {
         setState({ activeSections });
     };
 
-    const onPress = () => { };
     return (
         <SafeAreaView style={styles.container}>
             <BackgroundView>
@@ -86,6 +92,10 @@ const MarkScreen = () => {
                         onChange={_updateSections}
                     />
                 </ScrollView>
+                <BottomPopup ref={(target) => { popRef = target }}
+                    onTouchOutside={onClosePopup}
+                />
+
             </BackgroundView>
         </SafeAreaView>
     );
@@ -105,8 +115,10 @@ const styles = StyleSheet.create({
     },
     subitem: {
         backgroundColor: "lightblue",
-        padding: 20,
-        marginVertical: 8
+        paddingBottom: 20,
+        marginVertical: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     header: {
         fontSize: 32,
@@ -129,6 +141,14 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: "600"
     },
+    subtitle1: {
+        fontSize: 20,
+        fontWeight: '500',
+        height: 40,
+        backgroundColor: '#bff006',
+        marginBottom: 10,
+
+    }
 });
 
 export default MarkScreen

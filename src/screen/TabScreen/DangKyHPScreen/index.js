@@ -25,7 +25,7 @@ const DangKyHPScreen = () => {
             <View style={{ flex: 1 }}>
                 <Text style={styles.textMH}>Môn học đã đăng ký</Text>
                 <Table borderStyle={{ borderWidth: 1 }}>
-                    <TableWrapper style={styles.wrapper}>
+                    <TableWrapper>
                         <Row data={title} flexArr={[0.5, 2, 2.5, 0.5]} textStyle={styles.text} />
                     </TableWrapper>
                 </Table>
