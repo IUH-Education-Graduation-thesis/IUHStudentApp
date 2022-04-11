@@ -175,9 +175,6 @@ const ProgressStepsUI = () => {
     * UseEffect
     * ==========================================
     */
-    // useEffect(() => {
-    //     setState({ lopHocPhan: dataGetProfile?.getLopHocPhan?.data });
-    // }, [dataGetProfile?.getLopHocPhan?.data])
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
