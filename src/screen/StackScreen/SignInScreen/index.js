@@ -1,5 +1,5 @@
 import { Keyboard, KeyboardAvoidingView, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BackgroundView } from '../../../components'
 import Text from '../../../components/Text'
 import TextInput from '../../../components/TextInput'
@@ -7,11 +7,19 @@ import { styles } from './style'
 import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../../../utils/constantScreenName'
 import queries from '../../../core/GraphQl';
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { isEmpty } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const loginMutation = queries.mutation.login(`token`);
+const getProfileQuery = queries.query.getProfile(`id
+userName
+roles
+sinhVien {
+  id
+  hoTenDem
+  ten
+}`);
 
 const SignInScreen = () => {
 
@@ -25,11 +33,34 @@ const SignInScreen = () => {
      */
 
     const [actLogin, { data: dataLogin, loading: loadingLogin }] = useMutation(loginMutation);
+    const { data: dataGetProfile, loading: loadingGetProfile, error: errorGetProfile } = useQuery(getProfileQuery);
+
 
     /**
      * Useeffect
      * ==============================================================
      */
+
+    useEffect(() => {
+        if (isEmpty(dataGetProfile?.getProfile?.data)) return;
+        nav.navigate(screenName.homeTab);
+    }, [dataGetProfile])
+
+    useEffect(() => {
+        const helloWorld = async () => {
+            if (isEmpty(errorGetProfile)) return;
+            try {
+                await AsyncStorage.setItem('@token', '')
+
+            } catch (e) {
+                console.log('e', e);
+                // saving error
+            }
+        }
+
+        helloWorld();
+    }, [errorGetProfile])
+
 
 
     /**

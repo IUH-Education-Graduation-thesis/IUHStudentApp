@@ -6,11 +6,11 @@ import { onError } from "@apollo/client/link/error";
 import { clientCache } from "../helpers";
 import config from "../config";
 import { createHttpLink } from "@apollo/client/core";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const getAccessToken = () => {
+const getAccessToken = async () => {
   // get the authentication token from local storage if it exists
-  const token = clientCache.getAuthenTokenWithCookie();
-
+  const token = await AsyncStorage.getItem('@token')
   return token;
 };
 
@@ -18,9 +18,10 @@ const httpLink = createHttpLink({
   uri: config.GRAPHQL_URL,
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = getAccessToken();
+  const token = await getAccessToken();
+
   // return the headers to the context so httpLink can read them
   return {
     headers: {
