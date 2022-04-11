@@ -1,6 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import Octicons from 'react-native-vector-icons/Octicons'
+import Text from '../../../../components/Text'
 export const tpyeIcon = {
     octicons: "Octicons",
 }

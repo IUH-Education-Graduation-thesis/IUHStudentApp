@@ -1,10 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import BackgroundView from '../../../components/BackgroundView';
 import DropDownHK from './components/DropDownHK';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
+import Text from '../../../components/Text';
 const DangKyHPScreen = () => {
     const nav = useNavigation()
     const title = ["STT", "Mã lớp học phần", "Tên môn học/học phần", "TC"]
@@ -70,7 +71,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: '600',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'black'
     }
 })
 export default DangKyHPScreen

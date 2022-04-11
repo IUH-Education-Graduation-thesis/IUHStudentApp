@@ -19,7 +19,8 @@ const initialState = {
     ketQuaHocTap: [],
     token: "",
     hocKy: [],
-    lichHoc: []
+    lichHoc: [],
+    idsLopHocPhan: []
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -29,6 +30,7 @@ export default (state = initialState, { type, payload }) => {
         case GET_SINH_VIEN_FAIL:
             return { ...state }
         case GET_LIST_MONHOC_SUCCESS:
+            console.log("payload", payload);
             return { ...state, listMonHoc: payload }
         case GET_LIST_MONHOC_FAIL:
             return { ...state }

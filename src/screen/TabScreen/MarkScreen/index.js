@@ -1,7 +1,7 @@
 import React, { createRef, useRef, useState } from "react";
 import {
     StyleSheet,
-    Text,
+
     View,
     SafeAreaView,
     ScrollView,
@@ -13,6 +13,7 @@ import { IC_ARR_DOWN, IC_ARR_UP } from "./icons"
 import Accordion from "react-native-collapsible/Accordion";
 import BackgroundView from "../../../components/BackgroundView";
 import BottomPopup from "./components/BottomPopup";
+import Text from "../../../components/Text";
 const sample = [
     {
         title: "HK1(2018-2019)",
@@ -44,17 +45,7 @@ const MarkScreen = (props) => {
             <Image source={IC_ARR_DOWN} />
         </View>
     );
-    const renderContent = () => (
-        <View
-            style={{
-                backgroundColor: 'white',
-                padding: 16,
-                height: 450,
-            }}
-        >
-            <Text>Swipe down to close</Text>
-        </View>
-    );
+
     const _renderContent = section => {
         return section.data.map((item, index) => {
             if (index > -1) {

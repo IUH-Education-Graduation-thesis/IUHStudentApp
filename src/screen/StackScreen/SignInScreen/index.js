@@ -22,7 +22,7 @@ sinhVien {
 }`);
 
 const SignInScreen = () => {
-
+    console.disableYellowBox = true;
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
@@ -41,10 +41,10 @@ const SignInScreen = () => {
      * ==============================================================
      */
 
-    useEffect(() => {
-        if (isEmpty(dataGetProfile?.getProfile?.data)) return;
-        nav.navigate(screenName.homeTab);
-    }, [dataGetProfile])
+    // useEffect(() => {
+    //     if (isEmpty(dataGetProfile?.getProfile?.data)) return;
+    //     nav.navigate(screenName.homeTab);
+    // }, [dataGetProfile])
 
     useEffect(() => {
         const helloWorld = async () => {
@@ -100,29 +100,38 @@ const SignInScreen = () => {
     return (
         <KeyboardAvoidingView behavior="height"
             style={styles.container}>
-            <BackgroundView>
-                <View style={styles.headerView}>
-                    <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
-                    <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
-                </View>
-                <View style={styles.inputView} >
-                    <TextInput
-                        onChangeText={(text) => setUserName(text)}
-                        placeholder='Nhập mã sinh viên'
-                        style={styles.placeholderText}
-                    />
-                    <TextInput
-                        secureTextEntry
-                        onChangeText={(text) => setPassword(text)}
-                        placeholder='Nhập mật khẩu'
-                        style={styles.placeholderText} />
-                </View>
-                <View style={styles.btnView} >
-                    <TouchableOpacity style={styles.btnStyle} onPress={handleOnPressLogin}>
-                        <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
-                    </TouchableOpacity>
-                </View>
-            </BackgroundView>
+            {
+                !isEmpty(dataGetProfile?.getProfile.data)
+                    ?
+                    nav.navigate(screenName.homeTab)
+                    :
+                    (
+                        <BackgroundView>
+                            <View style={styles.headerView}>
+                                <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
+                                <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
+                            </View>
+                            <View style={styles.inputView} >
+                                <TextInput
+                                    onChangeText={(text) => setUserName(text)}
+                                    placeholder='Nhập mã sinh viên'
+                                    style={styles.placeholderText}
+                                />
+                                <TextInput
+                                    secureTextEntry
+                                    onChangeText={(text) => setPassword(text)}
+                                    placeholder='Nhập mật khẩu'
+                                    style={styles.placeholderText} />
+                            </View>
+                            <View style={styles.btnView} >
+                                <TouchableOpacity style={styles.btnStyle} onPress={handleOnPressLogin}>
+                                    <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </BackgroundView>
+                    )
+
+            }
         </KeyboardAvoidingView>
     )
 }
