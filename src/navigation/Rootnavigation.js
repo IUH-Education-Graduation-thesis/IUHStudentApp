@@ -106,6 +106,8 @@ const RootTab = () => {
         </Tab.Navigator>
     )
 }
+
+
 const Rootnavigation = () => {
 
     return (
@@ -113,7 +115,6 @@ const Rootnavigation = () => {
             <Stack.Screen name={screenName.signIn} component={SignInScreen} />
             <Stack.Screen name={screenName.homeTab} component={RootTab} />
             <Stack.Screen name={screenName.stepDKHP} component={ProgressStepsUI} />
-
         </Stack.Navigator >
     );
 }

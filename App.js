@@ -5,17 +5,18 @@ import { store } from './src/redux/store'
 import { NavigationContainer } from '@react-navigation/native'
 import Rootnavigation from './src/navigation/Rootnavigation'
 import client from './src/core/apollo'
+import { ApolloClient, ApolloProvider } from '@apollo/client'
 
 export default class App extends Component {
   render() {
     return (
-      <ApolloClient client={client}>
+      <ApolloProvider client={client}>
         <Provider store={store}>
           <NavigationContainer>
             <Rootnavigation />
           </NavigationContainer>
         </Provider>
-      </ApolloClient>
+      </ApolloProvider>
     )
   }
 }
