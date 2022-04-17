@@ -7653,6 +7653,9 @@ react-native-progress-steps@^1.3.4:
     prop-types "^15.6.2"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 181921e (update ui)
 react-native-radio-button@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-native-radio-button/-/react-native-radio-button-2.0.1.tgz#d21fc52276f3c5c89691ff40cd8a62758888745b"
@@ -7661,8 +7664,11 @@ react-native-radio-button@^2.0.1:
     prop-types "^15.5.10"
     react-native-animatable "^1.2.4"
 
+<<<<<<< HEAD
 =======
 >>>>>>> bdd65b3 (update ui DKHP)
+=======
+>>>>>>> 181921e (update ui)
 react-native-ratings@8.0.4:
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-8.0.4.tgz#efd5ebad8acc08bf98d34d39b18fb7a6813ef991"
