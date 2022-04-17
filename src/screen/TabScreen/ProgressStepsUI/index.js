@@ -8,6 +8,10 @@ import { screenName } from '../../../utils/constantScreenName';
 import { useSelector } from 'react-redux';
 import { getListMonHocSelectors } from '../../../redux/selectors/selectorStudents';
 import LopHocPhan from './components/LopHocPhan';
+import queries from "../../../core/GraphQl"
+import { GETLOPHOCPHANFRAGMENT } from './fragment';
+import { useLazyQuery, useQuery } from '@apollo/client';
+
 const ProgressStepsUI = () => {
 
     /**
@@ -15,83 +19,181 @@ const ProgressStepsUI = () => {
      */
     const nav = useNavigation();
     const [currentActive, setCurrentActive] = useState(0)
-    const idsMonHoc = useSelector(getListMonHocSelectors);
+
     const [state, setState] = useState({
         activeSections: [],
-        monHoc: [{
-            mahp: 410000161,
-            tenMon: "Chung chi Toeic",
-            tinChi: 5,
-            batbuoc: true,
-        },
-        {
-            tenMon: "Pháp luật đại cương",
-            tinChi: 2,
-            batbuoc: false,
-            mahp: 410000191,
-        },
-        {
-            tenMon: "Quản trị kinh doanh va kinh doanh quooc te",
-            tinChi: 3,
-            batbuoc: true,
-            mahp: 410000124,
-        }],
-        ctLop: [{
-            tenMon: "Pháp luật đại cương",
-            tinChi: 3,
-            batbuoc: false,
-            mahp: 410000124561,
-            tenGV: "Nguyễn Quỳnh Mai",
-            tiet: "1-3",
-            thu: "Thứ 5",
-            lopDuKien: "DHKTPM14BTT"
-        }
-            , {
-            tenMon: "Cơ sở văn hóa",
-            tinChi: 3,
-            batbuoc: false,
-            mahp: 410000124238,
-            tenGV: "Nguyễn Quỳnh Mai",
-            tiet: "4-6",
-            thu: "Thứ 5",
-            lopDuKien: "DHKTPM14BTT"
-        }
-            , {
-            tenMon: "Toán cao cấp",
-            tinChi: 3,
-            batbuoc: false,
-            mahp: 410000124001,
-            tenGV: "Nguyễn Quỳnh Mai",
-            tiet: "4-6",
-            thu: "Thứ 5", lopDuKien: "DHKTPM14BTT"
-        }],
-        chonLop: [{
-            tenMon: "Pháp luật đại cương",
-            tinChi: 3,
-            batbuoc: false,
-            mahp: 410000124561,
-            tenGV: "Nguyễn Quỳnh Mai",
-            tiet: "1-3",
-            thu: "Thứ 5"
-        }]
+        hocPhan: [
+            {
+                "id": "1",
+                "maHocPhan": "40023100156",
+                "batBuoc": true,
+                "monHoc": {
+                    "ten": "Mang may tinh"
+                },
+                "lopHocPhans": [
+                    {
+                        "id": "2",
+                        "maLopHocPhan": "400231000212",
+                        "tenLopHocPhan": "DHKTPM14BTT",
+                        "soLuongToiDa": 60,
+                        "soNhomThucHanh": 1,
+                        "trangThaiLopHocPhan": "Chờ sinh viên đăng ký",
+                        "soLuongHienTai": 0,
+                        "lopDuKien": null,
+                        "giangViens": [
+                            {
+                                "hoTenDem": "Hoang",
+                                "ten": "Anh"
+                            }
+                        ],
+                        "lichHocs": [
+                            {
+                                "id": "3",
+                                "ngayHocTrongTuan": 3,
+                                "nhomThucHanh": 0,
+                                "thoiGianBatDau": "2021-12-31T00:00:00Z",
+                                "thoiGianKetThuc": "2022-04-15T00:00:00Z",
+                                "tietHocBatDau": 1,
+                                "tietHocKetThuc": 3,
+                                "phongHoc": {
+                                    "tenPhongHoc": "B3.06"
+                                },
+                                "isLyThuyet": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": "6",
+                        "maLopHocPhan": "400213000453",
+                        "tenLopHocPhan": "DHKTPM14ATT",
+                        "soLuongToiDa": 40,
+                        "soNhomThucHanh": 2,
+                        "trangThaiLopHocPhan": "Chờ sinh viên đăng ký",
+                        "soLuongHienTai": 0,
+                        "lopDuKien": null,
+                        "giangViens": [
+                            {
+                                "hoTenDem": "Nguyen",
+                                "ten": "Hoang"
+                            }
+                        ],
+                        "lichHocs": [
+                            {
+                                "id": "4",
+                                "ngayHocTrongTuan": 6,
+                                "nhomThucHanh": 2,
+                                "thoiGianBatDau": "2021-12-31T00:00:00Z",
+                                "thoiGianKetThuc": "2022-04-15T00:00:00Z",
+                                "tietHocBatDau": 4,
+                                "tietHocKetThuc": 6,
+                                "phongHoc": {
+                                    "tenPhongHoc": "B2.03"
+                                },
+                                "isLyThuyet": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "maHocPhan": "400243001500",
+                "batBuoc": false,
+                "monHoc": {
+                    "ten": "Thống kê máy tính và dữ liệu"
+                },
+                "lopHocPhans": [
+                    {
+                        "id": "4",
+                        "maLopHocPhan": "400213000452",
+                        "tenLopHocPhan": "DHKTPM14CTT",
+                        "soLuongToiDa": 80,
+                        "soNhomThucHanh": 2,
+                        "trangThaiLopHocPhan": "Chờ sinh viên đăng ký",
+                        "soLuongHienTai": 0,
+                        "lopDuKien": null,
+                        "giangViens": [
+                            {
+                                "hoTenDem": "Nguyen",
+                                "ten": "Hoang"
+                            }
+                        ],
+                        "lichHocs": [
+                            {
+                                "id": "2",
+                                "ngayHocTrongTuan": 2,
+                                "nhomThucHanh": 0,
+                                "thoiGianBatDau": "2021-12-31T00:00:00Z",
+                                "thoiGianKetThuc": "2022-04-15T00:00:00Z",
+                                "tietHocBatDau": 1,
+                                "tietHocKetThuc": 3,
+                                "phongHoc": {
+                                    "tenPhongHoc": "A1.01"
+                                },
+                                "isLyThuyet": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "3",
+                "maHocPhan": "400243001213",
+                "batBuoc": false,
+                "monHoc": {
+                    "ten": "Co so van hoa"
+                },
+                "lopHocPhans": [
+                    {
+                        "id": "5",
+                        "maLopHocPhan": "400213000452",
+                        "tenLopHocPhan": "DHKTPM14CTT",
+                        "soLuongToiDa": 80,
+                        "soNhomThucHanh": 2,
+                        "trangThaiLopHocPhan": "Chờ sinh viên đăng ký",
+                        "soLuongHienTai": 0,
+                        "lopDuKien": null,
+                        "giangViens": [],
+                        "lichHocs": []
+                    }
+                ]
+            },
+            {
+                "id": "4",
+                "maHocPhan": "400243001503",
+                "batBuoc": false,
+                "monHoc": {
+                    "ten": "Thống kê máy tính và dữ liệu"
+                },
+                "lopHocPhans": []
+            }
+        ],
+
     });
-    console.log("idsMonHoc", idsMonHoc);
+
     /**
     * UseEffect
     * ==========================================
     */
+    // useEffect(() => {
+    //     setState({ lopHocPhan: dataGetProfile?.getLopHocPhan?.data });
+    // }, [dataGetProfile?.getLopHocPhan?.data])
+
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     }, [])
     /**
      * function
      */
+
     const onNextStep = () => {
-        console.log("idsMonHoc", idsMonHoc);
+
+        console.log('Payment step completed!');
     };
 
     const onPaymentStepComplete = () => {
-        console.log('Payment step completed!');
+
+        console.log("null");
     };
 
     const onPrevStep = () => {
@@ -121,7 +223,7 @@ const ProgressStepsUI = () => {
                     onPrevious={onPrevStep}
                     nextBtnText="Tiếp tục"
                 >
-                    <FlatlistUI data={state.monHoc} chitiet={false} />
+                    <FlatlistUI data={state.hocPhan} chitiet={false} />
                 </ProgressStep>
                 <ProgressStep
                     label="Lớp học phần"
@@ -131,7 +233,7 @@ const ProgressStepsUI = () => {
                     nextBtnText="Tiếp tục"
                     previousBtnStyle={{ textAlign: 'center', padding: 8 }}
                 >
-                    <LopHocPhan data={state.ctLop} />
+                    <LopHocPhan data={state.hocPhan} />
                 </ProgressStep>
                 <ProgressStep
                     label="Chi tiết lớp học"
@@ -140,7 +242,7 @@ const ProgressStepsUI = () => {
                     previousBtnText="Trở về"
                 >
                     <FlatlistUI
-                        data={state.chonLop}
+                        data={state.hocPhan}
                         chitiet={true}
                     />
                 </ProgressStep>

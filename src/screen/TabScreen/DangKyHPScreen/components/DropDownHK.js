@@ -1,72 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native';
 import { SelectCountry } from 'react-native-element-dropdown';
-import BackgroundView from '../../../../components/BackgroundView';
+
+import queries from '../../../../core/GraphQl';
+import { useQuery } from '@apollo/client';
+import { GETPROFILESINHVIEN } from '../fragment';
+import { useDispatch } from 'react-redux';
+import { setHocKyID } from '../../../../redux/actions/studentActions';
+
+/**
+ *  call graphql
+ */
+const getProfileQuery = queries.query.getProfile(GETPROFILESINHVIEN);
 const DropDownHK = () => {
-    const local_data = [
-        {
-            value: '1',
-            lable: 'HK1(2018-2019)',
-        },
-        {
-            value: '2',
-            lable: 'HK2(2018-2019)',
-        },
-        {
-            value: '3',
-            lable: 'HK3(2018-2019)',
-        },
-        {
-            value: '4',
-            lable: 'HK1(2019-2020)',
-        },
-        {
-            value: '5',
-            lable: 'HK2(2019-2020)',
-        },
-    ];
-    const [state, SetState] = useState({
-        contents: [
-            {
-                title: 'Học kỳ 1( 2018-2019)',
-                body:
-                {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                }
-            },
-            {
-                title: 'Học kỳ 2( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-            {
-                title: 'Học kỳ 3( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-        ],
-    });
-    const [country, setCountry] = useState('1');
+    const { data: dataGetProfile, loading: loadingGetProfile, error: errorGetProfile } = useQuery(getProfileQuery);
+    const [dataGetHocKy, setDataGetHocKy] = useState([]);
+    const [hocKy, setHocKy] = useState('1');
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const _hocKy = dataGetProfile?.getProfile.data[0].sinhVien.lop.khoa.hocKies;
+        setDataGetHocKy(_hocKy);
+        dispatch(setHocKyID(dataGetProfile?.getProfile.data[0].sinhVien.lop.khoa.hocKies[0].thuTu));
+    }, [dataGetProfile?.getProfile.data[0].sinhVien.lop.khoa.hocKies])
+
     return (
         <SelectCountry
             style={styles.dropdown}
             selectedTextStyle={styles.selectedTextStyle}
             imageStyle={styles.imageStyle}
             maxHeight={150}
-            value={country}
-            data={local_data}
-            valueField="value"
-            labelField="lable"
+            value={hocKy}
+            data={dataGetHocKy}
+            valueField="id"
+            labelField="thuTu"
             onChange={e => {
-                setCountry(e.value);
+                setHocKy(e.id);
+                dispatch(setHocKyID(e.id));
             }}
         />
     )

@@ -5,8 +5,8 @@ const config = {
   HOST_ADDRESS: "http://52.77.233.218",
 };
 
-config.GRAPHQL_URL = `${config.HOST_ADDRESS}/graphql`;
+// config.GRAPHQL_URL = `${config.HOST_ADDRESS}/graphql`;
 
-// config.GRAPHQL_URL = 'http://127.0.0.1:8080/graphql';
+config.GRAPHQL_URL = 'http://127.0.0.1:8080/graphql';
 
 module.exports = config;

@@ -1,4 +1,4 @@
-import { Keyboard, KeyboardAvoidingView, TouchableOpacity, View } from 'react-native'
+import { Keyboard, KeyboardAvoidingView, LogBox, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { BackgroundView } from '../../../components'
 import Text from '../../../components/Text'
@@ -19,10 +19,22 @@ sinhVien {
   id
   hoTenDem
   ten
+  lop{
+    id
+    ten
+    khoa{
+      id
+      khoa
+      hocKies{
+        id
+        thuTu
+      }
+    }
+  }
 }`);
 
 const SignInScreen = () => {
-    console.disableYellowBox = true;
+    LogBox.ignoreAllLogs()
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
@@ -34,7 +46,6 @@ const SignInScreen = () => {
 
     const [actLogin, { data: dataLogin, loading: loadingLogin }] = useMutation(loginMutation);
     const { data: dataGetProfile, loading: loadingGetProfile, error: errorGetProfile } = useQuery(getProfileQuery);
-
 
     /**
      * Useeffect

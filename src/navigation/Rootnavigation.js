@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { screenName } from '../utils/constantScreenName';
-import { CalendarScreen, DangKyHPScreen, HomeScreen, MarkScreen, ProfileScreen, ProgressStepsUI } from '../screen/TabScreen';
+import { CalendarScreen, DangKyHP, DangKyHPScreen, HomeScreen, MarkScreen, ProfileScreen, ProgressStepsUI } from '../screen/TabScreen';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -114,7 +114,7 @@ const Rootnavigation = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name={screenName.signIn} component={SignInScreen} />
             <Stack.Screen name={screenName.homeTab} component={RootTab} />
-            <Stack.Screen name={screenName.stepDKHP} component={ProgressStepsUI} />
+            <Stack.Screen name={screenName.stepDKHP} component={DangKyHP} />
         </Stack.Navigator >
     );
 }

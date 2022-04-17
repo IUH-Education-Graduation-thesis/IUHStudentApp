@@ -1,0 +1,33 @@
+export const GETLOPHOCPHANFRAGMENT = `
+    id
+    maLopHocPhan
+    moTa
+    tenLopHocPhan
+    soLuongToiDa
+    soNhomThucHanh
+    trangThaiLopHocPhan
+    hocPhan{
+        id
+        maHocPhan
+        moTa
+        batBuoc
+        monHoc{
+            ten
+        }
+    }
+    lop{
+        ten
+    }
+    giangViens{
+        hoTenDem
+        ten
+    }
+    lichHocs{
+        ngayHocTrongTuan
+        tietHocBatDau
+        tietHocKetThuc
+        phongHoc{
+            tenPhongHoc
+        }
+    }
+`

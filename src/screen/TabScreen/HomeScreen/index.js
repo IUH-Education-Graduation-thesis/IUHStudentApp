@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, LogBox } from 'react-native'
 import React from 'react'
 import { styles } from './style'
 import BackgroundView from '../../../components/BackgroundView'
@@ -10,7 +10,7 @@ import Button from './components/Button'
 import IconBtn, { tpyeIcon } from './components/IconBtn'
 import Text from '../../../components/Text'
 const HomeScreen = () => {
-    console.disableYellowBox = true;
+    LogBox.ignoreAllLogs()
     const name = "Đoàn Thị Thanh Hồng";
     const mssv = 18050761;
     const nav = useNavigation()

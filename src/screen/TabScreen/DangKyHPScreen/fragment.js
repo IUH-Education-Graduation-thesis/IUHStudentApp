@@ -1,0 +1,22 @@
+export const GETPROFILESINHVIEN = `
+    id
+    userName
+    roles
+    sinhVien{
+        id
+        hoTenDem
+        ten
+        lop{
+          id
+          ten
+          khoa{
+            id
+            khoa
+            hocKies{
+              id
+              thuTu
+            }
+          }
+        }
+    }
+`

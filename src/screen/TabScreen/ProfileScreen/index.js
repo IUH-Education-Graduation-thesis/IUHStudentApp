@@ -33,7 +33,6 @@ const ProfileScreen = () => {
         }
     })
     // const infoStudent = useSelector(getSinhVienSelectors);
-    console.log("sinhvien", dataGetSV);
     // useEffect(() => {
     //     const _listSV =
     //     dataGetSV?.info_sv?.data?.map((item) => ({
