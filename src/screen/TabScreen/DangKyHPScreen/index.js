@@ -1,10 +1,18 @@
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
 import BackgroundView from '../../../components/BackgroundView';
 import DropDownHK from './components/DropDownHK';
-import { useNavigation } from '@react-navigation/native';
-import { screenName } from '../../../utils/constantScreenName';
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
+import {useNavigation} from '@react-navigation/native';
+import {screenName} from '../../../utils/constantScreenName';
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+} from 'react-native-table-component';
 import Text from '../../../components/Text';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { GETLOPHOCPHANFRAGMENT } from '../ProgressStepsUI/fragment';
@@ -13,10 +21,15 @@ import { gethocKyIDSelectors } from '../../../redux/selectors/selectorStudents';
 import queries from '../../../core/GraphQl';
 import Accordion from 'react-native-collapsible/Accordion';
 import { IC_ARR_DOWN } from '../MarkScreen/icons';
+import queries from '../../../core/GraphQl';
+import {useQuery} from '@apollo/client';
+import {GET_LIST_HOC_KY_FRAGMENT} from './fragment';
 
 import AntDesign from "react-native-vector-icons/AntDesign"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 const getListHocPhanDKHPQuery = queries.query.getListHocPhanDKHP(GETLOPHOCPHANFRAGMENT);
+
+const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 
 const DangKyHPScreen = () => {
     const title = ["Tên môn học/học phần", "Bắt buộc"]
@@ -247,8 +260,8 @@ const DangKyHPScreen = () => {
             </View>
         </BackgroundView>
     );
+};
 
-}
 const styles = StyleSheet.create({
     styleBtn: {
         backgroundColor: "#1da1f2",
@@ -304,3 +317,4 @@ const styles = StyleSheet.create({
     },
 })
 export default DangKyHPScreen
+

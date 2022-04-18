@@ -89,7 +89,6 @@ const SignInScreen = () => {
 
         const _token = _data?.data?.login?.data?.token || '';
 
-
         if (isEmpty(_token)) {
             // do some thing here
             return;

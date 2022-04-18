@@ -20,3 +20,14 @@ export const GETPROFILESINHVIEN = `
         }
     }
 `
+export default {};
+
+export const GET_LIST_HOC_KY_FRAGMENT = `
+id
+thuTuHocKy
+namHoc {
+  id
+  namBatDau
+  namKetThuc
+}
+`;
