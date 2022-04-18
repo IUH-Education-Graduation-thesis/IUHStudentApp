@@ -1,9 +1,15 @@
-import React, {useState} from 'react';
+import {isEmpty} from 'lodash';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-const DropDownHK = ({data, style}) => {
+const DropDownHK = ({data, style, onChange}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+
+  const handleValueChange = payload => {
+    setValue(payload);
+    onChange(payload(value));
+  };
 
   return (
     <DropDownPicker
@@ -12,7 +18,7 @@ const DropDownHK = ({data, style}) => {
       open={open}
       items={data}
       setOpen={setOpen}
-      setValue={setValue}
+      setValue={handleValueChange}
       style={styles.dropdown}
     />
   );
