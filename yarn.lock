@@ -7540,6 +7540,9 @@ react-native-datepicker@^1.7.2:
   dependencies:
     moment "^2.22.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1c973ec (handle get list hoc ky)
 react-native-debugger@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-debugger/-/react-native-debugger-1.1.0.tgz#88ae36c229a7da6c8e97e0e98e366eca55d4736a"
@@ -7554,8 +7557,11 @@ react-native-device-info@^0.10.2:
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.10.2.tgz#350cd68ed43839022ddea0a3a423439f16fa4fba"
   integrity sha1-NQzWjtQ4OQIt3qCjpCNDnxb6T7o=
+<<<<<<< HEAD
 =======
 >>>>>>> 3780405 (update)
+=======
+>>>>>>> 1c973ec (handle get list hoc ky)
 
 react-native-drawer@2.5.1:
   version "2.5.1"
