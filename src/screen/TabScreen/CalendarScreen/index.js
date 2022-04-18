@@ -1,58 +1,140 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import BackgroundView from '../../../components/BackgroundView';
-import DropDownItem from 'react-native-drop-down-item';
-import Calendar from './components/Calendar';
-import DropDownHK from '../DangKyHPScreen/components/DropDownHK';
 import Button from './components/Button';
-import DatePicker from '@react-native-community/datetimepicker';
+// import { DatePicker } from 'antd';
+import { IC_ARR_DOWN } from '../MarkScreen/icons';
+import { ScrollView } from 'react-native';
+import Accordion from 'react-native-collapsible/Accordion';
+import { Image } from 'react-native';
+import { DatePicker } from 'native-base';
+import Antd from 'react-native-vector-icons/AntDesign'
+import { TouchableOpacity } from 'react-native';
+import queries from '../../../core/GraphQl';
+import { GETLICHHOC } from './fragment';
+import { useLazyQuery, useQuery } from '@apollo/client';
+
+const getLichHocQuery = queries.query.getLichHoc(GETLICHHOC);
 
 const CalendarScreen = () => {
+    const sample = [
+        {
+            "thu": "Thứ 2",
+            "thuNumber": 2,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Thứ 3",
+            "thuNumber": 3,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Thứ 4",
+            "thuNumber": 4,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Thứ 5",
+            "thuNumber": 5,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Thứ 6",
+            "thuNumber": 6,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Thứ 7",
+            "thuNumber": 7,
+            "listLichHoc": []
+        },
+        {
+            "thu": "Chủ Nhật",
+            "thuNumber": 8,
+            "listLichHoc": []
+        }
+    ];
+    let today = new Date();
+    // const [actGetLichHoc, { data: dataLichHoc, loading: loadingdataLichHoc, error: errordataLichHoc }] = useLazyQuery(getLichHocQuery);
 
-    const [date, setDate] = useState(null);
-    useEffect(() => {
-        let today = new Date();
-        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        setDate(date);
-    }, []);
-    console.log("date", date);
+    // console.log(dataLichHoc);
+    const [date, setDate] = useState(new Date());
+
+
+
+    const [state, setState] = useState({
+        activeSections: [],
+        showPickerCheck: false,
+    });
+    const _renderHeader = section => (
+        <View key={section} style={styles.item} >
+            <Text style={styles.title}>{section.thu}</Text>
+            <Image source={IC_ARR_DOWN} />
+        </View>
+    );
+
+    const _renderContent = section => {
+        return section.listLichHoc.map((item, index) => {
+            if (index > -1) {
+                return (
+                    <TouchableWithoutFeedback key={index} onPress={onShowUp} style={styles.subitem}>
+                        <Text style={styles.subtitle1}>{item}</Text>
+                    </TouchableWithoutFeedback>
+                );
+            }
+        });
+    };
+    const _updateSections = activeSections => {
+        setState({ activeSections });
+    };
+    const _onDateChange = (e, newDate) => {
+        setDate(newDate);
+    };
+
+
     return (
         <BackgroundView>
             <View style={styles.header}>
                 <View>
-                    <Text style={{ fontSize: 25, height: 50 }}>Lịch theo tuần</Text>
-                    <View style={styles.viewHeader}>
-                        <Button textBtn="Lịch học" />
-                        <Button textBtn="Lịch thi" />
-                        <Button textBtn="Hiện tại" />
+                    <View style={styles.headerView}>
+                        <Text style={styles.textHeader}>Lịch theo tuần</Text>
+
                     </View>
-                    <DatePicker
-                        value={new Date()}
-                        style={styles.datePicker}
-                        defaultDate={new Date(2022, 4, 18)}
-                        timeZoneOffsetInMinutes={undefined}
-                        modalTransparent={false}
-                        animationType={"fade"}
-                        androidMode={"default"}
-                        textStyle={{ color: 'black' }}
-                        placeHolderTextStyle={{ color: 'black' }}
-                        placeHolderText="wew"
-                        disabled={false}
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                            // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(date) => { this.setState({ date: date }) }}
-                    />
-                    {/* <Calendar isDate={true} /> */}
+                    <View style={styles.viewHeader}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, marginLeft: 5 }}>
+                            <Antd name='calendar' size={20} color='black' />
+                            <DatePicker
+
+                                locale={'vi'}
+                                animationType={'fade'}
+                                androidMode={'default'}
+                                placeHolderText={today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()}
+                                textStyle={{ color: 'red' }}
+                                placeHolderTextStyle={{ color: 'black' }}
+                                disabled={false}
+                                onChange={_onDateChange}
+                                value={date}
+                                onConfirm={(date) => {
+                                    // setOpen(false)
+                                    setState({ showPickerCheck: false })
+                                }}
+                            />
+                        </View>
+                        <Button textBtn="Lịch học" />
+                        <Button textBtn="Hiện tại" />
+                        <Button textBtn="Lịch thi" />
+                    </View>
+
+                    <ScrollView>
+                        <Accordion
+                            sections={sample}
+                            keyExtractory={(item, index) => index}
+                            activeSections={state.activeSections}
+                            renderHeader={_renderHeader}
+                            renderContent={_renderContent}
+                            onChange={_updateSections}
+                        />
+                    </ScrollView>
                 </View>
             </View>
 
@@ -73,9 +155,31 @@ const styles = StyleSheet.create({
     header: {
         flex: 1
     },
+    item: {
+        backgroundColor: "white",
+        height: 60,
+        paddingHorizontal: 8,
+        justifyContent: 'space-between',
+        marginBottom: 2,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    headerView: {
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        backgroundColor: '#4baef9',
+        marginBottom: 5,
+    }
+    ,
+    title: {
+        fontSize: 15,
+        color: 'black'
+    },
     viewHeader: {
         flexDirection: 'row',
-        alignItems: 'baseline',
+        alignItems: 'center',
         justifyContent: 'space-between',
         height: 50,
     }, datePicker: {
@@ -85,6 +189,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
-
+    textHeader: {
+        fontSize: 30,
+        color: 'white',
+        fontWeight: "600"
+    }
 })
 export default CalendarScreen

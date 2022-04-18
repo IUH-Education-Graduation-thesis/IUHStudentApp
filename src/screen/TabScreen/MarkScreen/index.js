@@ -1,4 +1,4 @@
-import React, { createRef, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import {
     StyleSheet,
 
@@ -14,6 +14,13 @@ import Accordion from "react-native-collapsible/Accordion";
 import BackgroundView from "../../../components/BackgroundView";
 import BottomPopup from "./components/BottomPopup";
 import Text from "../../../components/Text";
+
+import queries from '../../../core/GraphQl';
+import { GETDIEM_FRAGMENT } from "./fragment";
+import { useQuery } from "@apollo/client";
+import { COLORS } from "../../../themes/color";
+
+const getDiemQuery = queries.query.getDiem(GETDIEM_FRAGMENT);
 const sample = [
     {
         title: "HK1(2018-2019)",
@@ -38,23 +45,34 @@ const MarkScreen = (props) => {
     const sheetRef = useRef();
     const [state, setState] = useState({
         activeSections: [],
+        diem: []
     });
+    const [activeSections, setActiveSections] = useState([]);
+    const { data: dataGetDiem, loading: loadingGetDiem, error: errorGetDiem } = useQuery(getDiemQuery);
+    useEffect(() => {
+        setState({ diem: dataGetDiem?.getDiem?.data });
+    }, [dataGetDiem])
+    console.log(dataGetDiem);
     const _renderHeader = section => (
         <View key={section} style={styles.item} >
-            <Text style={styles.title}>{section.title}</Text>
+            <Text style={styles.title}>HK{section.thuTuHocKy}({section.namBatDau + "-" + section.namKetThuc})</Text>
             <Image source={IC_ARR_DOWN} />
         </View>
     );
 
     const _renderContent = section => {
-        return section.data.map((item, index) => {
-            if (index > -1) {
-                return (
-                    <TouchableWithoutFeedback key={index} onPress={onShowUp} style={styles.subitem}>
-                        <Text style={styles.subtitle1}>{item}</Text>
-                    </TouchableWithoutFeedback>
-                );
-            }
+        return section.listSinhVienLopHocPhan.map((item, index) => {
+            console.log(item.diemCuoiKy);
+
+            return (
+                <TouchableWithoutFeedback key={index} onPress={onShowUp} style={styles.subitem}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+                        <Text style={[styles.subtitle1]}>{index + 1 + "   " + item?.lopHocPhan?.tenLopHocPhan}</Text>
+                        <Text style={styles.subtitle1}>{item.diemCuoiKy}</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+            );
+
         });
     };
     const onShowUp = () => {
@@ -64,7 +82,9 @@ const MarkScreen = (props) => {
         popRef.close()
     }
     const _updateSections = activeSections => {
-        setState({ activeSections });
+        setActiveSections(
+            activeSections.includes(undefined) ? [] : activeSections
+        );
     };
 
     return (
@@ -74,14 +94,14 @@ const MarkScreen = (props) => {
                     <Text style={styles.textHeader}>Kết quả học tập</Text>
                 </View>
                 <ScrollView>
-                    <Accordion
-                        sections={sample}
+                    {dataGetDiem != null ? <Accordion
+                        sections={state.diem}
                         keyExtractory={(item, index) => index}
-                        activeSections={state.activeSections}
+                        activeSections={activeSections}
                         renderHeader={_renderHeader}
                         renderContent={_renderContent}
                         onChange={_updateSections}
-                    />
+                    /> : null}
                 </ScrollView>
                 <BottomPopup ref={(target) => { popRef = target }}
                     onTouchOutside={onClosePopup}
@@ -105,11 +125,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     subitem: {
-        backgroundColor: "lightblue",
+        // backgroundColor: "lightblue",
         paddingBottom: 20,
         marginVertical: 8,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+
     },
     header: {
         fontSize: 32,
@@ -135,10 +156,10 @@ const styles = StyleSheet.create({
     subtitle1: {
         fontSize: 20,
         fontWeight: '500',
-        height: 40,
-        backgroundColor: '#bff006',
+        height: 30,
+        // backgroundColor: COLORS.lightBlue,
         marginBottom: 10,
-
+        // borderWidth: 1
     }
 });
 
