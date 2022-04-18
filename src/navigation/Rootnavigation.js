@@ -114,7 +114,7 @@ const Rootnavigation = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name={screenName.signIn} component={SignInScreen} />
             <Stack.Screen name={screenName.homeTab} component={RootTab} />
-            <Stack.Screen name={screenName.stepDKHP} component={DangKyHP} />
+            <Stack.Screen name={screenName.stepDKHP} component={ProgressStepsUI} />
         </Stack.Navigator >
     );
 }

@@ -22,7 +22,6 @@ const DropDownHK = () => {
         setDataGetHocKy(_hocKy);
         dispatch(setHocKyID(dataGetProfile?.getProfile.data[0].sinhVien.lop.khoa.hocKies[0].thuTu));
     }, [dataGetProfile?.getProfile.data[0].sinhVien.lop.khoa.hocKies])
-
     return (
         <SelectCountry
             style={styles.dropdown}
