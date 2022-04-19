@@ -37,6 +37,8 @@ id
 maLopHocPhan
 tenLopHocPhan
 hocPhan {
+  soTinChiLyThuyet
+  soTinChiThucHanh
   batBuoc
   monHoc {
     id

@@ -18,10 +18,7 @@ import {
   Col,
 } from 'react-native-table-component';
 import Text from '../../../components/Text';
-import {useLazyQuery, useQuery} from '@apollo/client';
-import {GETLOPHOCPHANFRAGMENT} from '../ProgressStepsUI/fragment';
-import {useSelector} from 'react-redux';
-import {gethocKyIDSelectors} from '../../../redux/selectors/selectorStudents';
+import {useQuery} from '@apollo/client';
 import Accordion from 'react-native-collapsible/Accordion';
 import {IC_ARR_DOWN} from '../MarkScreen/icons';
 import queries from '../../../core/GraphQl';
@@ -33,6 +30,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {isEmpty} from 'lodash';
+import ModalLichHoc from '../ProgressStepsUI/components/ModalLichHoc';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(
@@ -43,124 +41,9 @@ const DangKyHPScreen = () => {
   const title = ['Tên môn học/học phần', 'Bắt buộc'];
   const nav = useNavigation();
   const [activeSections, setActiveSections] = useState([]);
-  const [getLopHocPhan, setDataGetHocKy] = useState([]);
   const [currentHocKy, setCurrentHocKy] = useState(null);
-  const hocKyThuTu = useSelector(gethocKyIDSelectors);
-  const [state, setState] = useState([
-    {
-      id: '1',
-      maHocPhan: '40023100131',
-      batBuoc: false,
-      monHoc: {
-        ten: 'Phương pháp tính',
-      },
-      lopHocPhans: [
-        {
-          id: '2',
-          maLopHocPhan: '400231000212',
-          tenLopHocPhan: 'DHKTPM14BTT',
-          soLuongToiDa: 60,
-          soNhomThucHanh: 1,
-          trangThaiLopHocPhan: 'Chờ sinh viên đăng ký',
-          soLuongHienTai: 0,
-          lopDuKien: null,
-          giangViens: [
-            {
-              hoTenDem: 'Hoang',
-              ten: 'Anh',
-            },
-          ],
-          lichHocs: [
-            {
-              id: '3',
-              ngayHocTrongTuan: 3,
-              nhomThucHanh: 0,
-              thoiGianBatDau: '2021-12-31T00:00:00Z',
-              thoiGianKetThuc: '2022-04-15T00:00:00Z',
-              tietHocBatDau: 1,
-              tietHocKetThuc: 3,
-              phongHoc: {
-                tenPhongHoc: 'B3.06',
-              },
-              isLyThuyet: false,
-            },
-          ],
-        },
-        {
-          id: '6',
-          maLopHocPhan: '400213000453',
-          tenLopHocPhan: 'DHKTPM14ATT',
-          soLuongToiDa: 40,
-          soNhomThucHanh: 2,
-          trangThaiLopHocPhan: 'Chờ sinh viên đăng ký',
-          soLuongHienTai: 0,
-          lopDuKien: null,
-          giangViens: [
-            {
-              hoTenDem: 'Nguyen',
-              ten: 'Hoang',
-            },
-          ],
-          lichHocs: [
-            {
-              id: '4',
-              ngayHocTrongTuan: 6,
-              nhomThucHanh: 2,
-              thoiGianBatDau: '2021-12-31T00:00:00Z',
-              thoiGianKetThuc: '2022-04-15T00:00:00Z',
-              tietHocBatDau: 4,
-              tietHocKetThuc: 6,
-              phongHoc: {
-                tenPhongHoc: 'B2.03',
-              },
-              isLyThuyet: false,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: '2',
-      maHocPhan: '400243001500',
-      batBuoc: true,
-      monHoc: {
-        ten: 'Tiếng anh 2',
-      },
-      lopHocPhans: [
-        {
-          id: '4',
-          maLopHocPhan: '400213000452',
-          tenLopHocPhan: 'DHKTPM14CTT',
-          soLuongToiDa: 80,
-          soNhomThucHanh: 2,
-          trangThaiLopHocPhan: 'Chờ sinh viên đăng ký',
-          soLuongHienTai: 0,
-          lopDuKien: null,
-          giangViens: [
-            {
-              hoTenDem: 'Nguyen',
-              ten: 'Hoang',
-            },
-          ],
-          lichHocs: [
-            {
-              id: '2',
-              ngayHocTrongTuan: 2,
-              nhomThucHanh: 0,
-              thoiGianBatDau: '2021-12-31T00:00:00Z',
-              thoiGianKetThuc: '2022-04-15T00:00:00Z',
-              tietHocBatDau: 1,
-              tietHocKetThuc: 3,
-              phongHoc: {
-                tenPhongHoc: 'A1.01',
-              },
-              isLyThuyet: false,
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  const [currentLopHocPhan, setCurrentLopHocPhan] = useState({});
+  const [isVisibleModalLicHoc, setIsVisibleModalLicHoc] = useState(false);
 
   /**
    * query
@@ -213,6 +96,11 @@ const DangKyHPScreen = () => {
     });
   };
 
+  const handlePressXemButton = lopHocPhan => {
+    setIsVisibleModalLicHoc(true);
+    setCurrentLopHocPhan(lopHocPhan);
+  };
+
   /**
    * render view
    * ====================================================================================
@@ -244,42 +132,38 @@ const DangKyHPScreen = () => {
   };
 
   const _renderContent = item => {
+    console.log('item', item);
 
-    const {lopHocPhans} = item;
     return (
-      <View>
-        <View>
-          {/* <View style={styles.renderContent}>
-            <Text style={styles.txtRenderChonMH}>
-              {lopHocPhans[0]?.maLopHocPhan} - {item?.monHoc?.ten}
-            </Text>
-            <Text style={styles.txtRenderChonMH}>
-              Tín chỉ: {lopHocPhans.lichHocs}
-            </Text>
-
-            <Text style={styles.txtRenderChonMH}>
-              GV:{' '}
-              {lopHocPhans[0]?.giangViens[0]?.hoTenDem +
-                ' ' +
-                lopHocPhans[0]?.giangViens[0]?.ten}
-            </Text>
-            <Text style={styles.txtRenderChonMH}>
-              Tiết:{' '}
-              {lopHocPhans[0]?.lichHocs[0]?.tietHocBatDau +
-                ' - ' +
-                lopHocPhans[0]?.lichHocs[0]?.tietHocKetThuc}
-            </Text>
-
-            <Text style={styles.txtRenderChonMH}>
-              Thứ : {lopHocPhans[0]?.lichHocs[0]?.ngayHocTrongTuan}
-            </Text>
-            <Text style={styles.txtRenderChonMH}>
-              Phòng học : {lopHocPhans[0]?.lichHocs[0]?.phongHoc?.tenPhongHoc}
-            </Text>
-          </View> */}
-          <TouchableOpacity style={styles.textHuy}>
-            <Text style={{textAlign: 'center', color: 'white'}}>Hủy</Text>
-          </TouchableOpacity>
+      <View
+        style={{
+          borderTopColor: 'grey',
+          borderTopWidth: 1,
+          backgroundColor: 'white',
+          borderBottomColor: 'grey',
+          borderBottomWidth: 1,
+        }}>
+        <View style={{padding: 20}}>
+          <View>
+            <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
+            <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
+            <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
+            <Text>{`Số tín chỉ: ${
+              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+            }`}</Text>
+            <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
+            <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
+          </View>
+          <View style={{flexDirection: 'row-reverse', marginTop: 20}}>
+            <TouchableOpacity style={styles.textHuy}>
+              <Text style={{textAlign: 'center', color: 'white'}}>Hủy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handlePressXemButton(item)}
+              style={styles.textHuy}>
+              <Text style={{textAlign: 'center', color: 'white'}}>Xem</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -297,7 +181,6 @@ const DangKyHPScreen = () => {
         renderContent={_renderContent}
         onChange={setSections}
       />
-      
     );
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 
@@ -327,6 +210,11 @@ const DangKyHPScreen = () => {
           <ScrollView>{renderListHocPhanDaDangKy}</ScrollView>
         </View>
       </View>
+      <ModalLichHoc
+        onClose={() => setIsVisibleModalLicHoc(false)}
+        data={currentLopHocPhan}
+        isVisible={isVisibleModalLicHoc}
+      />
     </BackgroundView>
   );
 };
