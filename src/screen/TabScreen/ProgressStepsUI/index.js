@@ -54,6 +54,10 @@ const ProgressStepsUI = ({route}) => {
     dangKyHocPhanMutation,
   );
 
+  const [actDangKyHocPhan, {data: dataDangKyHocPhan}] = useMutation(
+    dangKyHocPhanMutation,
+  );
+
   /**
    *  const
    */
