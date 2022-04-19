@@ -4,6 +4,7 @@ import getProfile from './getProfile';
 import getListHocPhanDKHP from './getListHocPhanDKHP';
 import getListHocKy from './getListHocKy';
 import getHocPhanDaDangKy from './getHocPhanDaDangKy';
+import dangKyHocPhan from './dangKyHocPhan';
 
 const query = {
   ...findSinhVien.query,
@@ -15,6 +16,7 @@ const query = {
 
 const mutation = {
   ...login.mutation,
+  ...dangKyHocPhan.mutation,
 };
 
 export default {

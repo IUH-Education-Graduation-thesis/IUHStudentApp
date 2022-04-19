@@ -14,9 +14,10 @@ import {useSelector} from 'react-redux';
 import {RadioButton} from 'react-native-paper';
 
 import ModalLichHoc from './ModalLichHoc';
+import {isEmpty} from 'lodash';
 
 const LopHocPhan = props => {
-  const {data} = props;
+  const {data, onChange} = props;
 
   const idsMonHoc = useSelector(getListMonHocSelectors);
   const [state, setState] = useState({
@@ -91,6 +92,23 @@ const LopHocPhan = props => {
    * UseEffect
    * ==============================================================
    */
+
+  useEffect(() => {
+    if (isEmpty(checkedLopHocPhan)) return;
+    const _listLopHocPhanSelected = checkedLopHocPhan?.map(
+      item => item?.lopHocPhanId,
+    );
+    const _data = data
+      ?.map(item =>
+        item?.lopHocPhans
+          ?.filter(_item => _listLopHocPhanSelected?.includes(_item?.id))
+          ?.flat(),
+      )
+      ?.flat();
+
+    onChange(_data);
+  }, [checkedLopHocPhan, data]);
+
   useEffect(() => {
     if (idsMonHoc != null) {
       data.map((item, index) => {

@@ -1,4 +1,12 @@
-import {Image, LogBox, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  LogBox,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import {BackgroundView} from '../../../components';
@@ -10,11 +18,16 @@ import {getListMonHocSelectors} from '../../../redux/selectors/selectorStudents'
 import LopHocPhan from './components/LopHocPhan';
 import queries from '../../../core/GraphQl';
 import {GETLOPHOCPHANFRAGMENT} from './fragment';
-import {useLazyQuery, useQuery} from '@apollo/client';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import Step3 from './components/Step3Render';
+import {isEmpty} from 'lodash';
+
+import Modal from 'react-native-modal';
 
 const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(
   GETLOPHOCPHANFRAGMENT,
 );
+const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan();
 
 const ProgressStepsUI = ({route}) => {
   const {currentHocKy} = route.params;
@@ -37,12 +50,19 @@ const ProgressStepsUI = ({route}) => {
     * ==========================================
     */
 
+  const [actDangKyHocPhan, {data: dataDangKyHocPhan}] = useMutation(
+    dangKyHocPhanMutation,
+  );
+
   /**
    *  const
    */
   const nav = useNavigation();
   const [currentActive, setCurrentActive] = useState(0);
   const [hocPhanSelected, setHocPhanSelected] = useState([]);
+  const [lopHocPhanSelected, setLopHocPhanSelected] = useState([]);
+  const [dataSubmit, setDataSubmit] = useState([]);
+  const [isVisibleModalThanhCong, setIsVisibleModalThanhCong] = useState(false);
 
   /**
    * UseEffect
@@ -56,6 +76,14 @@ const ProgressStepsUI = ({route}) => {
    * function
    * ===========================================================================
    */
+
+  const handleStep3Change = payload => {
+    setDataSubmit(payload);
+  };
+
+  const handleLopHocPhanChange = payload => {
+    setLopHocPhanSelected(payload);
+  };
 
   const handleHocPhanChange = payload => {
     const _listHocPhanDangKy = listHocPhanDangKy?.filter(item =>
@@ -77,9 +105,30 @@ const ProgressStepsUI = ({route}) => {
     setCurrentActive(currentActive - 1);
   };
 
-  const onSubmitSteps = () => {
-    console.log('called on submit step.');
-    nav.navigate(screenName.dkhp);
+  const onSubmitSteps = async () => {
+    const _inputs = dataSubmit;
+
+    const _dataRes = await actDangKyHocPhan({
+      variables: {
+        inputs: _inputs,
+      },
+    });
+
+    const _errors = _dataRes?.data?.dangKyHocPhan?.errors || [];
+
+    if (!isEmpty(_errors)) {
+      return;
+    }
+
+    const _data = _dataRes?.data?.dangKyHocPhan?.data || [];
+
+    if (isEmpty(_data)) {
+      return;
+    }
+
+    setIsVisibleModalThanhCong(true);
+
+    // nav.navigate(screenName.dkhp);
   };
 
   /**
@@ -109,16 +158,45 @@ const ProgressStepsUI = ({route}) => {
           previousBtnText="Trở về"
           nextBtnText="Tiếp tục"
           previousBtnStyle={{textAlign: 'center', padding: 8}}>
-          <LopHocPhan data={hocPhanSelected} />
+          <LopHocPhan
+            onChange={handleLopHocPhanChange}
+            data={hocPhanSelected}
+          />
         </ProgressStep>
         <ProgressStep
           label="Chi tiết lớp học"
           onPrevious={onPrevStep}
           onSubmit={onSubmitSteps}
           previousBtnText="Trở về">
-          <FlatlistUI data={[]} chitiet={true} />
+          <Step3 onChange={handleStep3Change} data={lopHocPhanSelected} />
         </ProgressStep>
       </ProgressSteps>
+      <Modal isVisible={isVisibleModalThanhCong}>
+        <View
+          style={{
+            flex: 0.2,
+            backgroundColor: 'white',
+            borderRadius: 10,
+            overflow: 'hidden',
+            flexDirection: 'column',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Đăng ký học phần thành công.
+          </Text>
+          <TouchableOpacity
+            onPress={() => nav.navigate(screenName.dkhp)}
+            style={{
+              backgroundColor: '#B9F8D3',
+              paddingHorizontal: 50,
+              paddingVertical: 10,
+              borderRadius: 5,
+            }}>
+            <Text style={{fontWeight: 'bold', fontSize: 17}}>Ok</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </BackgroundView>
   );
 };

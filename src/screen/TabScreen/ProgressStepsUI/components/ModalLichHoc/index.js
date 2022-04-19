@@ -44,6 +44,7 @@ const ModalLichHoc = ({data, isVisible, onClose}) => {
             borderRadius: 5,
             paddingHorizontal: 15,
             paddingVertical: 10,
+            marginTop: 10,
           }}>
           <Text>{`${_titleLicHoc} - ${_thu} (${_tiet})`}</Text>
           {_isThucHanh && <Text>{`Nhóm TH: ${item?.nhomThucHanh}`}</Text>}
