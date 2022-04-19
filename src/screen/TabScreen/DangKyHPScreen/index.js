@@ -132,7 +132,6 @@ const DangKyHPScreen = () => {
   };
 
   const _renderContent = item => {
-    console.log('item', item);
 
     return (
       <View
@@ -181,6 +180,7 @@ const DangKyHPScreen = () => {
         renderContent={_renderContent}
         onChange={setSections}
       />
+      
     );
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 
