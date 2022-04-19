@@ -33,9 +33,6 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {isEmpty} from 'lodash';
-const getListHocPhanDKHPQuery = queries.query.getListHocPhanDKHP(
-  GETLOPHOCPHANFRAGMENT,
-);
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(
@@ -189,46 +186,28 @@ const DangKyHPScreen = () => {
   const dataForListLopHocPhanDaDangKy =
     dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
 
-  const [
-    actGetLopHocPhan,
-    {
-      data: dataGetLopHocPhan,
-      loading: loadingGetLopHocPhan,
-      error: errorGetLopHocPhan,
-    },
-  ] = useLazyQuery(getListHocPhanDKHPQuery);
-
   /**
    * useEffect
    * =============================================
    */
-
-  useEffect(() => {
-    setDataGetHocKy(dataGetLopHocPhan);
-  }, [dataGetLopHocPhan]);
 
   /**
    * Function
    * ======================================================================================
    */
   const onPress = () => {
-    actGetLopHocPhan({
-      variables: {
-        hocKyDangKy: parseInt(hocKyThuTu),
-        // kieu: "HOC_MOI",
-      },
+    nav.navigate(screenName.stepDKHP, {
+      currentHocKy,
     });
-
-    nav.navigate(screenName.stepDKHP);
   };
 
   const setSections = sections => {
-    console.log('sections', sections);
     // Setting up a active section state
     setActiveSections(sections);
   };
 
   const handleWhenHocKyChange = payload => {
+    setCurrentHocKy(payload);
     refetchGetLopHocPhanDaDangKy({
       hocKyId: payload,
     });
@@ -239,7 +218,6 @@ const DangKyHPScreen = () => {
    * ====================================================================================
    */
   const _renderHeader = section => {
-    console.log('section', section);
     return (
       <View key={section?.id} style={styles.item}>
         <Text style={styles.title}>{section?.hocPhan?.monHoc?.ten}</Text>
@@ -266,7 +244,6 @@ const DangKyHPScreen = () => {
   };
 
   const _renderContent = item => {
-    console.log(item);
 
     const {lopHocPhans} = item;
     return (
@@ -320,6 +297,7 @@ const DangKyHPScreen = () => {
         renderContent={_renderContent}
         onChange={setSections}
       />
+      
     );
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 

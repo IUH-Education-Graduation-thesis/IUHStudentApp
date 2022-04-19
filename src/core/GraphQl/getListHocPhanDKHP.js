@@ -1,22 +1,21 @@
-import { gql } from "@apollo/client"
+import {gql} from '@apollo/client';
 
 export default {
   query: {
-    getListHocPhanDKHP: (fragment) => gql`
-    query GET_LISTHOCPHAN_DKHP($hocKyDangKy: Int! ,$kieu: HOC_MOI){
-      getListHocPhanDKHP(hocKyDangKy:$hocKyDangKy, kieu:$kieu){
-        status
-        message
-        errors{
+    getListHocPhanDKHP: fragment => gql`
+      query ($hocKyNormalId: ID!, $kieu: KieuDangKy!) {
+        getListHocPhanDKHP(hocKyNormalId: $hocKyNormalId, kieu: $kieu) {
+          status
+          errors {
+            message
+            error_fields
+          }
           message
-          error_fields
-        }
-        data{
-          ${fragment}
+          data {
+            ${fragment}
+          }
         }
       }
-    }
-    `
-  }
-
-} 
+    `,
+  },
+};

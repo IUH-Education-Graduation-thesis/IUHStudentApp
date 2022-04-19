@@ -1,33 +1,50 @@
 export const GETLOPHOCPHANFRAGMENT = `
+id
+maHocPhan
+monHoc {
+  id
+  ten
+}
+batBuoc
+soTinChiLyThuyet
+soTinChiThucHanh
+lopHocPhans {
+  id
+  maLopHocPhan
+  tenLopHocPhan
+  soLuongToiDa
+  soNhomThucHanh
+  trangThaiLopHocPhan
+  giangViens {
     id
-    maLopHocPhan
-    moTa
-    tenLopHocPhan
-    soLuongToiDa
-    soNhomThucHanh
-    trangThaiLopHocPhan
-    hocPhan{
+    hoTenDem
+    ten
+  }
+  soLuongHienTai
+  lopDuKien
+  lichHocs {
+    id
+    ngayHocTrongTuan
+    nhomThucHanh
+    thoiGianBatDau
+    thoiGianKetThuc
+    tietHocBatDau
+    tietHocKetThuc
+    giangVien {
+      id
+      hoTenDem
+      ten
+    }
+    phongHoc {
+      id
+      tenPhongHoc
+      dayNha {
         id
-        maHocPhan
-        moTa
-        batBuoc
-        monHoc{
-            ten
-        }
+        tenDayNha
+      }
     }
-    lop{
-        ten
-    }
-    giangViens{
-        hoTenDem
-        ten
-    }
-    lichHocs{
-        ngayHocTrongTuan
-        tietHocBatDau
-        tietHocKetThuc
-        phongHoc{
-            tenPhongHoc
-        }
-    }
-`
+    isLyThuyet
+    isLichThi
+  }
+}
+`;
