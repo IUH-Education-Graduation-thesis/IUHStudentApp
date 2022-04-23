@@ -1,6 +1,7 @@
 import {
     GET_SINH_VIEN_FAIL,
     GET_SINH_VIEN_SUCCESS,
+    SET_DAY,
     SET_HOCKY_ID,
     SET_MONHOC_ID,
 } from "../actions/studentActions"
@@ -8,7 +9,8 @@ import {
 const initialState = {
     sinhVien: {},
     idHocKy: "",
-    idMonHoc: []
+    idMonHoc: [],
+    date: "",
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -21,6 +23,8 @@ export default (state = initialState, { type, payload }) => {
             return { ...state, idHocKy: payload }
         case SET_MONHOC_ID:
             return { ...state, idMonHoc: payload }
+        case SET_DAY:
+            return { ...state, date: payload }
         default:
             return state
     }
