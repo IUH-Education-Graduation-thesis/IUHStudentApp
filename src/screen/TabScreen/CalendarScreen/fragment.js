@@ -9,6 +9,7 @@ export const GETLICHHOC = `
             thoiGianKetThuc
             tietHocBatDau
             tietHocKetThuc
+            isLichThi
             lopHocPhan{
                 tenLopHocPhan
                 maLopHocPhan

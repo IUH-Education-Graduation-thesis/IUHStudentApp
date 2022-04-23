@@ -68,7 +68,7 @@ const CalendarScreen = () => {
             console.log(item.tietHocKetThuc);
             if (!isEmpty(item?.lopHocPhan)) {
                 return (
-                    <View key={index} style={styles.viewContentAccordion}>
+                    <View key={index} style={[styles.viewContentAccordion, { backgroundColor: item?.isLichThi ? "#f3d27a" : "white" }]}>
 
                         <Text style={styles.textTitle}>{item?.lopHocPhan?.tenLopHocPhan}</Text>
                         <Text >{item?.lopHocPhan?.maLopHocPhan + " - " + item?.lopHocPhan?.tenLopHocPhan}</Text>
