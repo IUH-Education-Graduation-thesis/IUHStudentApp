@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     wrapper: { flexDirection: 'row' },
     title: { flex: 1, alignItems: 'flex-start' },
     row: { height: 28 },
-    text: { textAlign: 'center', fontSize: 16 },
+    text: { textAlign: 'center', color: 'black', fontSize: 20 },
     btnStyle: {
         width: "90%",
         height: 60,
@@ -47,7 +47,8 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 40,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        color: 'black'
     },
     textBtn: {
         fontSize: 30,

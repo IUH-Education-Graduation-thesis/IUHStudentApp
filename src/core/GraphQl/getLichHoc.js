@@ -3,21 +3,12 @@ import { gql } from "@apollo/client"
 export default {
     query: {
         getLichHoc: (fragment) => gql`
-            query GETLICHHOC($ngay: Date!){
+            query($ngay: Date!){
                 getLichHoc(ngay:$ngay){
                     status
+                    message
                     data{
-                        thu
-                        thuNumber
-                        listLichHoc{
-                        id
-                        ngayHocTrongTuan
-                        nhomThucHanh
-                        thoiGianBatDau
-                        thoiGianKetThuc
-                        tietHocBatDau
-                        tietHocKetThuc
-                        }
+                        ${fragment}
                     }
                 }
             }

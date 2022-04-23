@@ -1,13 +1,24 @@
 export const GETLICHHOC = `
-thu
-                        thuNumber
-                        listLichHoc{
-                        id
-                        ngayHocTrongTuan
-                        nhomThucHanh
-                        thoiGianBatDau
-                        thoiGianKetThuc
-                        tietHocBatDau
-                        tietHocKetThuc
-                        }
+        thu
+        thuNumber
+        listLichHoc{
+            id
+            ngayHocTrongTuan
+            nhomThucHanh
+            thoiGianBatDau
+            thoiGianKetThuc
+            tietHocBatDau
+            tietHocKetThuc
+            lopHocPhan{
+                tenLopHocPhan
+                maLopHocPhan
+                giangViens{
+                    hoTenDem
+                    ten
+                  }
+            }
+            phongHoc{
+                tenPhongHoc
+              }
+        }
 `

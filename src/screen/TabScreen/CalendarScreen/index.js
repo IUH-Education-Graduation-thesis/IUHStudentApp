@@ -1,71 +1,60 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import BackgroundView from '../../../components/BackgroundView';
 import Button from './components/Button';
-// import { DatePicker } from 'antd';
 import { IC_ARR_DOWN } from '../MarkScreen/icons';
 import { ScrollView } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
 import { Image } from 'react-native';
-import { DatePicker } from 'native-base';
-import Antd from 'react-native-vector-icons/AntDesign'
-import { TouchableOpacity } from 'react-native';
 import queries from '../../../core/GraphQl';
 import { GETLICHHOC } from './fragment';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { isEmpty } from 'lodash';
+import Text from '../../../components/Text';
+import ShowCalendar from './components/ShowCalendar';
+import { useSelector } from 'react-redux';
+import { getDay } from '../../../redux/selectors/selectorStudents';
+import { COLORS } from '../../../themes/color';
 
+const moment = require('moment');
 const getLichHocQuery = queries.query.getLichHoc(GETLICHHOC);
-
 const CalendarScreen = () => {
-    const sample = [
-        {
-            "thu": "Thứ 2",
-            "thuNumber": 2,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Thứ 3",
-            "thuNumber": 3,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Thứ 4",
-            "thuNumber": 4,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Thứ 5",
-            "thuNumber": 5,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Thứ 6",
-            "thuNumber": 6,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Thứ 7",
-            "thuNumber": 7,
-            "listLichHoc": []
-        },
-        {
-            "thu": "Chủ Nhật",
-            "thuNumber": 8,
-            "listLichHoc": []
-        }
-    ];
-    let today = new Date();
-    // const [actGetLichHoc, { data: dataLichHoc, loading: loadingdataLichHoc, error: errordataLichHoc }] = useLazyQuery(getLichHocQuery);
 
-    // console.log(dataLichHoc);
-    const [date, setDate] = useState(new Date());
-
-
+    /**
+     * Const
+     */
 
     const [state, setState] = useState({
-        activeSections: [],
+
         showPickerCheck: false,
     });
+    const [activeSections, setActiveSections] = useState([]);
+    let today = new Date();
+    /**
+     * use State/Selector/...
+     */
+    const day = useSelector(getDay);
+    const [date, setDate] = useState(today.toISOString());
+    useEffect(() => {
+        if (day) {
+            var nowDate = new Date(day);
+            nowDate.setDate(day.getDate() + 1);
+            setDate(nowDate.toISOString());
+        }
+    }, [day])
+    /**
+     * call query/ mutation
+     */
+    const { data: getdataLichHoc, loading: loadingLichHoc } = useQuery(getLichHocQuery, {
+        variables: {
+            ngay: `${date}`,
+        }
+    });
+    const dataLichHoc = getdataLichHoc?.getLichHoc?.data || [];
+    /**
+     * 
+     * function
+     */
     const _renderHeader = section => (
         <View key={section} style={styles.item} >
             <Text style={styles.title}>{section.thu}</Text>
@@ -74,24 +63,52 @@ const CalendarScreen = () => {
     );
 
     const _renderContent = section => {
+        console.log(section.listLichHoc);
         return section.listLichHoc.map((item, index) => {
-            if (index > -1) {
+            console.log(item.tietHocKetThuc);
+            if (!isEmpty(item?.lopHocPhan)) {
                 return (
-                    <TouchableWithoutFeedback key={index} onPress={onShowUp} style={styles.subitem}>
-                        <Text style={styles.subtitle1}>{item}</Text>
-                    </TouchableWithoutFeedback>
+                    <View key={index} style={styles.viewContentAccordion}>
+
+                        <Text style={styles.textTitle}>{item?.lopHocPhan?.tenLopHocPhan}</Text>
+                        <Text >{item?.lopHocPhan?.maLopHocPhan + " - " + item?.lopHocPhan?.tenLopHocPhan}</Text>
+                        <Text style={styles.subtitle1}>{"Tiết: " + item?.tietHocBatDau + "-" + item?.tietHocKetThuc}</Text>
+                        <Text style={styles.subtitle1}>{"Phòng: " + item?.phongHoc?.tenPhongHoc}</Text>
+                        <Text style={styles.subtitle1}>{"Giảng viên: " + item?.lopHocPhan?.giangViens[0].hoTenDem + " " + item?.lopHocPhan?.giangViens[0].ten}</Text>
+                        <Text style={styles.subtitle1}>{"Ghi chú: "}</Text>
+
+                    </View>
                 );
+            } else {
+                return <View style={{ width: '100%', height: 30, backgroundColor: 'white' }} />
             }
         });
     };
     const _updateSections = activeSections => {
-        setState({ activeSections });
-    };
-    const _onDateChange = (e, newDate) => {
-        setDate(newDate);
+        setActiveSections(
+            activeSections.includes(undefined) ? [] : activeSections
+        );
     };
 
+    const onPress = (type) => {
+        if (type == 'pre') {
+            var yesterday = new Date(date);
+            yesterday.setDate(yesterday.getDate() - 7);
+            setDate(yesterday.toISOString())
+        } else if (type == 'now') {
+            var now = new Date(today);
+            now.setDate(now.getDate());
+            setDate(now.toISOString())
+        } else {
+            var next = new Date(date);
+            next.setDate(next.getDate() + 7);
+            setDate(next.toISOString())
+        }
 
+    }
+    /**
+     * render ui
+     */
     return (
         <BackgroundView>
             <View style={styles.header}>
@@ -101,39 +118,25 @@ const CalendarScreen = () => {
 
                     </View>
                     <View style={styles.viewHeader}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, marginLeft: 5 }}>
-                            <Antd name='calendar' size={20} color='black' />
-                            <DatePicker
-
-                                locale={'vi'}
-                                animationType={'fade'}
-                                androidMode={'default'}
-                                placeHolderText={today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()}
-                                textStyle={{ color: 'red' }}
-                                placeHolderTextStyle={{ color: 'black' }}
-                                disabled={false}
-                                onChange={_onDateChange}
-                                value={date}
-                                onConfirm={(date) => {
-                                    // setOpen(false)
-                                    setState({ showPickerCheck: false })
-                                }}
-                            />
-                        </View>
-                        <Button textBtn="Lịch học" />
-                        <Button textBtn="Hiện tại" />
-                        <Button textBtn="Lịch thi" />
+                        <ShowCalendar day={date} />
+                        <Button textBtn="< Trở về" onPress={() => onPress('pre')} />
+                        <Button textBtn="Hiện tại" onPress={() => onPress('now')} />
+                        <Button textBtn="Tiếp >" onPress={() => onPress('next')} />
                     </View>
 
                     <ScrollView>
-                        <Accordion
-                            sections={sample}
-                            keyExtractory={(item, index) => index}
-                            activeSections={state.activeSections}
-                            renderHeader={_renderHeader}
-                            renderContent={_renderContent}
-                            onChange={_updateSections}
-                        />
+                        {!isEmpty(dataLichHoc)
+                            ? <Accordion
+                                sections={dataLichHoc}
+                                keyExtractory={(item, index) => index}
+                                activeSections={activeSections}
+                                renderHeader={_renderHeader}
+                                renderContent={_renderContent}
+                                onChange={_updateSections}
+                            />
+                            : <View>
+                                <Text>Loading...</Text>
+                            </View>}
                     </ScrollView>
                 </View>
             </View>
@@ -145,6 +148,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    textTitle: {
+        fontSize: 20,
+        fontWeight: '900',
+        color: '#f3d27a'
+    }
+    ,
     styleDropItem: {
         marginTop: 10,
         backgroundColor: "white",
@@ -163,6 +172,12 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    subitem: {
+        paddingBottom: 20,
+        marginVertical: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     headerView: {
         height: 50,
@@ -193,6 +208,27 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: 'white',
         fontWeight: "600"
+    },
+    viewContentAccordion:
+    {
+        justifyContent: 'space-between',
+        // alignItems: 'center',
+        paddingHorizontal: 20,
+        marginTop: 4,
+        backgroundColor: COLORS.lightBlue,
+        borderRadius: 10,
+        backgroundColor: 'white',
+        marginBottom: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.37,
+        shadowRadius: 7.49,
+        elevation: 12,
+        marginHorizontal: 10,
+        paddingVertical: 10
     }
 })
 export default CalendarScreen
