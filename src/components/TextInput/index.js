@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 50,
         marginHorizontal: 10,
+        color: 'black'
         // fontStyle: 'italic'
     },
     styleError: { borderColor: 'red', borderWidth: 1 },

@@ -4,4 +4,6 @@ import DangKyHPScreen from "./DangKyHPScreen";
 import MarkScreen from "./MarkScreen";
 import CalendarScreen from "./CalendarScreen";
 import ProgressStepsUI from "./ProgressStepsUI"
-export { HomeScreen, ProfileScreen, MarkScreen, ProgressStepsUI, DangKyHPScreen, CalendarScreen };
+import DangKyHP from "./DangKyHPScreen/components/DangKyHP";
+
+export { HomeScreen, ProfileScreen, MarkScreen, DangKyHP, ProgressStepsUI, DangKyHPScreen, CalendarScreen };

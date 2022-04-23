@@ -1,97 +1,35 @@
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native';
-import { SelectCountry } from 'react-native-element-dropdown';
-import BackgroundView from '../../../../components/BackgroundView';
-const DropDownHK = () => {
-    const local_data = [
-        {
-            value: '1',
-            lable: 'HK1(2018-2019)',
-        },
-        {
-            value: '2',
-            lable: 'HK2(2018-2019)',
-        },
-        {
-            value: '3',
-            lable: 'HK3(2018-2019)',
-        },
-        {
-            value: '4',
-            lable: 'HK1(2019-2020)',
-        },
-        {
-            value: '5',
-            lable: 'HK2(2019-2020)',
-        },
-    ];
-    const [state, SetState] = useState({
-        contents: [
-            {
-                title: 'Học kỳ 1( 2018-2019)',
-                body:
-                {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                }
-            },
-            {
-                title: 'Học kỳ 2( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-            {
-                title: 'Học kỳ 3( 2018-2019)',
-                body: {
-                    stt: 1,
-                    tenMonHoc: "Công nghệ mới",
-                    diemTB: `8.6`
-                },
-            },
-        ],
-    });
-    const [country, setCountry] = useState('1');
-    return (
-        <SelectCountry
-            style={styles.dropdown}
-            selectedTextStyle={styles.selectedTextStyle}
-            imageStyle={styles.imageStyle}
-            maxHeight={150}
-            value={country}
-            data={local_data}
-            valueField="value"
-            labelField="lable"
-            onChange={e => {
-                setCountry(e.value);
-            }}
-        />
-    )
-}
-const styles = StyleSheet.create({
-    dropdown: {
-        height: 40,
-        width: 145,
-        backgroundColor: 'white',
-        borderRadius: 22,
-    },
+import {isEmpty} from 'lodash';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import SelectDropdown from 'react-native-select-dropdown';
 
-    placeholderStyle: {
-        fontSize: 16,
-    },
-    selectedTextStyle: {
-        fontSize: 14,
-        paddingHorizontal: 8,
-        textAlign: 'center'
-    },
-    containerStyle: {
-        paddingLeft: 0,
-    }, imageStyle: {
-        width: 0,
-        margin: 0
-    }
+const DropDownHK = ({data, onChange}) => {
+  return (
+    <SelectDropdown
+      data={data?.map(item => item?.label)}
+      onSelect={(selectedItem, index) => {
+        const _value = data?.[index]?.value;
+
+        onChange(_value);
+
+        console.log(selectedItem, index);
+      }}
+      buttonTextAfterSelection={(selectedItem, index) => {
+        // text represented after item is selected
+        // if data array is an array of objects then return selectedItem.property to render after item is selected
+        return selectedItem;
+      }}
+      rowTextForSelection={(item, index) => {
+        // text represented for each item in dropdown
+        // if data array is an array of objects then return item.property to represent item in dropdown
+        return item;
+      }}
+    />
+  );
+};
+const styles = StyleSheet.create({
+  dropdown: {
+    width: 300,
+  },
 });
-export default DropDownHK
+export default DropDownHK;

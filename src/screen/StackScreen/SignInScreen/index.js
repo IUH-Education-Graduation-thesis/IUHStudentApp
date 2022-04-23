@@ -1,99 +1,149 @@
-import { Keyboard, KeyboardAvoidingView, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { BackgroundView } from '../../../components'
-import Text from '../../../components/Text'
-import TextInput from '../../../components/TextInput'
-import { styles } from './style'
-import { useNavigation } from '@react-navigation/native'
-import { screenName } from '../../../utils/constantScreenName'
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  LogBox,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {BackgroundView} from '../../../components';
+import Text from '../../../components/Text';
+import TextInput from '../../../components/TextInput';
+import {styles} from './style';
+import {useNavigation} from '@react-navigation/native';
+import {screenName} from '../../../utils/constantScreenName';
 import queries from '../../../core/GraphQl';
-import { useMutation } from '@apollo/client'
-import { isEmpty } from 'lodash';
+import {useMutation, useQuery} from '@apollo/client';
+import {isEmpty} from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const loginMutation = queries.mutation.login(`token`);
+const getProfileQuery = queries.query.getProfile(`id
+userName
+roles
+sinhVien {
+  id
+  hoTenDem
+  ten
+  lop{
+    id
+    ten
+    khoa{
+      id
+      khoa
+      hocKies{
+        id
+        thuTu
+      }
+    }
+  }
+}`);
 
 const SignInScreen = () => {
+  LogBox.ignoreAllLogs();
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
+  const nav = useNavigation();
+  /**
+   * API
+   * ================================================================
+   */
 
-    const nav = useNavigation();
-    /**
-     * API
-     * ================================================================
-     */
+  const [actLogin, {data: dataLogin, loading: loadingLogin}] =
+    useMutation(loginMutation);
+  const {
+    data: dataGetProfile,
+    loading: loadingGetProfile,
+    error: errorGetProfile,
+  } = useQuery(getProfileQuery);
 
-    const [actLogin, { data: dataLogin, loading: loadingLogin }] = useMutation(loginMutation);
+  /**
+   * Useeffect
+   * ==============================================================
+   */
 
-    /**
-     * Useeffect
-     * ==============================================================
-     */
+  useEffect(() => {
+    const helloWorld = async () => {
+      if (isEmpty(errorGetProfile)) return;
+      try {
+        await AsyncStorage.setItem('@token', '');
+      } catch (e) {
+        console.log('e', e);
+        // saving error
+      }
+    };
 
+    helloWorld();
+  }, [errorGetProfile]);
 
-    /**
-     * Function
-     * ===================================================================
-     */
+  /**
+   * Function
+   * ===================================================================
+   */
 
-    const handleOnPressLogin = async () => {
-        const _data = await actLogin({
-            variables: {
-                user_name: userName,
-                password: password,
-            }
-        })
+  const handleOnPressLogin = async () => {
+    const _data = await actLogin({
+      variables: {
+        user_name: userName,
+        password: password,
+      },
+    });
 
-        const _token = _data?.data?.login?.data?.token || '';
+    const _token = _data?.data?.login?.data?.token || '';
 
-
-        if (isEmpty(_token)) {
-            // do some thing here
-            return;
-        }
-
-        try {
-            await AsyncStorage.setItem('@token', _token)
-            nav.navigate(screenName.homeTab)
-        } catch (e) {
-            console.log('e', e);
-            // saving error
-        }
+    if (isEmpty(_token)) {
+      // do some thing here
+      return;
     }
 
-    /**
-     * render view
-     * ========================================================================
-     */
-    return (
-        <KeyboardAvoidingView behavior="height"
-            style={styles.container}>
-            <BackgroundView>
-                <View style={styles.headerView}>
-                    <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
-                    <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
-                </View>
-                <View style={styles.inputView} >
-                    <TextInput
-                        onChangeText={(text) => setUserName(text)}
-                        placeholder='Nhập mã sinh viên'
-                        style={styles.placeholderText}
-                    />
-                    <TextInput
-                        secureTextEntry
-                        onChangeText={(text) => setPassword(text)}
-                        placeholder='Nhập mật khẩu'
-                        style={styles.placeholderText} />
-                </View>
-                <View style={styles.btnView} >
-                    <TouchableOpacity style={styles.btnStyle} onPress={handleOnPressLogin}>
-                        <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
-                    </TouchableOpacity>
-                </View>
-            </BackgroundView>
-        </KeyboardAvoidingView>
-    )
-}
+    try {
+      await AsyncStorage.setItem('@token', _token);
+      nav.navigate(screenName.homeTab);
+    } catch (e) {
+      console.log('e', e);
+      // saving error
+    }
+  };
 
-export default SignInScreen
+  /**
+   * render view
+   * ========================================================================
+   */
+  return (
+    <KeyboardAvoidingView behavior="height" style={styles.container}>
+      {!isEmpty(dataGetProfile?.getProfile.data) ? (
+        nav.navigate(screenName.homeTab)
+      ) : (
+        <BackgroundView>
+          <View style={styles.headerView}>
+            <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
+            <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              onChangeText={text => setUserName(text)}
+              placeholder="Nhập mã sinh viên"
+              style={styles.placeholderText}
+            />
+            <TextInput
+              secureTextEntry
+              onChangeText={text => setPassword(text)}
+              placeholder="Nhập mật khẩu"
+              style={styles.placeholderText}
+            />
+          </View>
+          <View style={styles.btnView}>
+            <TouchableOpacity
+              style={styles.btnStyle}
+              onPress={handleOnPressLogin}>
+              <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
+            </TouchableOpacity>
+          </View>
+        </BackgroundView>
+      )}
+    </KeyboardAvoidingView>
+  );
+};
+
+export default SignInScreen;
