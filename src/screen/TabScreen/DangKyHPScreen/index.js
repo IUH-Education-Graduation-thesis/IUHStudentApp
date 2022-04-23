@@ -132,8 +132,6 @@ const DangKyHPScreen = () => {
   };
 
   const _renderContent = item => {
-    console.log('item', item);
-
     return (
       <View
         style={{
@@ -184,6 +182,12 @@ const DangKyHPScreen = () => {
     );
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 
+  const renderDropdown = useMemo(() => {
+    return (
+      <DropDownHK onChange={handleWhenHocKyChange} data={dataForDropdown} />
+    );
+  }, [dataForDropdown, handleWhenHocKyChange]);
+
   return (
     <BackgroundView>
       <View style={{flex: 0.2}}>
@@ -196,7 +200,7 @@ const DangKyHPScreen = () => {
               ĐKHP
             </Text>
           </TouchableOpacity>
-          <DropDownHK onChange={handleWhenHocKyChange} data={dataForDropdown} />
+          {renderDropdown}
         </View>
       </View>
       <View style={{flex: 1}}>

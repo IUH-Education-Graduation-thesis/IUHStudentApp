@@ -1,25 +1,29 @@
 import {isEmpty} from 'lodash';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-const DropDownHK = ({data, style, onChange}) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+import SelectDropdown from 'react-native-select-dropdown';
 
-  const handleValueChange = payload => {
-    setValue(payload);
-    onChange(payload(value));
-  };
-
+const DropDownHK = ({data, onChange}) => {
   return (
-    <DropDownPicker
-      style={style}
-      value={value}
-      open={open}
-      items={data}
-      setOpen={setOpen}
-      setValue={handleValueChange}
-      style={styles.dropdown}
+    <SelectDropdown
+      data={data?.map(item => item?.label)}
+      onSelect={(selectedItem, index) => {
+        const _value = data?.[index]?.value;
+
+        onChange(_value);
+
+        console.log(selectedItem, index);
+      }}
+      buttonTextAfterSelection={(selectedItem, index) => {
+        // text represented after item is selected
+        // if data array is an array of objects then return selectedItem.property to render after item is selected
+        return selectedItem;
+      }}
+      rowTextForSelection={(item, index) => {
+        // text represented for each item in dropdown
+        // if data array is an array of objects then return item.property to represent item in dropdown
+        return item;
+      }}
     />
   );
 };
