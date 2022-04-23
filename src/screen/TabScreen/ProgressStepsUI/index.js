@@ -45,14 +45,13 @@ const ProgressStepsUI = ({route}) => {
     },
   });
 
-    /**
-    * UseEffect
-    * ==========================================
-    */
+  const listHocPhanDangKy =
+    dataGetHocPhanDangKy?.getListHocPhanDKHP?.data || [];
 
-  const [actDangKyHocPhan, {data: dataDangKyHocPhan}] = useMutation(
-    dangKyHocPhanMutation,
-  );
+  /**
+   * UseEffect
+   * ==========================================
+   */
 
   const [actDangKyHocPhan, {data: dataDangKyHocPhan}] = useMutation(
     dangKyHocPhanMutation,
