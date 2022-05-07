@@ -1,18 +1,16 @@
-import {isEmpty} from 'lodash';
-import React, {useCallback, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const DropDownHK = ({data, onChange}) => {
+const DropDownHK = ({ data, onChange }) => {
   return (
     <SelectDropdown
-      data={data?.map(item => item?.label)}
+      data={data?.map((item) => item?.label)}
       onSelect={(selectedItem, index) => {
         const _value = data?.[index]?.value;
 
         onChange(_value);
-
-        console.log(selectedItem, index);
       }}
       buttonTextAfterSelection={(selectedItem, index) => {
         // text represented after item is selected

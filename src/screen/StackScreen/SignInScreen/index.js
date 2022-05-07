@@ -52,6 +52,7 @@ const SignInScreen = () => {
 
   const [actLogin, {data: dataLogin, loading: loadingLogin}] =
     useMutation(loginMutation);
+
   const {
     data: dataGetProfile,
     loading: loadingGetProfile,

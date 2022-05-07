@@ -1,23 +1,17 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { Image, ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Text from '../../../../components/Text';
-import {IC_ARR_DOWN} from '../../MarkScreen/icons';
+import { IC_ARR_DOWN } from '../../MarkScreen/icons';
 import Accordion from 'react-native-collapsible/Accordion';
-import {getListMonHocSelectors} from '../../../../redux/selectors/selectorStudents';
-import {useSelector} from 'react-redux';
-import {RadioButton} from 'react-native-paper';
+import { getListMonHocSelectors } from '../../../../redux/selectors/selectorStudents';
+import { useSelector } from 'react-redux';
+import { RadioButton } from 'react-native-paper';
 
 import ModalLichHoc from './ModalLichHoc';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
-const LopHocPhan = props => {
-  const {data, onChange} = props;
+const LopHocPhan = (props) => {
+  const { data, onChange } = props;
 
   const idsMonHoc = useSelector(getListMonHocSelectors);
   const [state, setState] = useState({
@@ -37,29 +31,23 @@ const LopHocPhan = props => {
    * ==========================================================
    */
 
-  const handleOnPressViewLicHoc = lhp => {
+  const handleOnPressViewLicHoc = (lhp) => {
     setCurrentLopHocPhan(lhp);
     setIsVisibleModalLichHoc(true);
   };
 
-  const setSections = sections => {
+  const setSections = (sections) => {
     // Setting up a active section state
     setActiveSections(sections.includes(undefined) ? [] : sections);
   };
 
   const handleClickRadioButton = (hocPhanId, lopHocPhanId) => {
-    const _current = checkedLopHocPhan
-      ?.map(item => item?.hocPhanId)
-      ?.includes(hocPhanId);
+    const _current = checkedLopHocPhan?.map((item) => item?.hocPhanId)?.includes(hocPhanId);
 
     if (_current) {
-      if (
-        checkedLopHocPhan
-          ?.map(item => item?.lopHocPhanId)
-          ?.includes(lopHocPhanId)
-      ) {
+      if (checkedLopHocPhan?.map((item) => item?.lopHocPhanId)?.includes(lopHocPhanId)) {
         const _checkedLopHocPhan = checkedLopHocPhan?.filter(
-          item => item?.hocPhanId !== hocPhanId,
+          (item) => item?.hocPhanId !== hocPhanId,
         );
 
         setCheckedLopHocPhan(_checkedLopHocPhan);
@@ -67,9 +55,7 @@ const LopHocPhan = props => {
         return;
       }
 
-      const _checkedLopHocPhan = checkedLopHocPhan?.filter(
-        item => item?.hocPhanId !== hocPhanId,
-      );
+      const _checkedLopHocPhan = checkedLopHocPhan?.filter((item) => item?.hocPhanId !== hocPhanId);
 
       const _temp = {
         hocPhanId: hocPhanId,
@@ -95,14 +81,10 @@ const LopHocPhan = props => {
 
   useEffect(() => {
     if (isEmpty(checkedLopHocPhan)) return;
-    const _listLopHocPhanSelected = checkedLopHocPhan?.map(
-      item => item?.lopHocPhanId,
-    );
+    const _listLopHocPhanSelected = checkedLopHocPhan?.map((item) => item?.lopHocPhanId);
     const _data = data
-      ?.map(item =>
-        item?.lopHocPhans
-          ?.filter(_item => _listLopHocPhanSelected?.includes(_item?.id))
-          ?.flat(),
+      ?.map((item) =>
+        item?.lopHocPhans?.filter((_item) => _listLopHocPhanSelected?.includes(_item?.id))?.flat(),
       )
       ?.flat();
 
@@ -112,7 +94,7 @@ const LopHocPhan = props => {
   useEffect(() => {
     if (idsMonHoc != null) {
       data.map((item, index) => {
-        idsMonHoc.map(id => {
+        idsMonHoc.map((id) => {
           if (id === item.maHocPhan) {
             setState({
               lopHocPhan: [...state.lopHocPhan, item],
@@ -128,7 +110,7 @@ const LopHocPhan = props => {
    * ==========================================================================
    */
 
-  const _renderHeader = section => {
+  const _renderHeader = (section) => {
     return (
       <View key={section.id} style={styles.item}>
         <Text style={styles.title}>{section.monHoc.ten}</Text>
@@ -137,11 +119,9 @@ const LopHocPhan = props => {
     );
   };
 
-  console.log('checkedLopHocPhan', checkedLopHocPhan);
-
-  const _renderContent = item => {
-    const {lopHocPhans} = item;
-    return lopHocPhans.map(lhp => {
+  const _renderContent = (item) => {
+    const { lopHocPhans } = item;
+    return lopHocPhans.map((lhp) => {
       return (
         <View>
           <View
@@ -153,22 +133,19 @@ const LopHocPhan = props => {
               marginHorizontal: 20,
               padding: 10,
               borderRadius: 10,
-            }}>
+            }}
+          >
             <RadioButton
               value={lhp.maLopHocPhan}
               status={
-                checkedLopHocPhan
-                  ?.map(item => item?.lopHocPhanId)
-                  ?.includes(lhp?.id)
+                checkedLopHocPhan?.map((item) => item?.lopHocPhanId)?.includes(lhp?.id)
                   ? 'checked'
                   : 'unchecked'
               }
               onPress={() => handleClickRadioButton(item?.id, lhp?.id)}
             />
             <View>
-              <Text style={styles.txtRenderChonMH}>
-                Mã LHP: {lhp?.maLopHocPhan}
-              </Text>
+              <Text style={styles.txtRenderChonMH}>Mã LHP: {lhp?.maLopHocPhan}</Text>
               <Text>Tên LHP: {item?.monHoc?.ten}</Text>
               <Text>Lớp dự kiến: {lhp?.lopDuKien}</Text>
               <Text>Sĩ số tối đa: {lhp?.soLuongToiDa}</Text>
@@ -182,8 +159,9 @@ const LopHocPhan = props => {
                   paddingLeft: 10,
                   marginTop: 10,
                   borderRadius: 5,
-                }}>
-                <Text style={{color: 'white'}}>Xem lịch học</Text>
+                }}
+              >
+                <Text style={{ color: 'white' }}>Xem lịch học</Text>
               </TouchableOpacity>
             </View>
           </View>

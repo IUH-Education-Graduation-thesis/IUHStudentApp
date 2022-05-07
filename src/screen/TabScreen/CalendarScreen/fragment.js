@@ -1,3 +1,5 @@
+export default {};
+
 export const GETLICHHOC = `
         thu
         thuNumber
@@ -22,4 +24,4 @@ export const GETLICHHOC = `
                 tenPhongHoc
               }
         }
-`
+`;
