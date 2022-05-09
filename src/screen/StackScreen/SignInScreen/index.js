@@ -1,20 +1,14 @@
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  LogBox,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {BackgroundView} from '../../../components';
+import { Keyboard, KeyboardAvoidingView, LogBox, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { BackgroundView } from '../../../components';
 import Text from '../../../components/Text';
 import TextInput from '../../../components/TextInput';
-import {styles} from './style';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../../../utils/constantScreenName';
+import { styles } from './style';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../../../utils/constantScreenName';
 import queries from '../../../core/GraphQl';
-import {useMutation, useQuery} from '@apollo/client';
-import {isEmpty} from 'lodash';
+import { useMutation, useQuery } from '@apollo/client';
+import { isEmpty } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const loginMutation = queries.mutation.login(`token`);
@@ -50,8 +44,7 @@ const SignInScreen = () => {
    * ================================================================
    */
 
-  const [actLogin, {data: dataLogin, loading: loadingLogin}] =
-    useMutation(loginMutation);
+  const [actLogin, { data: dataLogin, loading: loadingLogin }] = useMutation(loginMutation);
 
   const {
     data: dataGetProfile,
@@ -68,10 +61,9 @@ const SignInScreen = () => {
     const helloWorld = async () => {
       if (isEmpty(errorGetProfile)) return;
       try {
-        await AsyncStorage.setItem('@token', '');
+        await AsyncStorage.removeItem('@token');
       } catch (e) {
         console.log('e', e);
-        // saving error
       }
     };
 
@@ -94,7 +86,6 @@ const SignInScreen = () => {
     const _token = _data?.data?.login?.data?.token || '';
 
     if (isEmpty(_token)) {
-      // do some thing here
       return;
     }
 
@@ -103,7 +94,6 @@ const SignInScreen = () => {
       nav.navigate(screenName.homeTab);
     } catch (e) {
       console.log('e', e);
-      // saving error
     }
   };
 
@@ -123,21 +113,19 @@ const SignInScreen = () => {
           </View>
           <View style={styles.inputView}>
             <TextInput
-              onChangeText={text => setUserName(text)}
+              onChangeText={(text) => setUserName(text)}
               placeholder="Nhập mã sinh viên"
               style={styles.placeholderText}
             />
             <TextInput
               secureTextEntry
-              onChangeText={text => setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               placeholder="Nhập mật khẩu"
               style={styles.placeholderText}
             />
           </View>
           <View style={styles.btnView}>
-            <TouchableOpacity
-              style={styles.btnStyle}
-              onPress={handleOnPressLogin}>
+            <TouchableOpacity style={styles.btnStyle} onPress={handleOnPressLogin}>
               <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
             </TouchableOpacity>
           </View>

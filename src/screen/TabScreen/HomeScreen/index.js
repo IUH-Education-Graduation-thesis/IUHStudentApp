@@ -1,19 +1,19 @@
-import {View, TouchableOpacity, LogBox} from 'react-native';
-import React, {useEffect} from 'react';
-import {styles} from './style';
+import { View, TouchableOpacity, LogBox } from 'react-native';
+import React, { useEffect } from 'react';
+import { styles } from './style';
 import BackgroundView from '../../../components/BackgroundView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../../../utils/constantScreenName';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../../../utils/constantScreenName';
 
 import Button from './components/Button';
-import IconBtn, {tpyeIcon} from './components/IconBtn';
+import IconBtn, { tpyeIcon } from './components/IconBtn';
 import Text from '../../../components/Text';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import queries from '../../../core/GraphQl';
-import {isEmpty} from 'lodash';
-import {useDispatch} from 'react-redux';
-import {getSinhVienSuccess} from '../../../redux/actions/studentActions';
+import { isEmpty } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { getSinhVienSuccess } from '../../../redux/actions/studentActions';
 
 const getProfileQuery = queries.query.getProfile(` id
 userName
@@ -52,24 +52,26 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const nav = useNavigation();
-  const onPressBtn = screenName => {
-    nav.navigate(screenName, {id: mssv});
+  const onPressBtn = (screenName) => {
+    nav.navigate(screenName, { id: mssv });
   };
   const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || [];
 
   useEffect(() => {
     if (sv) {
       dispatch(getSinhVienSuccess(sv));
+
+      return;
     }
+
+    nav.navigate(screenName.signIn);
   }, [sv]);
 
   return (
     <BackgroundView>
-      <View style={{flex: 0.6}}>
+      <View style={{ flex: 0.6 }}>
         <View style={styles.headerView}>
-          <Text style={styles.textHeader}>
-            Xin chào, {sv?.hoTenDem + ' ' + sv?.ten}
-          </Text>
+          <Text style={styles.textHeader}>Xin chào, {sv?.hoTenDem + ' ' + sv?.ten}</Text>
           <TouchableOpacity onPress={() => nav.navigate(screenName.announce)}>
             <Ionicons name="notifications-outline" color="white" size={25} />
           </TouchableOpacity>
@@ -82,7 +84,7 @@ const HomeScreen = () => {
             textBtn="Xem lịch"
             onPress={() => onPressBtn(screenName.calendar)}
           />
-          <View style={{backgroundColor: '#eae4e4', width: 1, height: 70}} />
+          <View style={{ backgroundColor: '#eae4e4', width: 1, height: 70 }} />
           <Button
             nameIcon="vcard-o"
             size={30}
@@ -93,12 +95,7 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={styles.contentView}>
-        <IconBtn
-          nameIcon="stack"
-          size={30}
-          text={'Đăng ký học phần'}
-          type={tpyeIcon.octicons}
-        />
+        <IconBtn nameIcon="stack" size={30} text={'Đăng ký học phần'} type={tpyeIcon.octicons} />
       </View>
     </BackgroundView>
   );

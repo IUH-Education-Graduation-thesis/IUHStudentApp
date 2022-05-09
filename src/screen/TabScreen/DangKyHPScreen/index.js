@@ -1,41 +1,25 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
 import BackgroundView from '../../../components/BackgroundView';
 import DropDownHK from './components/DropDownHK';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../../../utils/constantScreenName';
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-} from 'react-native-table-component';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../../../utils/constantScreenName';
+import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
 import Text from '../../../components/Text';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Accordion from 'react-native-collapsible/Accordion';
-import {IC_ARR_DOWN} from '../MarkScreen/icons';
+import { IC_ARR_DOWN } from '../MarkScreen/icons';
 import queries from '../../../core/GraphQl';
-import {
-  GET_LIST_HOC_KY_FRAGMENT,
-  GET_LOP_HOC_PHAN_DA_DANG_KY,
-} from './fragment';
+import { GET_LIST_HOC_KY_FRAGMENT, GET_LOP_HOC_PHAN_DA_DANG_KY } from './fragment';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 import ModalLichHoc from '../ProgressStepsUI/components/ModalLichHoc';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
-const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(
-  GET_LOP_HOC_PHAN_DA_DANG_KY,
-);
+const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(GET_LOP_HOC_PHAN_DA_DANG_KY);
 
 const DangKyHPScreen = () => {
   const title = ['Tên môn học/học phần', 'Bắt buộc'];
@@ -49,25 +33,26 @@ const DangKyHPScreen = () => {
    * query
    * =================================================================================================
    */
-  const {data: dataGetListHocKy, loading: loadingGetListHocKy} =
-    useQuery(getListHocKyQuery);
+  const { data: dataGetListHocKy, loading: loadingGetListHocKy } = useQuery(getListHocKyQuery, {
+    fetchPolicy: 'network-only',
+  });
 
-  const dataForDropdown = dataGetListHocKy?.getListHocKy?.data?.map(item => ({
+  const dataForDropdown = dataGetListHocKy?.getListHocKy?.data?.map((item) => ({
     value: item?.id,
     label: `Học kỳ ${item?.thuTuHocKy} (${item?.namHoc?.namBatDau}-${item?.namHoc?.namKetThuc})`,
   }));
 
-  const {
-    data: dataGetLopHocPhanDaDangKy,
-    refetch: refetchGetLopHocPhanDaDangKy,
-  } = useQuery(getLopHocPhanDaDangKy, {
-    variables: {
-      hocKyId: currentHocKy,
+  const { data: dataGetLopHocPhanDaDangKy, refetch: refetchGetLopHocPhanDaDangKy } = useQuery(
+    getLopHocPhanDaDangKy,
+    {
+      skip: !currentHocKy,
+      variables: {
+        hocKyId: currentHocKy,
+      },
     },
-  });
+  );
 
-  const dataForListLopHocPhanDaDangKy =
-    dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
+  const dataForListLopHocPhanDaDangKy = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
 
   /**
    * useEffect
@@ -78,25 +63,25 @@ const DangKyHPScreen = () => {
    * Function
    * ======================================================================================
    */
-  const onPress = () => {
+  const onPress = async () => {
     nav.navigate(screenName.stepDKHP, {
       currentHocKy,
     });
   };
 
-  const setSections = sections => {
+  const setSections = (sections) => {
     // Setting up a active section state
     setActiveSections(sections);
   };
 
-  const handleWhenHocKyChange = payload => {
+  const handleWhenHocKyChange = (payload) => {
     setCurrentHocKy(payload);
     refetchGetLopHocPhanDaDangKy({
       hocKyId: payload,
     });
   };
 
-  const handlePressXemButton = lopHocPhan => {
+  const handlePressXemButton = (lopHocPhan) => {
     setIsVisibleModalLicHoc(true);
     setCurrentLopHocPhan(lopHocPhan);
   };
@@ -105,25 +90,15 @@ const DangKyHPScreen = () => {
    * render view
    * ====================================================================================
    */
-  const _renderHeader = section => {
+  const _renderHeader = (section) => {
     return (
       <View key={section?.id} style={styles.item}>
         <Text style={styles.title}>{section?.hocPhan?.monHoc?.ten}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           {section?.hocPhan?.batBuoc ? (
-            <AntDesign
-              name="checkcircle"
-              size={22}
-              color={'green'}
-              style={{marginRight: 10}}
-            />
+            <AntDesign name="checkcircle" size={22} color={'green'} style={{ marginRight: 10 }} />
           ) : (
-            <MaterialIcons
-              name="cancel"
-              size={25}
-              color={'red'}
-              style={{marginRight: 10}}
-            />
+            <MaterialIcons name="cancel" size={25} color={'red'} style={{ marginRight: 10 }} />
           )}
           <Image source={IC_ARR_DOWN} />
         </View>
@@ -131,7 +106,7 @@ const DangKyHPScreen = () => {
     );
   };
 
-  const _renderContent = item => {
+  const _renderContent = (item) => {
     return (
       <View
         style={{
@@ -140,8 +115,9 @@ const DangKyHPScreen = () => {
           backgroundColor: 'white',
           borderBottomColor: 'grey',
           borderBottomWidth: 1,
-        }}>
-        <View style={{padding: 20}}>
+        }}
+      >
+        <View style={{ padding: 20 }}>
           <View>
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
             <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
@@ -152,14 +128,12 @@ const DangKyHPScreen = () => {
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>
-          <View style={{flexDirection: 'row-reverse', marginTop: 20}}>
+          <View style={{ flexDirection: 'row-reverse', marginTop: 20 }}>
             <TouchableOpacity style={styles.textHuy}>
-              <Text style={{textAlign: 'center', color: 'white'}}>Hủy</Text>
+              <Text style={{ textAlign: 'center', color: 'white' }}>Hủy</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handlePressXemButton(item)}
-              style={styles.textHuy}>
-              <Text style={{textAlign: 'center', color: 'white'}}>Xem</Text>
+            <TouchableOpacity onPress={() => handlePressXemButton(item)} style={styles.textHuy}>
+              <Text style={{ textAlign: 'center', color: 'white' }}>Xem</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -173,7 +147,7 @@ const DangKyHPScreen = () => {
     return (
       <Accordion
         sections={dataForListLopHocPhanDaDangKy}
-        keyExtractory={item => item?.id}
+        keyExtractory={(item) => item?.id}
         activeSections={activeSections}
         renderHeader={_renderHeader}
         renderContent={_renderContent}
@@ -183,34 +157,30 @@ const DangKyHPScreen = () => {
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 
   const renderDropdown = useMemo(() => {
-    return (
-      <DropDownHK onChange={handleWhenHocKyChange} data={dataForDropdown} />
-    );
+    return <DropDownHK onChange={handleWhenHocKyChange} data={dataForDropdown} />;
   }, [dataForDropdown, handleWhenHocKyChange]);
 
   return (
     <BackgroundView>
-      <View style={{flex: 0.2}}>
+      <View style={{ flex: 0.2 }}>
         <View style={styles.headerView}>
           <Text style={styles.textHeader}>Đăng ký học phần</Text>
         </View>
         <View style={styles.viewStep1}>
           <TouchableOpacity style={styles.styleBtn} onPress={onPress}>
-            <Text style={{color: 'white', fontSize: 15, fontWeight: '700'}}>
-              ĐKHP
-            </Text>
+            <Text style={{ color: 'white', fontSize: 15, fontWeight: '700' }}>ĐKHP</Text>
           </TouchableOpacity>
           {renderDropdown}
         </View>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Text style={styles.textMH}>Môn học đã đăng ký</Text>
-        <Table borderStyle={{borderWidth: 1}}>
+        <Table borderStyle={{ borderWidth: 1 }}>
           <TableWrapper>
             <Row data={title} flexArr={[3, 1]} textStyle={styles.text} />
           </TableWrapper>
         </Table>
-        <View style={{flex: 3}}>
+        <View style={{ flex: 3 }}>
           <ScrollView>{renderListHocPhanDaDangKy}</ScrollView>
         </View>
       </View>
@@ -251,7 +221,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  txtheader: {color: 'black', fontWeight: '600', fontSize: 18},
+  txtheader: { color: 'black', fontWeight: '600', fontSize: 18 },
   renderContent: {
     backgroundColor: 'white',
     marginVertical: 5,
@@ -277,7 +247,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textAlign: 'center',
   },
-  title: {flex: 1, alignItems: 'flex-start'},
+  title: { flex: 1, alignItems: 'flex-start' },
   text: {
     fontSize: 16,
     fontWeight: '600',

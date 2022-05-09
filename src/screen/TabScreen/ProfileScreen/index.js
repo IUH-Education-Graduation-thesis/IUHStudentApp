@@ -39,7 +39,7 @@ const ProfileScreen = () => {
     const onPress = () => {
         const deleteToken = async () => {
             try {
-                await AsyncStorage.setItem('@token', '')
+                await AsyncStorage.removeItem('@token')
 
             } catch (e) {
                 console.log('e', e);
