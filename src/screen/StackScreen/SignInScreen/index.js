@@ -10,8 +10,11 @@ import queries from '../../../core/GraphQl';
 import { useMutation, useQuery } from '@apollo/client';
 import { isEmpty } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LOGIN_FRAGMENT } from './fragment';
+import { useDispatch } from 'react-redux';
+import { getSinhVienSuccess } from '../../../redux/actions/studentActions';
 
-const loginMutation = queries.mutation.login(`token`);
+const loginMutation = queries.mutation.login(LOGIN_FRAGMENT);
 const getProfileQuery = queries.query.getProfile(`id
 userName
 roles
@@ -38,6 +41,7 @@ const SignInScreen = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
   const nav = useNavigation();
   /**
    * API
@@ -84,6 +88,7 @@ const SignInScreen = () => {
     });
 
     const _token = _data?.data?.login?.data?.token || '';
+    const _sinhVien = _data?.data?.login?.data?.sinhVien || {};
 
     if (isEmpty(_token)) {
       return;
@@ -91,6 +96,7 @@ const SignInScreen = () => {
 
     try {
       await AsyncStorage.setItem('@token', _token);
+      dispatch(getSinhVienSuccess(_sinhVien));
       nav.navigate(screenName.homeTab);
     } catch (e) {
       console.log('e', e);

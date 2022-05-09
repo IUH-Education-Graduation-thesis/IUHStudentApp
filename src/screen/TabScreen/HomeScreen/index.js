@@ -55,12 +55,11 @@ const HomeScreen = () => {
   const onPressBtn = (screenName) => {
     nav.navigate(screenName, { id: mssv });
   };
-  const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || [];
+  const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
 
   useEffect(() => {
-    if (sv) {
+    if (!isEmpty(sv)) {
       dispatch(getSinhVienSuccess(sv));
-
       return;
     }
 
@@ -72,7 +71,7 @@ const HomeScreen = () => {
       <View style={{ flex: 0.6 }}>
         <View style={styles.headerView}>
           <Text style={styles.textHeader}>Xin chào, {sv?.hoTenDem + ' ' + sv?.ten}</Text>
-          <TouchableOpacity onPress={() => nav.navigate(screenName.announce)}>
+          <TouchableOpacity onPress={() => nav.navigate(screenName.notification)}>
             <Ionicons name="notifications-outline" color="white" size={25} />
           </TouchableOpacity>
         </View>
