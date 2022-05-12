@@ -2,12 +2,11 @@ import { ApolloClient, InMemoryCache, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { from } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
 import config from '../config';
 import { createHttpLink } from '@apollo/client/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from 'apollo-link-ws';
 
 const getAccessToken = async () => {
   // get the authentication token from local storage if it exists
@@ -19,19 +18,13 @@ const httpLink = createHttpLink({
   uri: config.GRAPHQL_URL,
 });
 
-// const wsLink = new WebSocketLink({
-//   uri: config.GRAPHQL_URL_SUBSCRIPTION,
-//   options: {
-//     reconnect: true,
-//     lazy: true,
-//   },
-// });
-
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: config.GRAPHQL_URL_SUBSCRIPTION,
-  }),
-);
+const wsLink = new WebSocketLink({
+  uri: config.GRAPHQL_URL_SUBSCRIPTION,
+  options: {
+    reconnect: true,
+    lazy: true,
+  },
+});
 
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -49,7 +42,6 @@ const authLink = setContext(async (_, { headers }) => {
 const terminatingLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
-
     return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
   },
   wsLink,

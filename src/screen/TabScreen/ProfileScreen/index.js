@@ -7,17 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
 import { useSelector } from 'react-redux';
 import { getSinhVienSelectors } from '../../../redux/selectors/selectorStudents';
-import { useQuery } from '@apollo/client';
-import queries from '../../../core/GraphQl';
-import { SINHVIEN_FRAGMENT } from './fragment';
 import Text from '../../../components/Text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const nav = useNavigation();
   const sv = useSelector(getSinhVienSelectors);
-
-  console.log('sv', sv);
 
   const date = new Date(sv?.ngaySinh);
   const table = useState({

@@ -66,9 +66,7 @@ const SignInScreen = () => {
       if (isEmpty(errorGetProfile)) return;
       try {
         await AsyncStorage.removeItem('@token');
-      } catch (e) {
-        console.log('e', e);
-      }
+      } catch (e) {}
     };
 
     helloWorld();
@@ -98,9 +96,7 @@ const SignInScreen = () => {
       await AsyncStorage.setItem('@token', _token);
       dispatch(getSinhVienSuccess(_sinhVien));
       nav.navigate(screenName.homeTab);
-    } catch (e) {
-      console.log('e', e);
-    }
+    } catch (e) {}
   };
 
   /**

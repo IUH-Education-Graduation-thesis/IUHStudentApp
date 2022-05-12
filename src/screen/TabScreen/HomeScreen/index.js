@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, LogBox } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { styles } from './style';
 import BackgroundView from '../../../components/BackgroundView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,6 +14,7 @@ import queries from '../../../core/GraphQl';
 import { isEmpty } from 'lodash';
 import { useDispatch } from 'react-redux';
 import { getSinhVienSuccess } from '../../../redux/actions/studentActions';
+import { GlobalContext } from '../../../contexts/GlobalContext';
 
 const getProfileQuery = queries.query.getProfile(` id
 userName
@@ -42,20 +43,37 @@ sinhVien {
     }
   }
 }`);
+
 const HomeScreen = () => {
   LogBox.ignoreAllLogs();
-  const {
-    data: dataGetProfile,
-    loading: loadingGetProfile,
-    error: errorGetProfile,
-  } = useQuery(getProfileQuery);
-
   const dispatch = useDispatch();
   const nav = useNavigation();
+  const { listNotification } = useContext(GlobalContext);
+
+  const listNotificationUnRead = listNotification?.filter((item) => !item?.isRead);
+
+  /**
+   * API
+   * ===============================================================
+   */
+
+  const { data: dataGetProfile } = useQuery(getProfileQuery);
+
+  const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
+
+  /**
+   * Function
+   * ===============================================
+   */
+
   const onPressBtn = (screenName) => {
     nav.navigate(screenName, { id: mssv });
   };
-  const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
+
+  /**
+   * UseEffect
+   * ======================================================
+   */
 
   useEffect(() => {
     if (!isEmpty(sv)) {
@@ -71,8 +89,22 @@ const HomeScreen = () => {
       <View style={{ flex: 0.6 }}>
         <View style={styles.headerView}>
           <Text style={styles.textHeader}>Xin chào, {sv?.hoTenDem + ' ' + sv?.ten}</Text>
-          <TouchableOpacity onPress={() => nav.navigate(screenName.notification)}>
+          <TouchableOpacity
+            style={{ position: 'relative' }}
+            onPress={() => nav.navigate(screenName.notification, { listNotification })}
+          >
             <Ionicons name="notifications-outline" color="white" size={25} />
+            <View
+              style={{
+                position: 'absolute',
+                borderRadius: 50,
+                backgroundColor: 'red',
+                width: 10,
+                height: 10,
+                right: 0,
+                display: listNotificationUnRead?.length <= 0 ? 'none' : 'flex',
+              }}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.featureView}>
