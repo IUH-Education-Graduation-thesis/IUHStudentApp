@@ -1,79 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { BackgroundView } from '../../../components';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-
-const mockData = [
-  {
-    id: 1,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 2,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 3,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 4,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 5,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 6,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 7,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 8,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-  {
-    id: 9,
-    date: '2020/4/23',
-    message: 'Đây là nội dung của cái thông báo nó dài vcl ra như thế này nè',
-    type: 'LHP',
-    isRead: false,
-  },
-];
+import { GlobalContext } from '../../../contexts/GlobalContext';
+import moment from 'moment';
 
 const NotificationScreen = () => {
   const nav = useNavigation();
+
+  const { listNotification } = useContext(GlobalContext);
+
+  const totalNotificationUnread = listNotification?.filter((item) => !item?.isRead)?.length;
 
   /**
    * Render view
@@ -81,6 +21,8 @@ const NotificationScreen = () => {
    */
 
   const handleRenderListItem = ({ item }) => {
+    const _createDate = moment(item?.createDate)?.format('hh:mm DD/MM/YYYY');
+
     return (
       <TouchableOpacity style={styles?.wrapper?.item}>
         <View style={{ backgroundColor: '#eae4e4', padding: 20, borderRadius: 50 }}>
@@ -89,7 +31,7 @@ const NotificationScreen = () => {
         <View style={{ width: 20 }} />
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: '600' }}>{item?.message}</Text>
-          <Text>{item?.date}</Text>
+          <Text>{_createDate}</Text>
         </View>
         <View style={{ width: 10 }} />
         <TouchableOpacity style={{ padding: 10 }}>
@@ -119,19 +61,18 @@ const NotificationScreen = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: 50,
+                display: totalNotificationUnread <= 0 ? 'none' : 'flex',
               }}
             >
-              <Text style={{ fontSize: 10, color: 'white' }}>
-                {mockData?.filter((item) => !item?.isRead).length}
-              </Text>
+              <Text style={{ fontSize: 10, color: 'white' }}>{totalNotificationUnread}</Text>
             </View>
           </View>
           <TouchableOpacity>
             <IconEntypo size={25} name="dots-three-horizontal" />
           </TouchableOpacity>
         </View>
-        <ScrollView>
-          <FlatList data={mockData} renderItem={handleRenderListItem} />
+        <ScrollView style={{ backgroundColor: 'white' }}>
+          <FlatList data={listNotification} renderItem={handleRenderListItem} />
         </ScrollView>
       </View>
     </BackgroundView>
