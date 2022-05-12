@@ -7,6 +7,10 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { GlobalContext } from '../../../contexts/GlobalContext';
 import moment from 'moment';
+import queries from '../../../core/GraphQl';
+import { useMutation } from '@apollo/client';
+
+const suaNotificationMutation = queries.mutation.suaNotification('id');
 
 const NotificationScreen = () => {
   const nav = useNavigation();
@@ -14,6 +18,29 @@ const NotificationScreen = () => {
   const { listNotification } = useContext(GlobalContext);
 
   const totalNotificationUnread = listNotification?.filter((item) => !item?.isRead)?.length;
+
+  /**
+   * API
+   * ======================================================
+   */
+
+  const [actSuaNotification] = useMutation(suaNotificationMutation);
+
+  /**
+   * Function
+   * ==========================================================
+   */
+
+  const handlePressNotificationItem = (notification) => {
+    if (notification?.isRead) return;
+
+    actSuaNotification({
+      variables: {
+        id: notification?.id,
+        isRead: true,
+      },
+    });
+  };
 
   /**
    * Render view
@@ -24,8 +51,11 @@ const NotificationScreen = () => {
     const _createDate = moment(item?.createDate)?.format('hh:mm DD/MM/YYYY');
 
     return (
-      <TouchableOpacity style={styles?.wrapper?.item}>
-        <View style={{ backgroundColor: '#eae4e4', padding: 20, borderRadius: 50 }}>
+      <TouchableOpacity
+        onPress={() => handlePressNotificationItem(item)}
+        style={{ ...styles?.wrapper?.item, backgroundColor: !item?.isRead ? '#EEF3D2' : 'white' }}
+      >
+        <View style={{ backgroundColor: '#B689C0', padding: 20, borderRadius: 50 }}>
           <IconFontAwesome size={30} name="group" />
         </View>
         <View style={{ width: 20 }} />
@@ -86,7 +116,7 @@ const styles = StyleSheet.create({
     wrap_head: {
       paddingHorizontal: 20,
       height: 60,
-      backgroundColor: '#eae4e4',
+      backgroundColor: '#947EC3',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
