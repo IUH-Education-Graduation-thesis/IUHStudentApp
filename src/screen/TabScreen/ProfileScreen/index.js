@@ -81,7 +81,7 @@ const ProfileScreen = () => {
           </TableWrapper>
         </Table>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnStyle} onPress={() => onPress()}>
+          <TouchableOpacity style={styles.btnStyle} onPress={() => onPress}>
             <Text style={styles.textBtn}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>
