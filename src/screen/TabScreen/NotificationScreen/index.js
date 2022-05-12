@@ -9,6 +9,7 @@ import { GlobalContext } from '../../../contexts/GlobalContext';
 import moment from 'moment';
 import queries from '../../../core/GraphQl';
 import { useMutation } from '@apollo/client';
+import { screenName } from '../../../utils/constantScreenName';
 
 const suaNotificationMutation = queries.mutation.suaNotification('id');
 
@@ -32,6 +33,12 @@ const NotificationScreen = () => {
    */
 
   const handlePressNotificationItem = (notification) => {
+    if (notification?.type == 'LH') {
+      nav.navigate(screenName.calendar);
+    } else {
+      nav.navigate(screenName.dkhp);
+    }
+
     if (notification?.isRead) return;
 
     actSuaNotification({
