@@ -40,9 +40,6 @@ sinhVien {
 
 const SignInScreen = () => {
   LogBox.ignoreAllLogs();
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
   const nav = useNavigation();
   const [inputs, setInputs] = useState({ mssv: '', password: '' });
@@ -98,7 +95,7 @@ const SignInScreen = () => {
     }
   };
 
-  const login = async () => {
+  const login = () => {
     setLoading(true);
     setTimeout(async () => {
       setLoading(false);
@@ -115,7 +112,7 @@ const SignInScreen = () => {
       if (!isEmpty(_token)) {
         try {
           await AsyncStorage.setItem('@token', _token);
-          dispatch(getSinhVienSuccess(_sinhVien));
+          // dispatch(getSinhVienSuccess(_sinhVien));
           nav.navigate(screenName.homeTab);
         } catch (e) {
           console.log('e', e);

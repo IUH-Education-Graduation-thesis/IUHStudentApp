@@ -1,26 +1,22 @@
 import {
-  Image,
   LogBox,
-  ScrollView,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
-import {BackgroundView} from '../../../components';
+import React, { useEffect, useState } from 'react';
+import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { BackgroundView } from '../../../components';
 import FlatlistUI from './components/FlatlistUI';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../../../utils/constantScreenName';
-import {useSelector} from 'react-redux';
-import {getListMonHocSelectors} from '../../../redux/selectors/selectorStudents';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../../../utils/constantScreenName';
 import LopHocPhan from './components/LopHocPhan';
 import queries from '../../../core/GraphQl';
-import {GETLOPHOCPHANFRAGMENT} from './fragment';
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import { GETLOPHOCPHANFRAGMENT } from './fragment';
+import { useMutation, useQuery } from '@apollo/client';
 import Step3 from './components/Step3Render';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
 import Modal from 'react-native-modal';
 
@@ -29,15 +25,15 @@ const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(
 );
 const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan();
 
-const ProgressStepsUI = ({route}) => {
-  const {currentHocKy} = route.params;
+const ProgressStepsUI = ({ route }) => {
+  const { currentHocKy } = route.params;
 
   /**
    * API
    * ===========================================
    */
 
-  const {data: dataGetHocPhanDangKy} = useQuery(getHocPhanForDKHP, {
+  const { data: dataGetHocPhanDangKy } = useQuery(getHocPhanForDKHP, {
     skip: !currentHocKy,
     variables: {
       hocKyNormalId: currentHocKy,
@@ -53,7 +49,7 @@ const ProgressStepsUI = ({route}) => {
    * ==========================================
    */
 
-  const [actDangKyHocPhan, {data: dataDangKyHocPhan}] = useMutation(
+  const [actDangKyHocPhan, { data: dataDangKyHocPhan }] = useMutation(
     dangKyHocPhanMutation,
   );
 
@@ -160,7 +156,7 @@ const ProgressStepsUI = ({route}) => {
           onPrevious={onPrevStep}
           previousBtnText="Trở về"
           nextBtnText="Tiếp tục"
-          previousBtnStyle={{textAlign: 'center', padding: 8}}>
+          previousBtnStyle={{ textAlign: 'center', padding: 8 }}>
           <LopHocPhan
             onChange={handleLopHocPhanChange}
             data={hocPhanSelected}
@@ -185,7 +181,7 @@ const ProgressStepsUI = ({route}) => {
             justifyContent: 'space-around',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
             Đăng ký học phần thành công.
           </Text>
           <TouchableOpacity
@@ -196,7 +192,7 @@ const ProgressStepsUI = ({route}) => {
               paddingVertical: 10,
               borderRadius: 5,
             }}>
-            <Text style={{fontWeight: 'bold', fontSize: 17}}>Ok</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Ok</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -211,8 +207,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  txtheader: {color: 'black', fontWeight: '600', fontSize: 18},
-  txtRenderChonMH: {color: 'black', fontWeight: '600', fontSize: 18},
+  txtheader: { color: 'black', fontWeight: '600', fontSize: 18 },
+  txtRenderChonMH: { color: 'black', fontWeight: '600', fontSize: 18 },
   item: {
     backgroundColor: 'white',
     height: 60,

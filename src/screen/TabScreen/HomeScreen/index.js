@@ -67,7 +67,7 @@ const HomeScreen = () => {
    */
 
   const onPressBtn = (screenName) => {
-    nav.navigate(screenName, { id: mssv });
+    nav.navigate(screenName);
   };
 
   /**
