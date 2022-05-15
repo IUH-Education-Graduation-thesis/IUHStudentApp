@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -19,7 +19,6 @@ import queries from '../../../core/GraphQl';
 import { GETDIEM_FRAGMENT } from './fragment';
 import { useQuery } from '@apollo/client';
 import CTDiem from './components/CTDiem';
-import { isEmpty } from 'lodash';
 import { styles } from './styles';
 const getDiemQuery = queries.query.getDiem(GETDIEM_FRAGMENT);
 
@@ -31,8 +30,17 @@ const MarkScreen = props => {
   const [isShow, setShow] = useState(false);
   const [activeSections, setActiveSections] = useState([]);
 
-  const { data: dataGetDiem, loading: loadingGetDiem } = useQuery(getDiemQuery);
+  const { data: dataGetDiem, loading: loadingGetDiem, error } = useQuery(getDiemQuery);
   const listDiem = dataGetDiem?.getDiem?.data || [];
+  /**
+   * useEffect
+   */
+  // useEffect(() => {
+  //   const ids = listDiem.map((item, index) => index)
+  //   setActiveSections(ids)
+
+  // }, [listDiem, setActiveSections])
+
   /**
    * Function
    */
@@ -53,8 +61,6 @@ const MarkScreen = props => {
 
   const _renderContent = section => {
     return section.listSinhVienLopHocPhan.map((item, index) => {
-      console.log("listDiem", item.diemTrungBinh);
-
       return (
         <TouchableWithoutFeedback
           key={index}
@@ -80,7 +86,26 @@ const MarkScreen = props => {
   const _updateSections = activeSections => {
     setActiveSections(activeSections.includes(undefined) ? [] : activeSections);
   };
-
+  const renderDiem = useMemo(() => {
+    if (loadingGetDiem) {
+      return <View>
+        <Text>Loading...</Text>
+      </View>
+    }
+    if (error) {
+      return <View>
+        <Text>Error data...</Text>
+      </View>
+    }
+    return <Accordion
+      sections={listDiem}
+      keyExtractory={(item, index) => index}
+      activeSections={activeSections}
+      renderHeader={_renderHeader}
+      renderContent={_renderContent}
+      onChange={_updateSections}
+    />
+  }, [loadingGetDiem, error, dataGetDiem, listDiem, _renderContent, _renderHeader, _updateSections, activeSections])
   /**
    *
    * render ui
@@ -92,20 +117,7 @@ const MarkScreen = props => {
           <Text style={styles.textHeader}>Kết quả học tập</Text>
         </View>
         <ScrollView>
-          {loadingGetDiem ? (
-            <View>
-              <Text>Loading...</Text>
-            </View>
-          ) : (
-            <Accordion
-              sections={listDiem}
-              keyExtractory={(item, index) => index}
-              activeSections={activeSections}
-              renderHeader={_renderHeader}
-              renderContent={_renderContent}
-              onChange={_updateSections}
-            />
-          )}
+          {renderDiem}
         </ScrollView>
         <Modal animationType="fade" transparent={true} visible={isShow}>
           <View style={styles.styleView}>

@@ -57,7 +57,7 @@ const HomeScreen = () => {
    * ===============================================================
    */
 
-  const { data: dataGetProfile } = useQuery(getProfileQuery, {
+  const { data: dataGetProfile, error: errorData } = useQuery(getProfileQuery, {
     onCompleted: (data) => {
       const _sv = data?.getProfile?.data[0]?.sinhVien;
       if (!isEmpty(_sv)) {
@@ -69,6 +69,7 @@ const HomeScreen = () => {
       nav.navigate(screenName.signIn);
     }
   });
+  // console.log("_sv", sv);
 
   const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
   /**
@@ -84,6 +85,11 @@ const HomeScreen = () => {
    * UseEffect
    * ======================================================
    */
+  useEffect(() => {
+    if (errorData) {
+      nav.navigate(screenName.signIn);
+    }
+  }, [errorData])
 
 
 

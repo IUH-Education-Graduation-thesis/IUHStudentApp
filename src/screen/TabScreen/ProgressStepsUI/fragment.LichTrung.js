@@ -1,0 +1,34 @@
+export const fragmentLichTrung = `
+      isTrung
+      listNgayTrongTuan{
+        thu
+        thuNumber
+        lichHocs{
+          id
+          ngayHocTrongTuan
+          nhomThucHanh
+          thoiGianBatDau
+          thoiGianKetThuc
+          tietHocBatDau
+          tietHocKetThuc
+          lopHocPhan{
+            maLopHocPhan
+            tenLopHocPhan
+            soLuongToiDa
+          }
+          phongHoc{
+            tenPhongHoc
+            sucChua
+            dayNha{
+              tenDayNha
+            }
+          }
+          isLyThuyet
+          isLichThi
+          giangVien{
+            hoTenDem
+            ten
+          }
+        }
+      }
+`

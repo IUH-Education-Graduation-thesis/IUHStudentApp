@@ -6,24 +6,24 @@ import {
   StyleSheet,
   Button,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {CheckBox} from 'react-native-elements';
-import {useDispatch} from 'react-redux';
-import {setMonHocID} from '../../../../redux/actions/studentActions';
+import { CheckBox } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
+import { setMonHocID } from '../../../../redux/actions/studentActions';
 const FlatlistUI = prop => {
-  const {data, chitiet, onSelectChange} = prop;
+  const { data, chitiet, onSelectChange, listHocPhan } = prop;
   const dispatch = useDispatch();
-
-  const [checkedHocPhan, setCheckedHocPhan] = useState([]);
-
+  const _listHPiD = listHocPhan.map(item => item.id);
+  const [checkedHocPhan, setCheckedHocPhan] = useState(_listHPiD);
   const [state, setState] = useState({
     ids: [],
   });
 
   useEffect(() => {
     dispatch(setMonHocID(state.ids));
+    // setCheckedHocPhan(_listHPiD);
   }, [state.ids]);
   /**
    * Function logic renderItem
@@ -43,7 +43,7 @@ const FlatlistUI = prop => {
     onSelectChange([...checkedHocPhan, itemId]);
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <View>
         <View
@@ -68,21 +68,21 @@ const FlatlistUI = prop => {
             <Text style={styles.txtRenderChonMH}>
               Tín chỉ: {item?.soTinChiLyThuyet + item?.soTinChiThucHanh}
             </Text>
-            <View style={{alignItems: 'center', flexDirection: 'row'}}>
+            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
               <Text style={styles.txtRenderChonMH1}>Bắt buộc:</Text>
               {item.batBuoc ? (
                 <AntDesign
                   name="checkcircle"
                   size={25}
                   color={'green'}
-                  style={{marginLeft: 15}}
+                  style={{ marginLeft: 15 }}
                 />
               ) : (
                 <MaterialIcons
                   name="cancel"
                   size={30}
                   color={'red'}
-                  style={{marginLeft: 15}}
+                  style={{ marginLeft: 15 }}
                 />
               )}
             </View>
@@ -95,7 +95,7 @@ const FlatlistUI = prop => {
    * function logic render redernCTMonHoc
    */
 
-  const redernCTMonHoc = ({item}) => {
+  const redernCTMonHoc = ({ item }) => {
     return (
       <View
         style={{
@@ -109,21 +109,21 @@ const FlatlistUI = prop => {
           {item.mahp} - {item.tenMon}
         </Text>
         <Text style={styles.txtRenderChonMH}>Tín chỉ: {item.tinChi}</Text>
-        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
           <Text style={styles.txtRenderChonMH1}>Bắt buộc:</Text>
           {item.batbuoc ? (
             <AntDesign
               name="checkcircle"
               size={25}
               color={'green'}
-              style={{marginLeft: 15}}
+              style={{ marginLeft: 15 }}
             />
           ) : (
             <MaterialIcons
               name="cancel"
               size={30}
               color={'red'}
-              style={{marginLeft: 15}}
+              style={{ marginLeft: 15 }}
             />
           )}
         </View>
@@ -145,14 +145,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  txtheader: {color: 'black', fontWeight: '600', fontSize: 18},
+  txtheader: { color: 'black', fontWeight: '600', fontSize: 18 },
   txtRenderChonMH: {
     color: 'black',
     fontWeight: '600',
     fontSize: 18,
     marginRight: 50,
   },
-  txtRenderChonMH1: {color: 'black', fontWeight: '600', fontSize: 18},
+  txtRenderChonMH1: { color: 'black', fontWeight: '600', fontSize: 18 },
   container: {
     backgroundColor: 'white',
     flexDirection: 'row',

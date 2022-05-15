@@ -9,6 +9,7 @@ import getLichHoc from './getLichHoc';
 import getDiem from './getDiem';
 import getNotification from './getNotification';
 import suaNotification from './suaNotification';
+import checkLichTrung from './checkLichTrung';
 
 const query = {
   ...getListHocPhanDKHP.query,
@@ -24,6 +25,7 @@ const mutation = {
   ...login.mutation,
   ...dangKyHocPhan.mutation,
   ...suaNotification.mutation,
+  ...checkLichTrung.mutation,
 };
 
 const subscription = {

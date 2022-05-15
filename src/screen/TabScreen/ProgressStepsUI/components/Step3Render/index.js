@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView} from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
-import {View, Text, Image} from 'react-native';
-import {IC_ARR_DOWN} from '../../../MarkScreen/icons';
-import {isEmpty} from 'lodash';
+import { View, Image } from 'react-native';
+import { IC_ARR_DOWN } from '../../../MarkScreen/icons';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
-import {RadioButton} from 'react-native-paper';
-
-const Step3 = ({data, onChange}) => {
+import { RadioButton } from 'react-native-paper';
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Text from '../../../../../components/Text';
+const Step3 = ({ data, onChange }) => {
   const [activeSections, setActiveSections] = useState([]);
   const [checkedLichHoc, setCheckedLichHoc] = useState([]);
 
@@ -31,7 +32,8 @@ const Step3 = ({data, onChange}) => {
         nhomThucHanh: _nhomThucHanh,
       };
     });
-
+    const _ids = data.map((item, index) => index)
+    setActiveSections(_ids);
     setCheckedLichHoc(_checkedLichHoc);
   }, [data]);
 
@@ -82,14 +84,21 @@ const Step3 = ({data, onChange}) => {
           paddingHorizontal: 15,
           paddingVertical: 15,
         }}>
-        <Text style={{fontSize: 17, fontWeight: 'bold'}}>
+        <TouchableOpacity >
+          <EvilIcons name='trash' size={30} color='black' />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 17, fontWeight: 'bold' }}>
           {item?.tenLopHocPhan}
         </Text>
         <Image source={IC_ARR_DOWN} />
       </View>
     );
   };
-
+  // const onPress =()=>{
+  //   data.map((item,index)=>{
+  //     if
+  //   })
+  // }
   const renderListLicHoc = lichHocs => {
     if (isEmpty(lichHocs)) return;
 
@@ -123,7 +132,7 @@ const Step3 = ({data, onChange}) => {
             {_isThucHanh && <Text>{`Nhóm TH: ${item?.nhomThucHanh}`}</Text>}
             <Text>{`Phòng học: ${item?.phongHoc?.tenPhongHoc}`}</Text>
             <Text>{`Dãy nhà: ${item?.phongHoc?.dayNha?.tenDayNha}`}</Text>
-            <Text>{`Giảng viên: ${item?.giangVien?.hoTenDem} ${item?.giangVien?.ten}`}</Text>
+            <Text>{`Giảng viên: ${item?.giangVien?.hoTenDem ? item?.giangVien?.hoTenDem : "Giảng viên tạm"} ${item?.giangVien?.ten ? item?.giangVien?.ten : ""}`}</Text>
             <Text>{`Thời gian: ${_time}`}</Text>
           </View>
         );
@@ -173,7 +182,7 @@ const Step3 = ({data, onChange}) => {
               }
             />
           </View>
-          <View style={{marginLeft: 10}}>
+          <View style={{ marginLeft: 10 }}>
             <Text>{`${_titleLicHoc} - ${_thu} (${_tiet})`}</Text>
             {_isThucHanh && <Text>{`Nhóm TH: ${item?.nhomThucHanh}`}</Text>}
             <Text>{`Phòng học: ${item?.phongHoc?.tenPhongHoc}`}</Text>
