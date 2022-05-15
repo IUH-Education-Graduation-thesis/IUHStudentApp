@@ -11,7 +11,7 @@ import ModalLichHoc from './ModalLichHoc';
 import { isEmpty } from 'lodash';
 
 const LopHocPhan = (props) => {
-  const { data, onChange } = props;
+  const { data, onChange, listLopHP } = props;
 
   const idsMonHoc = useSelector(getListMonHocSelectors);
   const [state, setState] = useState({
@@ -20,9 +20,9 @@ const LopHocPhan = (props) => {
   const [currentLopHocPhan, setCurrentLopHocPhan] = useState({});
   const [isVisibleModalLichHoc, setIsVisibleModalLichHoc] = useState(false);
 
-  const [checked, setChecked] = useState(data[0].lopHocPhans.maLopHocPhan);
-
-  const [checkedLopHocPhan, setCheckedLopHocPhan] = useState([]);
+  // const [checked, setChecked] = useState(data[0].lopHocPhans.maLopHocPhan);
+  const _listLHP = listLopHP.map((item) => item);
+  const [checkedLopHocPhan, setCheckedLopHocPhan] = useState(_listLHP);
 
   const [activeSections, setActiveSections] = useState([]);
 
@@ -104,6 +104,10 @@ const LopHocPhan = (props) => {
       });
     }
   }, [data]);
+  useEffect(() => {
+    const _ids = data.map((item, index) => index)
+    setActiveSections(_ids);
+  }, [data, setActiveSections])
 
   /**
    * Render view
@@ -149,7 +153,7 @@ const LopHocPhan = (props) => {
               <Text>Tên LHP: {item?.monHoc?.ten}</Text>
               <Text>Lớp dự kiến: {lhp?.lopDuKien}</Text>
               <Text>Sĩ số tối đa: {lhp?.soLuongToiDa}</Text>
-              <Text>Dã đăng ký: {lhp?.soLuongHienTai}</Text>
+              <Text>Đã đăng ký: {lhp?.soLuongHienTai}</Text>
               <Text>Trạng thái: {lhp?.trangThaiLopHocPhan}</Text>
               <TouchableOpacity
                 onPress={() => handleOnPressViewLicHoc(lhp)}
@@ -159,6 +163,7 @@ const LopHocPhan = (props) => {
                   paddingLeft: 10,
                   marginTop: 10,
                   borderRadius: 5,
+                  width: 110
                 }}
               >
                 <Text style={{ color: 'white' }}>Xem lịch học</Text>

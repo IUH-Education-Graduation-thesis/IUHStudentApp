@@ -13,6 +13,7 @@ export const GETDIEM_FRAGMENT = `
       diemThucHanh
       diemGiuaKy
       diemCuoiKy
+      diemTrungBinh
      lopHocPhan{
       id
       maLopHocPhan

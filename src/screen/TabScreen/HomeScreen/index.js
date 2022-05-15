@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, LogBox } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { styles } from './style';
 import BackgroundView from '../../../components/BackgroundView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -57,32 +57,41 @@ const HomeScreen = () => {
    * ===============================================================
    */
 
-  const { data: dataGetProfile } = useQuery(getProfileQuery);
+  const { data: dataGetProfile, error: errorData } = useQuery(getProfileQuery, {
+    onCompleted: (data) => {
+      const _sv = data?.getProfile?.data[0]?.sinhVien;
+      if (!isEmpty(_sv)) {
+        dispatch(getSinhVienSuccess(_sv));
+        return;
+      }
+      console.log("Hello...........");
+
+      nav.navigate(screenName.signIn);
+    }
+  });
+  // console.log("_sv", sv);
 
   const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
-
   /**
    * Function
    * ===============================================
    */
 
   const onPressBtn = (screenName) => {
-    nav.navigate(screenName, { id: mssv });
+    nav.navigate(screenName);
   };
 
   /**
    * UseEffect
    * ======================================================
    */
-
   useEffect(() => {
-    if (!isEmpty(sv)) {
-      dispatch(getSinhVienSuccess(sv));
-      return;
+    if (errorData) {
+      nav.navigate(screenName.signIn);
     }
+  }, [errorData])
 
-    nav.navigate(screenName.signIn);
-  }, [sv]);
+
 
   return (
     <BackgroundView>

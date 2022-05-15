@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
 import BackgroundView from '../../../components/BackgroundView';
 import DropDownHK from './components/DropDownHK';
@@ -63,10 +63,29 @@ const DangKyHPScreen = () => {
    * Function
    * ======================================================================================
    */
+  //Show alert when user not pick hocKy
+  const twoOptionAlertHandler = () => {
+    //function to make two option alert
+    Alert.alert(
+      //title
+      'Thông báo',
+      //body
+      'Yêu cầu chọn học kỳ trước khi nhấn "DKHP"!',
+      [
+        { text: 'Ok', onPress: () => console.log('Ok Pressed') }
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+  };
   const onPress = async () => {
-    nav.navigate(screenName.stepDKHP, {
-      currentHocKy,
-    });
+    if (currentHocKy === null) {
+      twoOptionAlertHandler();
+    } else {
+      nav.navigate(screenName.stepDKHP, {
+        currentHocKy,
+      });
+    }
   };
 
   const setSections = (sections) => {
@@ -122,9 +141,8 @@ const DangKyHPScreen = () => {
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
             <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${
-              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-            }`}</Text>
+            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+              }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>

@@ -37,9 +37,9 @@ const ProfileScreen = () => {
       bacDaotao: `${sv?.bacDaoTao === 'DAI_HOC' ? 'Đại học' : 'Cao đẳng'}`,
       khoa: `${sv?.lop?.khoa?.khoa}`,
       chuyenNganh: 'Kỹ thuật phần mềm',
-      diaChi: `${sv?.diaChi}`,
+      diaChi: `${sv?.diaChi ? sv?.diaChi : ""}`,
       phoneNumber: `${sv?.soDienThoai}`,
-      placeOfBirth: `${sv?.noiSinh}`,
+      placeOfBirth: `${sv?.noiSinh ? sv?.noiSinh : ""}`,
     },
   });
 
@@ -81,7 +81,7 @@ const ProfileScreen = () => {
           </TableWrapper>
         </Table>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnStyle} onPress={() => onPress()}>
+          <TouchableOpacity style={styles.btnStyle} onPress={onPress}>
             <Text style={styles.textBtn}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>

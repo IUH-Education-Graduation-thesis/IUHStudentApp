@@ -18,7 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { COLORS } from '../themes/color';
-import { SignInScreen } from '../screen/StackScreen';
+import SignInScreen from '../screen/StackScreen/SignInScreen';
 
 export const Icon = {
   entypo: 'Entypo',

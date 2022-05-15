@@ -3,16 +3,17 @@ import { COLORS } from '../../../themes/color'
 
 export const styles = StyleSheet.create({
     headerView: {
-        flex: 1,
+        // flex: 1,
         alignItems: 'center',
+        marginBottom: 50
     },
     container: {
         flex: 1.5,
     },
     inputView: {
-        flex: 0.5,
+        flex: 1,
         alignItems: 'center',
-        marginTop: 100,
+        // marginTop: 100,
     },
     btnView: {
         flex: 1,
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({
         elevation: 2,
         alignItems: 'center',
         justifyContent: "center",
-
+        marginTop: 50
     },
     textBtn: {
         fontSize: 30,
