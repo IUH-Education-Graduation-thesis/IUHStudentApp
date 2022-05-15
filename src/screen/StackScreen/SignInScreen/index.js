@@ -65,14 +65,14 @@ const SignInScreen = () => {
 
   useEffect(() => {
     const helloWorld = async () => {
-      if (isEmpty(errorGetProfile)) return;
+      if (isEmpty(dataGetProfile)) return;
       try {
         await AsyncStorage.removeItem('@token');
       } catch (e) { }
     };
 
     helloWorld();
-  }, [errorGetProfile]);
+  }, [dataGetProfile]);
 
   /**
    * Function
@@ -95,7 +95,7 @@ const SignInScreen = () => {
     }
   };
 
-  const login = () => {
+  const login = async () => {
     setLoading(true);
     setTimeout(async () => {
       setLoading(false);
@@ -112,7 +112,7 @@ const SignInScreen = () => {
       if (!isEmpty(_token)) {
         try {
           await AsyncStorage.setItem('@token', _token);
-          // dispatch(getSinhVienSuccess(_sinhVien));
+          dispatch(getSinhVienSuccess(_sinhVien));
           nav.navigate(screenName.homeTab);
         } catch (e) {
           console.log('e', e);
@@ -135,47 +135,37 @@ const SignInScreen = () => {
    * ========================================================================
    */
   return (
-    <>
-      {!isEmpty(dataGetProfile?.getProfile.data) ? (
-        nav.navigate(screenName.homeTab)
-      ) : (
-
-        <BackgroundView>
-          <Loader visible={loading} />
-
-          <View style={styles.inputView}>
-            <View style={styles.headerView}>
-              <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
-              <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
-            </View>
-            <Input
-              onChangeText={text => handleOnchange(text, 'mssv')}
-              onFocus={() => handleError(null, 'mssv')}
-              iconName="email-outline"
-              label="MSSV"
-              placeholder="Nhập mssv"
-              error={errors.mssv}
-              style={{ width: '86%', fontSize: 18 }}
-            />
-            <Input
-              onChangeText={text => handleOnchange(text, 'password')}
-              onFocus={() => handleError(null, 'password')}
-              iconName="lock-outline"
-              label="Mật khẩu"
-              placeholder="Nhập mật khẩu"
-              error={errors.password}
-              password
-              style={{ width: '80%', fontSize: 18 }}
-            />
-            <TouchableOpacity style={styles.btnStyle} onPress={validate}>
-              <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
-            </TouchableOpacity>
-
-          </View>
-
-        </BackgroundView>
-      )}
-    </>
+    <BackgroundView>
+      <Loader visible={loading} />
+      <View style={styles.inputView}>
+        <View style={styles.headerView}>
+          <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
+          <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
+        </View>
+        <Input
+          onChangeText={text => handleOnchange(text, 'mssv')}
+          onFocus={() => handleError(null, 'mssv')}
+          iconName="email-outline"
+          label="MSSV"
+          placeholder="Nhập mssv"
+          error={errors.mssv}
+          style={{ width: '86%', fontSize: 18 }}
+        />
+        <Input
+          onChangeText={text => handleOnchange(text, 'password')}
+          onFocus={() => handleError(null, 'password')}
+          iconName="lock-outline"
+          label="Mật khẩu"
+          placeholder="Nhập mật khẩu"
+          error={errors.password}
+          password
+          style={{ width: '80%', fontSize: 18 }}
+        />
+        <TouchableOpacity style={styles.btnStyle} onPress={validate}>
+          <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>
+        </TouchableOpacity>
+      </View>
+    </BackgroundView>
   );
 };
 

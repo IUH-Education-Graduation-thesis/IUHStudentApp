@@ -129,7 +129,7 @@ function CalendarScreen() {
             </Text>
             <Text style={styles.subtitle1}>{`Phòng: ${item?.phongHoc?.tenPhongHoc}`}</Text>
             <Text style={styles.subtitle1}>
-              {`Giảng viên: ${item?.lopHocPhan?.giangViens[0]?.hoTenDem} ${item?.lopHocPhan?.giangViens[0]?.ten}`}
+              {`Giảng viên: ${item?.lopHocPhan?.giangViens[0]?.hoTenDem ? item?.lopHocPhan?.giangViens[0]?.hoTenDem : "Giáo viên tạm"} ${item?.lopHocPhan?.giangViens[0]?.ten ? item?.lopHocPhan?.giangViens[0]?.ten : ""}`}
             </Text>
             <Text style={styles.subtitle1}>{'Ghi chú: '}</Text>
           </View>

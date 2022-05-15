@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useRef, useState} from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,17 +10,17 @@ import {
   Modal,
   Dimensions,
 } from 'react-native';
-import {IC_ARR_DOWN} from './icons';
+import { IC_ARR_DOWN } from './icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import BackgroundView from '../../../components/BackgroundView';
 import Text from '../../../components/Text';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import queries from '../../../core/GraphQl';
-import {GETDIEM_FRAGMENT} from './fragment';
-import {useQuery} from '@apollo/client';
+import { GETDIEM_FRAGMENT } from './fragment';
+import { useQuery } from '@apollo/client';
 import CTDiem from './components/CTDiem';
-import {isEmpty} from 'lodash';
-import {styles} from './styles';
+import { isEmpty } from 'lodash';
+import { styles } from './styles';
 const getDiemQuery = queries.query.getDiem(GETDIEM_FRAGMENT);
 
 const MarkScreen = props => {
@@ -31,7 +31,7 @@ const MarkScreen = props => {
   const [isShow, setShow] = useState(false);
   const [activeSections, setActiveSections] = useState([]);
 
-  const {data: dataGetDiem, loading: loadingGetDiem} = useQuery(getDiemQuery);
+  const { data: dataGetDiem, loading: loadingGetDiem } = useQuery(getDiemQuery);
   const listDiem = dataGetDiem?.getDiem?.data || [];
   /**
    * Function
@@ -53,6 +53,8 @@ const MarkScreen = props => {
 
   const _renderContent = section => {
     return section.listSinhVienLopHocPhan.map((item, index) => {
+      console.log("listDiem", item.diemTrungBinh);
+
       return (
         <TouchableWithoutFeedback
           key={index}
@@ -62,7 +64,7 @@ const MarkScreen = props => {
             <Text style={[styles.subtitle1]}>
               {index + 1 + '   ' + item?.lopHocPhan?.tenLopHocPhan}
             </Text>
-            <Text style={styles.subtitle1}>{item.diemCuoiKy}</Text>
+            <Text style={styles.subtitle1}>{item.diemTrungBinh ? Math.round(item.diemTrungBinh * 10) / 10 : ""}</Text>
           </View>
         </TouchableWithoutFeedback>
       );
@@ -117,19 +119,20 @@ const MarkScreen = props => {
                     <Antdesign name="closecircleo" size={25} color="black" />
                   </TouchableOpacity>
                 </View>
-                <View style={{height: 1, backgroundColor: 'gray'}} />
+                <View style={{ height: 1, backgroundColor: 'gray' }} />
                 <CTDiem ten="Điểm thường kỳ" diem={currentDiem?.diemThuongKy} />
                 <CTDiem ten="Điểm giữa kỳ" diem={currentDiem?.diemGiuaKy} />
                 <CTDiem ten="Điểm thực hành" diem={currentDiem?.diemCuoiKy} />
                 <CTDiem ten="Điểm cuối kỳ" diem={currentDiem?.diemCuoiKy} />
-                <View style={{height: 1, backgroundColor: 'gray'}} />
+                <View style={{ height: 1, backgroundColor: 'gray' }} />
                 <CTDiem
                   ten="Điểm trung bình"
-                  style={{fontSize: 20, fontWeight: '700'}}
+                  style={{ fontSize: 20, fontWeight: '700' }}
+                  diem={currentDiem?.diemTrungBinh}
                 />
                 <CTDiem
                   ten="Ghi chú"
-                  style={{fontSize: 20, fontWeight: '700'}}
+                  style={{ fontSize: 20, fontWeight: '700' }}
                 />
               </View>
             </View>

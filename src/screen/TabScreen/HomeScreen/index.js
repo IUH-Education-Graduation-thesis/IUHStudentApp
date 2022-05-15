@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, LogBox } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { styles } from './style';
 import BackgroundView from '../../../components/BackgroundView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -57,10 +57,20 @@ const HomeScreen = () => {
    * ===============================================================
    */
 
-  const { data: dataGetProfile } = useQuery(getProfileQuery);
+  const { data: dataGetProfile } = useQuery(getProfileQuery, {
+    onCompleted: (data) => {
+      const _sv = data?.getProfile?.data[0]?.sinhVien;
+      if (!isEmpty(_sv)) {
+        dispatch(getSinhVienSuccess(_sv));
+        return;
+      }
+      console.log("Hello...........");
+
+      nav.navigate(screenName.signIn);
+    }
+  });
 
   const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
-
   /**
    * Function
    * ===============================================
@@ -75,14 +85,7 @@ const HomeScreen = () => {
    * ======================================================
    */
 
-  useEffect(() => {
-    if (!isEmpty(sv)) {
-      dispatch(getSinhVienSuccess(sv));
-      return;
-    }
 
-    nav.navigate(screenName.signIn);
-  }, [sv]);
 
   return (
     <BackgroundView>

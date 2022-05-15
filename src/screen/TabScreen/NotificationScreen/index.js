@@ -10,6 +10,7 @@ import moment from 'moment';
 import queries from '../../../core/GraphQl';
 import { useMutation } from '@apollo/client';
 import { screenName } from '../../../utils/constantScreenName';
+import { COLORS } from '../../../themes/color';
 
 const suaNotificationMutation = queries.mutation.suaNotification('id');
 
@@ -67,8 +68,8 @@ const NotificationScreen = () => {
         </View>
         <View style={{ width: 20 }} />
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: '600' }}>{item?.message}</Text>
-          <Text>{_createDate}</Text>
+          <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: '600', color: 'black' }}>{item?.message}</Text>
+          <Text style={{ color: 'black' }} >{_createDate}</Text>
         </View>
         <View style={{ width: 10 }} />
         <TouchableOpacity style={{ padding: 10 }}>
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     wrap_head: {
       paddingHorizontal: 20,
       height: 60,
-      backgroundColor: '#947EC3',
+      backgroundColor: "#4baef9",
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
