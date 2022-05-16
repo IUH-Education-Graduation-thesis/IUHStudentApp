@@ -1,4 +1,10 @@
-import { Alert, Keyboard, KeyboardAvoidingView, LogBox, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  LogBox,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { BackgroundView } from '../../../components';
 import Text from '../../../components/Text';
@@ -44,7 +50,6 @@ const SignInScreen = () => {
   const nav = useNavigation();
   const [inputs, setInputs] = useState({ mssv: '', password: '' });
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
   /**
    * API
    * ================================================================
@@ -68,7 +73,7 @@ const SignInScreen = () => {
       if (isEmpty(dataGetProfile)) return;
       try {
         await AsyncStorage.removeItem('@token');
-      } catch (e) { }
+      } catch (e) {}
     };
 
     helloWorld();
@@ -96,39 +101,37 @@ const SignInScreen = () => {
   };
 
   const login = async () => {
-    setLoading(true);
-    setTimeout(async () => {
-      setLoading(false);
-      const _data = await actLogin({
-        variables: {
-          user_name: inputs.mssv,
-          password: inputs.password,
-        },
-      });
+    await AsyncStorage.removeItem('@token');
 
-      const _token = _data?.data?.login?.data?.token || '';
-      const _sinhVien = _data?.data?.login?.data?.sinhVien || {};
+    const _data = await actLogin({
+      variables: {
+        user_name: inputs.mssv,
+        password: inputs.password,
+      },
+    });
 
-      if (!isEmpty(_token)) {
-        try {
-          await AsyncStorage.setItem('@token', _token);
-          dispatch(getSinhVienSuccess(_sinhVien));
-          nav.navigate(screenName.homeTab);
-        } catch (e) {
-          console.log('e', e);
-        }
-      } else {
-        Alert.alert('Thông báo', 'Mã số sinh viên hoặc mật khẩu sai!');
+    const _token = _data?.data?.login?.data?.token || '';
+    const _sinhVien = _data?.data?.login?.data?.sinhVien || {};
+
+    if (!isEmpty(_token)) {
+      try {
+        await AsyncStorage.setItem('@token', _token);
+        dispatch(getSinhVienSuccess(_sinhVien));
+        nav.navigate(screenName.homeTab);
+      } catch (e) {
+        console.log('e', e);
       }
-    }, 3000);
+    } else {
+      Alert.alert('Thông báo', 'Mã số sinh viên hoặc mật khẩu sai!');
+    }
   };
 
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({ ...prevState, [input]: text }));
+    setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({ ...prevState, [input]: error }));
+    setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
   /**
    * render view
@@ -136,14 +139,14 @@ const SignInScreen = () => {
    */
   return (
     <BackgroundView>
-      <Loader visible={loading} />
+      <Loader visible={loadingLogin || loadingGetProfile} />
       <View style={styles.inputView}>
         <View style={styles.headerView}>
           <Text style={styles.headerText}> CỔNG THÔNG TIN SINH VIÊN</Text>
           <Text style={styles.secondaryText}> ĐĂNG NHẬP HỆ THỐNG</Text>
         </View>
         <Input
-          onChangeText={text => handleOnchange(text, 'mssv')}
+          onChangeText={(text) => handleOnchange(text, 'mssv')}
           onFocus={() => handleError(null, 'mssv')}
           iconName="email-outline"
           label="MSSV"
@@ -152,7 +155,7 @@ const SignInScreen = () => {
           style={{ width: '86%', fontSize: 18 }}
         />
         <Input
-          onChangeText={text => handleOnchange(text, 'password')}
+          onChangeText={(text) => handleOnchange(text, 'password')}
           onFocus={() => handleError(null, 'password')}
           iconName="lock-outline"
           label="Mật khẩu"

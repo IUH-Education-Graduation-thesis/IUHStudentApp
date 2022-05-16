@@ -64,10 +64,9 @@ const HomeScreen = () => {
         dispatch(getSinhVienSuccess(_sv));
         return;
       }
-      console.log("Hello...........");
 
       nav.navigate(screenName.signIn);
-    }
+    },
   });
   // console.log("_sv", sv);
 
@@ -89,9 +88,7 @@ const HomeScreen = () => {
     if (errorData) {
       nav.navigate(screenName.signIn);
     }
-  }, [errorData])
-
-
+  }, [errorData]);
 
   return (
     <BackgroundView>
@@ -135,7 +132,20 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={styles.contentView}>
-        <IconBtn nameIcon="stack" size={30} text={'Đăng ký học phần'} type={tpyeIcon.octicons} />
+        <IconBtn
+          onPress={() => nav.navigate(screenName.dkhp)}
+          nameIcon="stack"
+          size={30}
+          text={'Đăng ký học phần'}
+          type={tpyeIcon.octicons}
+        />
+        <View style={{ width: 20 }} />
+        <IconBtn
+          nameIcon="project"
+          size={30}
+          text={'Chương trình khung'}
+          type={tpyeIcon.octicons}
+        />
       </View>
     </BackgroundView>
   );
