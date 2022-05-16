@@ -11,6 +11,7 @@ import getNotification from './getNotification';
 import suaNotification from './suaNotification';
 import checkLichTrung from './checkLichTrung';
 import getChuongTrinhKhung from './getChuongTrinhKhung';
+import huyLopHocPhan from './huyLopHocPhan';
 
 const query = {
   ...getListHocPhanDKHP.query,
@@ -28,6 +29,7 @@ const mutation = {
   ...dangKyHocPhan.mutation,
   ...suaNotification.mutation,
   ...checkLichTrung.mutation,
+  ...huyLopHocPhan.mutation,
 };
 
 const subscription = {

@@ -42,7 +42,6 @@ const ModalLichTrung = ({ data, isVisible, onClose, isTrung }) => {
       const _tiet = `T${lh?.tietHocBatDau} - T${lh?.tietHocKetThuc}`;
       const _thoiGianBatDau = moment(lh.thoiGianBatDau);
       const _thoiGianKetThuc = moment(lh.thoiGianKetThuc);
-
       const _time = `${_thoiGianBatDau.format('DD/MM/YYYY')} - ${_thoiGianKetThuc?.format(
         'DD/MM/YYYY',
       )}`;
@@ -57,13 +56,13 @@ const ModalLichTrung = ({ data, isVisible, onClose, isTrung }) => {
             marginTop: 10,
           }}
         >
+          <Text>{`${lh?.lopHocPhan?.maLopHocPhan} - ${lh?.lopHocPhan?.tenLopHocPhan}`}</Text>
           <Text>{`${_titleLicHoc} - ${_thu} (${_tiet})`}</Text>
           {_isThucHanh && <Text>{`Nhóm TH: ${lh?.nhomThucHanh}`}</Text>}
           <Text>{`Phòng học: ${lh?.phongHoc?.tenPhongHoc}`}</Text>
           <Text>{`Dãy nhà: ${lh?.phongHoc?.dayNha?.tenDayNha}`}</Text>
-          <Text>{`Giảng viên: ${
-            lh?.giangVien?.hoTenDem ? lh?.giangVien?.hoTenDem : 'Giảng viên tạm'
-          } ${lh?.giangVien?.ten ? item?.giangVien?.ten : ''}`}</Text>
+          <Text>{`Giảng viên: ${lh?.giangVien?.hoTenDem ? lh?.giangVien?.hoTenDem : 'Giảng viên tạm'
+            } ${lh?.giangVien?.ten ? lh?.giangVien?.ten : ' '}`}</Text>
           <Text>{`Thời gian: ${_time}`}</Text>
         </View>
       );

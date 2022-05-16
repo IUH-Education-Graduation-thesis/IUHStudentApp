@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
 import Text from '../../../components/Text';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import Accordion from 'react-native-collapsible/Accordion';
 import { IC_ARR_DOWN } from '../MarkScreen/icons';
 import queries from '../../../core/GraphQl';
@@ -16,10 +16,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { isEmpty } from 'lodash';
 import ModalLichHoc from '../ProgressStepsUI/components/ModalLichHoc';
+import { fragmentHuyLHP } from './fragment.huyLHP';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(GET_LOP_HOC_PHAN_DA_DANG_KY);
-
+const huyDangKyHocPhanMutation = queries.mutation.huyLopHocPhan(fragmentHuyLHP)
 const DangKyHPScreen = () => {
   const title = ['Tên môn học/học phần', 'Bắt buộc'];
   const nav = useNavigation();
@@ -40,16 +41,20 @@ const DangKyHPScreen = () => {
     value: item?.id,
     label: `Học kỳ ${item?.thuTuHocKy} (${item?.namHoc?.namBatDau}-${item?.namHoc?.namKetThuc})`,
   }));
-
+  const [actHuyDKHP, { data: dataHuy }] = useMutation(huyDangKyHocPhanMutation);
   const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] =
     useLazyQuery(getLopHocPhanDaDangKy);
 
-  const dataForListLopHocPhanDaDangKy = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
+  const [dataForListLopHocPhanDaDangKy, setdataForListLopHocPhanDaDangKy] = useState([]);
 
   /**
    * useEffect
    * =============================================
    */
+  useEffect(() => {
+    const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
+    setdataForListLopHocPhanDaDangKy(_data);
+  })
 
   /**
    * Function
@@ -117,7 +122,43 @@ const DangKyHPScreen = () => {
       </View>
     );
   };
+  const handleHuyHocPhanButton = (item) => {
+    console.log("Huy", JSON.stringify(item.id, null, 4));
+    Alert.alert(
+      //title
+      'Thông báo',
+      //body
+      'Bạn có muốn hủy lớp học phần?',
+      [{
+        text: 'Đồng ý', onPress: async () => {
+          const dataHuyHP = await actHuyDKHP({
+            variables: {
+              lopHocPhanId: item.id,
+            }
+          })
+          if (!isEmpty(dataHuyHP)) {
+            const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
+            setdataForListLopHocPhanDaDangKy(_data);
+          } else {
+            Alert.alert(
+              "Thông báo",
+              "Hủy lớp học phần không thành công",
+              [{ text: "Ok", onPress: () => console.log("Cancel Pressed"), }],
+              { cancelable: true },
+            )
+          }
+        }
+      },
+      {
+        text: "Không",
+        onPress: () => console.log("Cancel Pressed"),
+      }
+      ],
+      { cancelable: false },
+      //clicking out side of alert will not cancel
+    );
 
+  }
   const _renderContent = (item) => {
     return (
       <View
@@ -134,14 +175,13 @@ const DangKyHPScreen = () => {
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
             <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${
-              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-            }`}</Text>
+            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+              }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>
           <View style={{ flexDirection: 'row-reverse', marginTop: 20 }}>
-            <TouchableOpacity style={styles.textHuy}>
+            <TouchableOpacity onPress={() => handleHuyHocPhanButton(item)} style={styles.textHuy}>
               <Text style={{ textAlign: 'center', color: 'white' }}>Hủy</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handlePressXemButton(item)} style={styles.textHuy}>

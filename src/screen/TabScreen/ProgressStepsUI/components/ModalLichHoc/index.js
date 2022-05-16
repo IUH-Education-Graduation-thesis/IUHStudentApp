@@ -1,7 +1,8 @@
 import Modal from 'react-native-modal';
 import React, { useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import moment from 'moment';
+import Text from '../../../../../components/Text';
 
 const ModalLichHoc = ({ data, isVisible, onClose }) => {
   const lichHocs = data?.lichHocs || [];
