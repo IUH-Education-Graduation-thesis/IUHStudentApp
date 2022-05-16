@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
 import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
 import Text from '../../../components/Text';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import Accordion from 'react-native-collapsible/Accordion';
 import { IC_ARR_DOWN } from '../MarkScreen/icons';
 import queries from '../../../core/GraphQl';
@@ -16,7 +16,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { isEmpty } from 'lodash';
 import ModalLichHoc from '../ProgressStepsUI/components/ModalLichHoc';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(GET_LOP_HOC_PHAN_DA_DANG_KY);
@@ -42,15 +41,8 @@ const DangKyHPScreen = () => {
     label: `Học kỳ ${item?.thuTuHocKy} (${item?.namHoc?.namBatDau}-${item?.namHoc?.namKetThuc})`,
   }));
 
-  const { data: dataGetLopHocPhanDaDangKy, refetch: refetchGetLopHocPhanDaDangKy } = useQuery(
-    getLopHocPhanDaDangKy,
-    {
-      skip: !currentHocKy,
-      variables: {
-        hocKyId: currentHocKy,
-      },
-    },
-  );
+  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] =
+    useLazyQuery(getLopHocPhanDaDangKy);
 
   const dataForListLopHocPhanDaDangKy = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
 
@@ -71,10 +63,8 @@ const DangKyHPScreen = () => {
       'Thông báo',
       //body
       'Yêu cầu chọn học kỳ trước khi nhấn "DKHP"!',
-      [
-        { text: 'Ok', onPress: () => console.log('Ok Pressed') }
-      ],
-      { cancelable: false }
+      [{ text: 'Ok', onPress: () => console.log('Ok Pressed') }],
+      { cancelable: false },
       //clicking out side of alert will not cancel
     );
   };
@@ -95,8 +85,11 @@ const DangKyHPScreen = () => {
 
   const handleWhenHocKyChange = (payload) => {
     setCurrentHocKy(payload);
-    refetchGetLopHocPhanDaDangKy({
-      hocKyId: payload,
+
+    actGetHocPhanDaDangKy({
+      variables: {
+        hocKyId: payload,
+      },
     });
   };
 
@@ -141,8 +134,9 @@ const DangKyHPScreen = () => {
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
             <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-              }`}</Text>
+            <Text>{`Số tín chỉ: ${
+              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+            }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>

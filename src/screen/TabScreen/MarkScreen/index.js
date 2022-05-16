@@ -10,7 +10,7 @@ import {
   Modal,
   Dimensions,
 } from 'react-native';
-import { IC_ARR_DOWN } from './icons';
+import { IC_ARR_DOWN, IC_ARR_UP } from './icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import BackgroundView from '../../../components/BackgroundView';
 import Text from '../../../components/Text';
@@ -20,9 +20,10 @@ import { GETDIEM_FRAGMENT } from './fragment';
 import { useQuery } from '@apollo/client';
 import CTDiem from './components/CTDiem';
 import { styles } from './styles';
+import { isEmpty } from 'lodash';
 const getDiemQuery = queries.query.getDiem(GETDIEM_FRAGMENT);
 
-const MarkScreen = props => {
+const MarkScreen = (props) => {
   /**
    * const
    */
@@ -34,12 +35,15 @@ const MarkScreen = props => {
   const listDiem = dataGetDiem?.getDiem?.data || [];
   /**
    * useEffect
+   * =====================================================================
    */
-  // useEffect(() => {
-  //   const ids = listDiem.map((item, index) => index)
-  //   setActiveSections(ids)
 
-  // }, [listDiem, setActiveSections])
+  useEffect(() => {
+    if (isEmpty(listDiem)) return;
+
+    const ids = listDiem.map((item, index) => index);
+    setActiveSections(ids);
+  }, [listDiem, setActiveSections]);
 
   /**
    * Function
@@ -50,62 +54,76 @@ const MarkScreen = props => {
   const close = () => {
     setShow(false);
   };
-  const _renderHeader = section => (
+  const _renderHeader = (section, index, isActive) => (
     <View key={section} style={styles.item}>
       <Text style={styles.title}>
         HK{section.thuTuHocKy}({section.namBatDau + '-' + section.namKetThuc})
       </Text>
-      <Image source={IC_ARR_DOWN} />
+      <Image source={isActive ? IC_ARR_DOWN : IC_ARR_UP} />
     </View>
   );
 
-  const _renderContent = section => {
+  const _renderContent = (section) => {
     return section.listSinhVienLopHocPhan.map((item, index) => {
       return (
-        <TouchableWithoutFeedback
-          key={index}
-          onPress={() => onShowUp(item)}
-          style={styles.subitem}>
+        <TouchableWithoutFeedback key={index} onPress={() => onShowUp(item)} style={styles.subitem}>
           <View style={styles.viewContentAccordion}>
             <Text style={[styles.subtitle1]}>
               {index + 1 + '   ' + item?.lopHocPhan?.tenLopHocPhan}
             </Text>
-            <Text style={styles.subtitle1}>{item.diemTrungBinh ? Math.round(item.diemTrungBinh * 10) / 10 : ""}</Text>
+            <Text style={styles.subtitle1}>
+              {item.diemTrungBinh ? Math.round(item.diemTrungBinh * 10) / 10 : ''}
+            </Text>
           </View>
         </TouchableWithoutFeedback>
       );
     });
   };
-  const onShowUp = item => {
+  const onShowUp = (item) => {
     show();
     setCurrentDiem(item);
   };
   const onClosePopup = () => {
     close();
   };
-  const _updateSections = activeSections => {
+  const _updateSections = (activeSections) => {
     setActiveSections(activeSections.includes(undefined) ? [] : activeSections);
   };
   const renderDiem = useMemo(() => {
     if (loadingGetDiem) {
-      return <View>
-        <Text>Loading...</Text>
-      </View>
+      return (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
     }
     if (error) {
-      return <View>
-        <Text>Error data...</Text>
-      </View>
+      return (
+        <View>
+          <Text>Error data...</Text>
+        </View>
+      );
     }
-    return <Accordion
-      sections={listDiem}
-      keyExtractory={(item, index) => index}
-      activeSections={activeSections}
-      renderHeader={_renderHeader}
-      renderContent={_renderContent}
-      onChange={_updateSections}
-    />
-  }, [loadingGetDiem, error, dataGetDiem, listDiem, _renderContent, _renderHeader, _updateSections, activeSections])
+    return (
+      <Accordion
+        sections={listDiem}
+        keyExtractory={(item, index) => index}
+        activeSections={activeSections}
+        renderHeader={_renderHeader}
+        renderContent={_renderContent}
+        onChange={_updateSections}
+      />
+    );
+  }, [
+    loadingGetDiem,
+    error,
+    dataGetDiem,
+    listDiem,
+    _renderContent,
+    _renderHeader,
+    _updateSections,
+    activeSections,
+  ]);
   /**
    *
    * render ui
@@ -116,9 +134,7 @@ const MarkScreen = props => {
         <View style={styles.headerView}>
           <Text style={styles.textHeader}>Kết quả học tập</Text>
         </View>
-        <ScrollView>
-          {renderDiem}
-        </ScrollView>
+        <ScrollView>{renderDiem}</ScrollView>
         <Modal animationType="fade" transparent={true} visible={isShow}>
           <View style={styles.styleView}>
             <View style={styles.styleBottom}>
@@ -142,10 +158,7 @@ const MarkScreen = props => {
                   style={{ fontSize: 20, fontWeight: '700' }}
                   diem={currentDiem?.diemTrungBinh}
                 />
-                <CTDiem
-                  ten="Ghi chú"
-                  style={{ fontSize: 20, fontWeight: '700' }}
-                />
+                <CTDiem ten="Ghi chú" style={{ fontSize: 20, fontWeight: '700' }} />
               </View>
             </View>
           </View>
