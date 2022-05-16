@@ -10,6 +10,7 @@ import getDiem from './getDiem';
 import getNotification from './getNotification';
 import suaNotification from './suaNotification';
 import checkLichTrung from './checkLichTrung';
+import getChuongTrinhKhung from './getChuongTrinhKhung';
 
 const query = {
   ...getListHocPhanDKHP.query,
@@ -19,6 +20,7 @@ const query = {
   ...getProfile.query,
   ...getListHocKy.query,
   ...getHocPhanDaDangKy.query,
+  ...getChuongTrinhKhung.query,
 };
 
 const mutation = {

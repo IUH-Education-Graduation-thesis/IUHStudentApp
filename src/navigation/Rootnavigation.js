@@ -12,6 +12,7 @@ import {
   ProfileScreen,
   ProgressStepsUI,
   NotificationScreen,
+  ChuongTrinhKhungScreen,
 } from '../screen/TabScreen';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -171,6 +172,7 @@ const Rootnavigation = () => {
       <Stack.Screen name={screenName.signIn} component={SignInScreen} />
       <Stack.Screen name={screenName.stepDKHP} component={ProgressStepsUI} />
       <Stack.Screen name={screenName.notification} component={NotificationScreen} />
+      <Stack.Screen name={screenName.chuongTrinhKhung} component={ChuongTrinhKhungScreen} />
     </Stack.Navigator>
   );
 };

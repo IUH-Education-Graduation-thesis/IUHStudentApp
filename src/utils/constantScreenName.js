@@ -9,4 +9,5 @@ export const screenName = {
   dkhp: 'DangKyHP',
   stepDKHP: 'ProgressStepsUI',
   notification: 'notification',
+  chuongTrinhKhung: 'chuongTrinhKhung',
 };

@@ -6,6 +6,7 @@ import CalendarScreen from './CalendarScreen';
 import ProgressStepsUI from './ProgressStepsUI';
 import DangKyHP from './DangKyHPScreen/components/DangKyHP';
 import NotificationScreen from './NotificationScreen';
+import ChuongTrinhKhungScreen from './ChuongTrinhKhungScreen';
 
 export {
   HomeScreen,
@@ -16,4 +17,5 @@ export {
   DangKyHPScreen,
   CalendarScreen,
   NotificationScreen,
+  ChuongTrinhKhungScreen,
 };

@@ -141,6 +141,7 @@ const HomeScreen = () => {
         />
         <View style={{ width: 20 }} />
         <IconBtn
+          onPress={() => nav.navigate(screenName.chuongTrinhKhung)}
           nameIcon="project"
           size={30}
           text={'Chương trình khung'}
