@@ -18,6 +18,7 @@ import queries from '../../../core/GraphQl';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
 import { useNavigation } from '@react-navigation/native';
+import { isEmpty } from 'lodash';
 
 const getChuongTrinhKhungQuery = queries.query.getChuongTrinhKhung();
 
@@ -42,8 +43,13 @@ const ChuongTrinhKhungScreen = (props) => {
    */
 
   useEffect(() => {
-    const _listSection = [...Array(listHocKy?.length)?.keys()];
-    setActiveSections(_listSection);
+    if (isEmpty(listHocKy)) return;
+
+    console.log('hello world');
+
+    const _keys = listHocKy?.map((item, index) => index) || [];
+
+    setActiveSections([..._keys]);
   }, [listHocKy]);
 
   /**

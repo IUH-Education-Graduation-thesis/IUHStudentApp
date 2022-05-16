@@ -57,6 +57,7 @@ const ProgressStepsUI = ({ route }) => {
   const [isVisibleModalThanhCong, setIsVisibleModalThanhCong] = useState(false);
   const [isVisibleModalLichTrung, setIsVisibleModalLichHoc] = useState(false);
   const [listLichTrung, setListLichTrung] = useState([]);
+
   const [state, setState] = useState({
     isValid: false,
     errors: false,
@@ -69,12 +70,6 @@ const ProgressStepsUI = ({ route }) => {
 
   const [isTrung, setIsTrung] = useState(false);
 
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    lopHocPhanSelected.map((item) =>
-      setIdLopHP([{ lopHocPhanId: item.id, nhomThucHanh: item?.lichHocs?.nhomThucHanh }]),
-    );
-  }, [lopHocPhanSelected]);
   /**
    * function
    * ===========================================================================
@@ -184,6 +179,7 @@ const ProgressStepsUI = ({ route }) => {
     setListLichTrung(_dataLT?.[0]?.listNgayTrongTuan);
 
     _dataLT.map((item) => {
+      setIsTrung(_dataLT?.[0]?.isTrung);
       setIsVisibleModalLichHoc(true);
     });
   };
