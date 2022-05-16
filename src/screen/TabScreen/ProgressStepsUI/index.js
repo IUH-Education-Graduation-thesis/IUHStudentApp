@@ -1,11 +1,4 @@
-import {
-  LogBox,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { LogBox, StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { BackgroundView } from '../../../components';
@@ -18,126 +11,18 @@ import { GETLOPHOCPHANFRAGMENT } from './fragment';
 import { useMutation, useQuery } from '@apollo/client';
 import Step3 from './components/Step3Render';
 import { isEmpty } from 'lodash';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import { COLORS } from '../../../themes/color';
 import ModalLichHoc from './components/ModalLichHoc';
 import ModalLichTrung from './components/ModalLichTrung';
 import { fragmentLichTrung } from './fragment.LichTrung';
 
-const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(
-  GETLOPHOCPHANFRAGMENT,
-);
+const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(GETLOPHOCPHANFRAGMENT);
 const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan();
 const checkLichTrungMutation = queries.mutation.checkLichTrung(fragmentLichTrung);
 const ProgressStepsUI = ({ route }) => {
   const { currentHocKy } = route.params;
-
-  const dataGia = {
-    "data": {
-      "checkLichTrung": {
-        "status": "OK",
-        "errors": null,
-        "message": "Kiểm tram lịch trùng thành công.",
-        "data": [
-          {
-            "isTrung": true,
-            "listNgayTrongTuan": [
-              {
-                "thu": "Thứ 2",
-                "thuNumber": 2,
-                "lichHocs": [
-                  {
-                    "id": "1",
-                    "ghiChu": null,
-                    "ngayHocTrongTuan": 2,
-                    "nhomThucHanh": null,
-                    "thoiGianBatDau": "2021-07-01T00:00:00Z",
-                    "thoiGianKetThuc": "2021-12-02T00:00:00Z",
-                    "tietHocBatDau": 1,
-                    "tietHocKetThuc": 3,
-                    "isLyThuyet": true,
-                    "isLichThi": false,
-                    "giangVien": null
-                  },
-                  {
-                    "id": "4",
-                    "ghiChu": null,
-                    "ngayHocTrongTuan": 2,
-                    "nhomThucHanh": null,
-                    "thoiGianBatDau": "2021-08-01T00:00:00Z",
-                    "thoiGianKetThuc": "2022-01-02T00:00:00Z",
-                    "tietHocBatDau": 1,
-                    "tietHocKetThuc": 3,
-                    "isLyThuyet": true,
-                    "isLichThi": false,
-                    "giangVien": null
-                  }
-                ]
-              },
-              {
-                "thu": "Thứ 3",
-                "thuNumber": 3,
-                "lichHocs": [
-                  {
-                    "id": "2",
-                    "ghiChu": null,
-                    "ngayHocTrongTuan": 3,
-                    "nhomThucHanh": 1,
-                    "thoiGianBatDau": "2021-08-01T00:00:00Z",
-                    "thoiGianKetThuc": "2021-08-01T00:00:00Z",
-                    "tietHocBatDau": 1,
-                    "tietHocKetThuc": 2,
-                    "isLyThuyet": false,
-                    "isLichThi": false,
-                    "giangVien": null
-                  },
-                  {
-                    "id": "5",
-                    "ghiChu": null,
-                    "ngayHocTrongTuan": 3,
-                    "nhomThucHanh": 1,
-                    "thoiGianBatDau": "2021-08-01T00:00:00Z",
-                    "thoiGianKetThuc": "2021-11-14T00:00:00Z",
-                    "tietHocBatDau": 1,
-                    "tietHocKetThuc": 3,
-                    "isLyThuyet": false,
-                    "isLichThi": false,
-                    "giangVien": null
-                  }
-                ]
-              },
-              {
-                "thu": "Thứ 4",
-                "thuNumber": 4,
-                "lichHocs": []
-              },
-              {
-                "thu": "Thứ 5",
-                "thuNumber": 5,
-                "lichHocs": []
-              },
-              {
-                "thu": "Thứ 6",
-                "thuNumber": 6,
-                "lichHocs": []
-              },
-              {
-                "thu": "Thứ 7",
-                "thuNumber": 7,
-                "lichHocs": []
-              },
-              {
-                "thu": "Chủ nhật",
-                "thuNumber": 8,
-                "lichHocs": []
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
 
   /**
    * API
@@ -152,17 +37,14 @@ const ProgressStepsUI = ({ route }) => {
     },
   });
 
-  const listHocPhanDangKy =
-    dataGetHocPhanDangKy?.getListHocPhanDKHP?.data || [];
+  const listHocPhanDangKy = dataGetHocPhanDangKy?.getListHocPhanDKHP?.data || [];
 
   /**
    * UseEffect
    * ==========================================
    */
 
-  const [actDangKyHocPhan, { data: dataDangKyHocPhan }] = useMutation(
-    dangKyHocPhanMutation,
-  );
+  const [actDangKyHocPhan, { data: dataDangKyHocPhan }] = useMutation(dangKyHocPhanMutation);
   const [actLichTrung, { data: dataLichTrung }] = useMutation(checkLichTrungMutation);
   /**
    *  const
@@ -174,80 +56,68 @@ const ProgressStepsUI = ({ route }) => {
   const [dataSubmit, setDataSubmit] = useState([]);
   const [isVisibleModalThanhCong, setIsVisibleModalThanhCong] = useState(false);
   const [isVisibleModalLichTrung, setIsVisibleModalLichHoc] = useState(false);
+  const [listLichTrung, setListLichTrung] = useState([]);
   const [state, setState] = useState({
     isValid: false,
-    errors: false
+    errors: false,
   });
+
   /**
    * UseEffect
    * ==========================================
    */
-  const [lichTrung, setLichTrung] = useState([])
-  const [idLopHP, setIdLopHP] = useState([
-    {
-      lopHocPhanId: "",
-      nhomThucHanh: "",
-    }
-  ]);
+
   const [isTrung, setIsTrung] = useState(false);
-  // console.log("lichTrung", JSON.stringify(idLopHP, null, 4));
+
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    lopHocPhanSelected.map(item => setIdLopHP([{ lopHocPhanId: item.id, nhomThucHanh: item?.lichHocs?.nhomThucHanh }]))
+    lopHocPhanSelected.map((item) =>
+      setIdLopHP([{ lopHocPhanId: item.id, nhomThucHanh: item?.lichHocs?.nhomThucHanh }]),
+    );
   }, [lopHocPhanSelected]);
   /**
    * function
    * ===========================================================================
    */
-  const handleStep3Change = payload => {
+  const handleStep3Change = (payload) => {
     setDataSubmit(payload);
   };
 
-  const handleLopHocPhanChange = payload => {
+  const handleLopHocPhanChange = (payload) => {
     setLopHocPhanSelected(payload);
   };
 
-  const handleHocPhanChange = payload => {
-    const _listHocPhanDangKy = listHocPhanDangKy?.filter(item =>
-      payload?.includes(item?.id),
-    );
+  const handleHocPhanChange = (payload) => {
+    const _listHocPhanDangKy = listHocPhanDangKy?.filter((item) => payload?.includes(item?.id));
 
     setHocPhanSelected(_listHocPhanDangKy);
   };
 
   const onNextStep = () => {
     if (!isEmpty(lopHocPhanSelected)) {
-      setState({ errors: false })
-      console.log('isSelected');
+      setState({ errors: false });
     } else {
-      setState({ errors: true })
+      setState({ errors: true });
       Alert.alert(
-        "Thông báo",
-        "Yêu cầu chọn lớp học phần trước khi nhấn Tiếp tục",
-        [
-          { text: 'Ok', onPress: () => console.log('Ok Pressed') }
-        ],
-        { cancelable: false }
-      )
-
+        'Thông báo',
+        'Yêu cầu chọn lớp học phần trước khi nhấn Tiếp tục',
+        [{ text: 'Ok', onPress: () => console.log('Ok Pressed') }],
+        { cancelable: false },
+      );
     }
   };
 
   const onPaymentStepComplete = () => {
     if (!isEmpty(hocPhanSelected)) {
-
-      setState({ errors: false })
-      console.log('isSelected');
+      setState({ errors: false });
     } else {
-      setState({ errors: true })
+      setState({ errors: true });
       Alert.alert(
-        "Thông báo",
-        "Yêu cầu chọn học phần trước khi nhấn Tiếp tục",
-        [
-          { text: 'Ok', onPress: () => console.log('Ok Pressed') }
-        ],
-        { cancelable: false }
-      )
+        'Thông báo',
+        'Yêu cầu chọn học phần trước khi nhấn Tiếp tục',
+        [{ text: 'Ok', onPress: () => console.log('Ok Pressed') }],
+        { cancelable: false },
+      );
     }
   };
 
@@ -258,8 +128,19 @@ const ProgressStepsUI = ({ route }) => {
   const onSubmitSteps = async () => {
     const _inputs = dataSubmit;
 
-    if (!isTrung) {
-      setState({ errors: false })
+    const _dataLichTrungRes = await actLichTrung({
+      variables: {
+        listLopHocPhanPrepareDangKy: _inputs,
+        hocKyNormalId: currentHocKy,
+      },
+    });
+
+    const _dataLichTrung = _dataLichTrungRes?.data?.checkLichTrung?.data?.[0];
+
+    const _isLichTrung = _dataLichTrung?.isTrung;
+
+    if (!_isLichTrung) {
+      setState({ errors: false });
       const _dataRes = await actDangKyHocPhan({
         variables: {
           inputs: _inputs,
@@ -279,18 +160,14 @@ const ProgressStepsUI = ({ route }) => {
 
       setIsVisibleModalThanhCong(true);
     } else {
-      setState({ errors: true })
+      setState({ errors: true });
       Alert.alert(
-        "Thông báo",
-        "Trùng lịch học!",
-        [
-          { text: 'Ok', onPress: () => console.log('Ok Pressed') }
-        ],
-        { cancelable: false }
-      )
+        'Thông báo',
+        'Trùng lịch học!',
+        [{ text: 'Ok', onPress: () => console.log('Ok Pressed') }],
+        { cancelable: false },
+      );
     }
-
-
 
     // nav.navigate(screenName.dkhp);
   };
@@ -298,34 +175,38 @@ const ProgressStepsUI = ({ route }) => {
     const _dataLichTrung = await actLichTrung({
       variables: {
         listLopHocPhanPrepareDangKy: dataSubmit,
-        hocKyNormalId: currentHocKy
-      }
+        hocKyNormalId: currentHocKy,
+      },
+    });
 
-    })
-    console.log("_dataLichTrung", JSON.stringify(_dataLichTrung.data?.checkLichTrung?.data, null, 3));
     const _dataLT = _dataLichTrung.data?.checkLichTrung?.data;
-    _dataLT.map(item => {
-      setLichTrung(item.listNgayTrongTuan);
-      setIsTrung(item.isTrung);
+
+    setListLichTrung(_dataLT?.[0]?.listNgayTrongTuan);
+
+    _dataLT.map((item) => {
       setIsVisibleModalLichHoc(true);
-    })
-  }
+    });
+  };
   /**
    * render UI
    */
   return (
     <BackgroundView>
-      <TouchableOpacity style={styles.goback} onPress={() => nav.goBack()}><Ionicons name='chevron-back-sharp' size={35} /></TouchableOpacity>
+      <TouchableOpacity style={styles.goback} onPress={() => nav.goBack()}>
+        <Ionicons name="chevron-back-sharp" size={35} />
+      </TouchableOpacity>
       <ProgressSteps
         labelColor="#393939"
         disabledStepIconColor="#757575"
-        progressBarColor="#757575">
+        progressBarColor="#757575"
+      >
         <ProgressStep
           label="Học phần"
           onNext={onPaymentStepComplete}
           onPrevious={onPrevStep}
           errors={state.errors}
-          nextBtnText="Tiếp tục">
+          nextBtnText="Tiếp tục"
+        >
           <FlatlistUI
             onSelectChange={handleHocPhanChange}
             data={listHocPhanDangKy}
@@ -340,7 +221,8 @@ const ProgressStepsUI = ({ route }) => {
           previousBtnText="Trở về"
           nextBtnText="Tiếp tục"
           errors={state.errors}
-          previousBtnStyle={{ textAlign: 'center', padding: 8 }}>
+          previousBtnStyle={{ textAlign: 'center', padding: 8 }}
+        >
           <LopHocPhan
             onChange={handleLopHocPhanChange}
             data={hocPhanSelected}
@@ -352,14 +234,30 @@ const ProgressStepsUI = ({ route }) => {
           onPrevious={onPrevStep}
           onSubmit={onSubmitSteps}
           errors={state.errors}
-          previousBtnText="Trở về">
-          <TouchableOpacity onPress={() => onPress()} style={{ height: 40, fontSize: 20, width: 200, marginBottom: 3, marginLeft: '50%', justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.blue }}>
-            <Text style={{ color: 'black' }}>Kiểm tra lịch trùng</Text>
-          </TouchableOpacity>
+          previousBtnText="Trở về"
+        >
+          <View style={{ paddingHorizontal: 10, flexDirection: 'row-reverse' }}>
+            <TouchableOpacity
+              onPress={() => onPress()}
+              style={{
+                height: 40,
+                fontSize: 20,
+                width: 200,
+                marginBottom: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: COLORS.lightOrange,
+                borderRadius: 5,
+              }}
+            >
+              <Text style={{ color: 'white' }}>Kiểm tra lịch trùng</Text>
+            </TouchableOpacity>
+          </View>
+
           <ModalLichTrung
             onClose={() => setIsVisibleModalLichHoc(false)}
             isVisible={isVisibleModalLichTrung}
-            data={lichTrung}
+            data={listLichTrung}
             isTrung={isTrung}
           />
           <Step3 onChange={handleStep3Change} data={lopHocPhanSelected} />
@@ -375,10 +273,9 @@ const ProgressStepsUI = ({ route }) => {
             flexDirection: 'column',
             justifyContent: 'space-around',
             alignItems: 'center',
-          }}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            Đăng ký học phần thành công.
-          </Text>
+          }}
+        >
+          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đăng ký học phần thành công.</Text>
           <TouchableOpacity
             onPress={() => nav.navigate(screenName.dkhp)}
             style={{
@@ -386,7 +283,8 @@ const ProgressStepsUI = ({ route }) => {
               paddingHorizontal: 50,
               paddingVertical: 10,
               borderRadius: 5,
-            }}>
+            }}
+          >
             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Ok</Text>
           </TouchableOpacity>
         </View>
@@ -398,7 +296,7 @@ const styles = StyleSheet.create({
   goback: {
     position: 'absolute',
     paddingTop: 30,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   viewStep1: {
     flexDirection: 'row',
