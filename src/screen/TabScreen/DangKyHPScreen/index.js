@@ -65,6 +65,21 @@ const DangKyHPScreen = () => {
    * =============================================
    */
 
+  useEffect(() => {
+    if (isEmpty(currentHocKy)) return;
+
+    const unsubscribe = nav.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+      actGetHocPhanDaDangKy({
+        hocKyId: currentHocKy?.id,
+      });
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [nav, currentHocKy]);
+
   /**
    * Function
    * ======================================================================================
@@ -154,12 +169,13 @@ const DangKyHPScreen = () => {
               Alert.alert('Thông báo', 'Hủy lớp học phần thành công', [
                 {
                   text: 'Ok',
-                  onPress: () =>
+                  onPress: () => {
                     actGetHocPhanDaDangKy({
                       variables: {
                         hocKyId: currentHocKy?.id,
                       },
-                    }),
+                    });
+                  },
                 },
               ]);
             } else {
