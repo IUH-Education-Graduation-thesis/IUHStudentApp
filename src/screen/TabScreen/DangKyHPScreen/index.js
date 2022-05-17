@@ -66,7 +66,7 @@ const DangKyHPScreen = () => {
    */
 
   useEffect(() => {
-    if (isEmpty(currentHocKy)) return;
+    if (isEmpty(currentHocKy) || !currentHocKy?.id) return;
 
     const unsubscribe = nav.addListener('focus', () => {
       // The screen is focused

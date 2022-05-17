@@ -1,6 +1,3 @@
-const env = process.env['APP_ENV'];
-const apiUrl = env === 'prod' ? '52.77.233.218' : 'localhost:8080';
-
 const config = {
   IS_LOCAL: process.env.NODE_ENV === 'dev',
   IS_PROD: process.env.NODE_ENV === 'prod',
@@ -8,10 +5,10 @@ const config = {
   HOST_ADDRESS: '52.77.233.218',
 };
 
-config.GRAPHQL_URL = `http://${apiUrl}/graphql`;
-config.GRAPHQL_URL_SUBSCRIPTION = `ws://${apiUrl}/subscriptions`;
+// config.GRAPHQL_URL = `http://${apiUrl}/graphql`;
+// config.GRAPHQL_URL_SUBSCRIPTION = `ws://${apiUrl}/subscriptions`;
 
-// config.GRAPHQL_URL_SUBSCRIPTION = `ws://localhost:8080/subscriptions`;
-// config.GRAPHQL_URL = 'http://localhost:8080/graphql';
+config.GRAPHQL_URL_SUBSCRIPTION = `ws://localhost:8080/subscriptions`;
+config.GRAPHQL_URL = 'http://localhost:8080/graphql';
 
 module.exports = config;
