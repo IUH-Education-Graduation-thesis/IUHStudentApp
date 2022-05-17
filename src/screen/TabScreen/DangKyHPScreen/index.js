@@ -20,7 +20,7 @@ import { fragmentHuyLHP } from './fragment.huyLHP';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(GET_LOP_HOC_PHAN_DA_DANG_KY);
-const huyDangKyHocPhanMutation = queries.mutation.huyLopHocPhan(fragmentHuyLHP)
+const huyDangKyHocPhanMutation = queries.mutation.huyLopHocPhan(fragmentHuyLHP);
 const DangKyHPScreen = () => {
   const title = ['Tên môn học/học phần', 'Bắt buộc'];
   const nav = useNavigation();
@@ -28,6 +28,7 @@ const DangKyHPScreen = () => {
   const [currentHocKy, setCurrentHocKy] = useState(null);
   const [currentLopHocPhan, setCurrentLopHocPhan] = useState({});
   const [isVisibleModalLicHoc, setIsVisibleModalLicHoc] = useState(false);
+  const [dataForListLopHocPhanDaDangKy, setdataForListLopHocPhanDaDangKy] = useState([]);
 
   /**
    * query
@@ -35,17 +36,23 @@ const DangKyHPScreen = () => {
    */
   const { data: dataGetListHocKy, loading: loadingGetListHocKy } = useQuery(getListHocKyQuery, {
     fetchPolicy: 'network-only',
+    onCompleted: (dataRes) => {
+      const _data = dataRes?.getListHocKy?.data || [];
+
+      const _lastHocKy = _data?.[_data?.length - 1] || {};
+
+      setCurrentHocKy(_lastHocKy);
+    },
   });
+
+  const [actHuyDKHP, { data: dataHuy }] = useMutation(huyDangKyHocPhanMutation);
+  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] =
+    useLazyQuery(getLopHocPhanDaDangKy);
 
   const dataForDropdown = dataGetListHocKy?.getListHocKy?.data?.map((item) => ({
     value: item?.id,
     label: `Học kỳ ${item?.thuTuHocKy} (${item?.namHoc?.namBatDau}-${item?.namHoc?.namKetThuc})`,
   }));
-  const [actHuyDKHP, { data: dataHuy }] = useMutation(huyDangKyHocPhanMutation);
-  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] =
-    useLazyQuery(getLopHocPhanDaDangKy);
-
-  const [dataForListLopHocPhanDaDangKy, setdataForListLopHocPhanDaDangKy] = useState([]);
 
   /**
    * useEffect
@@ -54,7 +61,7 @@ const DangKyHPScreen = () => {
   useEffect(() => {
     const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
     setdataForListLopHocPhanDaDangKy(_data);
-  })
+  });
 
   /**
    * Function
@@ -123,42 +130,42 @@ const DangKyHPScreen = () => {
     );
   };
   const handleHuyHocPhanButton = (item) => {
-    console.log("Huy", JSON.stringify(item.id, null, 4));
     Alert.alert(
       //title
       'Thông báo',
       //body
       'Bạn có muốn hủy lớp học phần?',
-      [{
-        text: 'Đồng ý', onPress: async () => {
-          const dataHuyHP = await actHuyDKHP({
-            variables: {
-              lopHocPhanId: item.id,
+      [
+        {
+          text: 'Đồng ý',
+          onPress: async () => {
+            const dataHuyHP = await actHuyDKHP({
+              variables: {
+                lopHocPhanId: item.id,
+              },
+            });
+            if (!isEmpty(dataHuyHP)) {
+              const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
+              setdataForListLopHocPhanDaDangKy(_data);
+            } else {
+              Alert.alert(
+                'Thông báo',
+                'Hủy lớp học phần không thành công',
+                [{ text: 'Ok', onPress: () => console.log('Cancel Pressed') }],
+                { cancelable: true },
+              );
             }
-          })
-          if (!isEmpty(dataHuyHP)) {
-            const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
-            setdataForListLopHocPhanDaDangKy(_data);
-          } else {
-            Alert.alert(
-              "Thông báo",
-              "Hủy lớp học phần không thành công",
-              [{ text: "Ok", onPress: () => console.log("Cancel Pressed"), }],
-              { cancelable: true },
-            )
-          }
-        }
-      },
-      {
-        text: "Không",
-        onPress: () => console.log("Cancel Pressed"),
-      }
+          },
+        },
+        {
+          text: 'Không',
+          onPress: () => console.log('Cancel Pressed'),
+        },
       ],
       { cancelable: false },
       //clicking out side of alert will not cancel
     );
-
-  }
+  };
   const _renderContent = (item) => {
     return (
       <View
@@ -175,8 +182,9 @@ const DangKyHPScreen = () => {
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
             <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-              }`}</Text>
+            <Text>{`Số tín chỉ: ${
+              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+            }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>
@@ -209,7 +217,13 @@ const DangKyHPScreen = () => {
   }, [dataForListLopHocPhanDaDangKy, activeSections]);
 
   const renderDropdown = useMemo(() => {
-    return <DropDownHK onChange={handleWhenHocKyChange} data={dataForDropdown} />;
+    return (
+      <DropDownHK
+        currentHocKy={currentHocKy}
+        onChange={handleWhenHocKyChange}
+        data={dataForDropdown}
+      />
+    );
   }, [dataForDropdown, handleWhenHocKyChange]);
 
   return (

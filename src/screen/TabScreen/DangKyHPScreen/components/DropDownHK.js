@@ -1,11 +1,11 @@
-import { isEmpty } from 'lodash';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const DropDownHK = ({ data, onChange }) => {
+const DropDownHK = ({ data, onChange, currentHocKy }) => {
   return (
     <SelectDropdown
+      defaultButtonText={`Học kỳ ${currentHocKy?.thuTuHocKy} (${currentHocKy?.namHoc?.namBatDau} - ${currentHocKy?.namHoc?.namKetThuc})`}
       data={data?.map((item) => item?.label)}
       onSelect={(selectedItem, index) => {
         const _value = data?.[index]?.value;

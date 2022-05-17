@@ -4,7 +4,6 @@ module.exports = (api) => {
     env: {
       development: {
         plugins: [
-          'transform-react-jsx-source',
           [
             'module-resolver',
             {
