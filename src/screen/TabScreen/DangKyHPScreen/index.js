@@ -28,7 +28,6 @@ const DangKyHPScreen = () => {
   const [currentHocKy, setCurrentHocKy] = useState(null);
   const [currentLopHocPhan, setCurrentLopHocPhan] = useState({});
   const [isVisibleModalLicHoc, setIsVisibleModalLicHoc] = useState(false);
-  const [dataForListLopHocPhanDaDangKy, setdataForListLopHocPhanDaDangKy] = useState([]);
 
   /**
    * query
@@ -46,22 +45,25 @@ const DangKyHPScreen = () => {
   });
 
   const [actHuyDKHP, { data: dataHuy }] = useMutation(huyDangKyHocPhanMutation);
-  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] =
-    useLazyQuery(getLopHocPhanDaDangKy);
+  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] = useLazyQuery(
+    getLopHocPhanDaDangKy,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
 
   const dataForDropdown = dataGetListHocKy?.getListHocKy?.data?.map((item) => ({
+    ...item,
     value: item?.id,
     label: `Học kỳ ${item?.thuTuHocKy} (${item?.namHoc?.namBatDau}-${item?.namHoc?.namKetThuc})`,
   }));
+
+  const listHocPhanDaDangKy = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
 
   /**
    * useEffect
    * =============================================
    */
-  useEffect(() => {
-    const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
-    setdataForListLopHocPhanDaDangKy(_data);
-  });
 
   /**
    * Function
@@ -85,7 +87,7 @@ const DangKyHPScreen = () => {
       twoOptionAlertHandler();
     } else {
       nav.navigate(screenName.stepDKHP, {
-        currentHocKy,
+        currentHocKy: currentHocKy?.id,
       });
     }
   };
@@ -96,11 +98,13 @@ const DangKyHPScreen = () => {
   };
 
   const handleWhenHocKyChange = (payload) => {
-    setCurrentHocKy(payload);
+    const _hocKy = dataForDropdown?.find((item) => item?.id === payload);
+
+    setCurrentHocKy(_hocKy);
 
     actGetHocPhanDaDangKy({
       variables: {
-        hocKyId: payload,
+        hocKyId: _hocKy?.id,
       },
     });
   };
@@ -129,6 +133,7 @@ const DangKyHPScreen = () => {
       </View>
     );
   };
+
   const handleHuyHocPhanButton = (item) => {
     Alert.alert(
       //title
@@ -144,9 +149,19 @@ const DangKyHPScreen = () => {
                 lopHocPhanId: item.id,
               },
             });
+
             if (!isEmpty(dataHuyHP)) {
-              const _data = dataGetLopHocPhanDaDangKy?.getLopHocPhanDaDangKy?.data;
-              setdataForListLopHocPhanDaDangKy(_data);
+              Alert.alert('Thông báo', 'Hủy lớp học phần thành công', [
+                {
+                  text: 'Ok',
+                  onPress: () =>
+                    actGetHocPhanDaDangKy({
+                      variables: {
+                        hocKyId: currentHocKy?.id,
+                      },
+                    }),
+                },
+              ]);
             } else {
               Alert.alert(
                 'Thông báo',
@@ -202,11 +217,11 @@ const DangKyHPScreen = () => {
   };
 
   const renderListHocPhanDaDangKy = useMemo(() => {
-    if (isEmpty(dataForListLopHocPhanDaDangKy)) return;
+    if (isEmpty(listHocPhanDaDangKy)) return;
 
     return (
       <Accordion
-        sections={dataForListLopHocPhanDaDangKy}
+        sections={listHocPhanDaDangKy}
         keyExtractory={(item) => item?.id}
         activeSections={activeSections}
         renderHeader={_renderHeader}
@@ -214,7 +229,7 @@ const DangKyHPScreen = () => {
         onChange={setSections}
       />
     );
-  }, [dataForListLopHocPhanDaDangKy, activeSections]);
+  }, [listHocPhanDaDangKy, activeSections]);
 
   const renderDropdown = useMemo(() => {
     return (
