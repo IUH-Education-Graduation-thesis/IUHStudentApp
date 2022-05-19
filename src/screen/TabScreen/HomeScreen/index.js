@@ -68,7 +68,6 @@ const HomeScreen = () => {
       nav.navigate(screenName.signIn);
     },
   });
-  // console.log("_sv", sv);
 
   const sv = dataGetProfile?.getProfile?.data[0]?.sinhVien || {};
   /**

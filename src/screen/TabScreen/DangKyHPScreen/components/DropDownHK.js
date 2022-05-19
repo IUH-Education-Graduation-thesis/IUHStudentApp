@@ -5,6 +5,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 const DropDownHK = ({ data, onChange, currentHocKy }) => {
   return (
     <SelectDropdown
+      buttonStyle={{ width: '60%' }}
       defaultButtonText={`Học kỳ ${currentHocKy?.thuTuHocKy} (${currentHocKy?.namHoc?.namBatDau} - ${currentHocKy?.namHoc?.namKetThuc})`}
       data={data?.map((item) => item?.label)}
       onSelect={(selectedItem, index) => {

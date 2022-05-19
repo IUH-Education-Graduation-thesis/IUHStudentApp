@@ -182,7 +182,7 @@ function CalendarScreen() {
             <Button textBtn="Tiếp >" onPress={() => onPress('next')} />
           </View>
 
-          <ScrollView>{renderListLichHoc}</ScrollView>
+          <ScrollView style={{ marginBottom: 100 }}>{renderListLichHoc}</ScrollView>
         </View>
       </View>
     </BackgroundView>

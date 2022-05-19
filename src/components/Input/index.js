@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS } from '../../themes/color';
+import Text from '../Text';
 const Input = ({
     label,
     iconName,
@@ -39,14 +40,15 @@ const Input = ({
                     }}
                     onBlur={() => setIsFocused(false)}
                     secureTextEntry={hidePassword}
-                    style={{ color: COLORS.darkBlue, width: '80%' }}
+                    placeholderTextColor='gray'
+                    style={{ color: 'black', width: '80%' }}
                     {...props}
                 />
                 {password && (
                     <Icon
                         onPress={() => setHidePassword(!hidePassword)}
                         name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
-                        style={{ color: COLORS.darkBlue, fontSize: 22, }}
+                        style={{ color: 'black', fontSize: 22, }}
                     />
                 )}
             </View>

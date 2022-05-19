@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
   ScrollView,
-  Text,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -19,6 +17,7 @@ import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
 import { useNavigation } from '@react-navigation/native';
 import { isEmpty } from 'lodash';
+import Text from '../../../components/Text';
 
 const getChuongTrinhKhungQuery = queries.query.getChuongTrinhKhung();
 
@@ -44,9 +43,6 @@ const ChuongTrinhKhungScreen = (props) => {
 
   useEffect(() => {
     if (isEmpty(listHocKy)) return;
-
-    console.log('hello world');
-
     const _keys = listHocKy?.map((item, index) => index) || [];
 
     setActiveSections([..._keys]);
@@ -158,7 +154,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
 
-      title: { fontSize: 20, fontWeight: 'bold' },
+      title: { fontSize: 20, fontWeight: 'bold', color: 'white' },
     },
 
     item: {

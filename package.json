@@ -5,6 +5,7 @@
   "scripts": {
     "android": "APP_ENV=prod react-native run-android",
     "android-dev": "APP_ENV=dev react-native run-android",
+    "android-win": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",

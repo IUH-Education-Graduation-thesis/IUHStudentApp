@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   // This only works on iOS
   datePicker: {
-    width: 320,
+    width: '30%',
     height: 260,
     display: 'flex',
     justifyContent: 'center',
@@ -114,5 +114,5 @@ ShowCalendar.propTypes = {
 
 ShowCalendar.defaultProps = {
   day: new Date(),
-  onDateChange: () => {},
+  onDateChange: () => { },
 };

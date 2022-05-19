@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 const TableHocPhan = ({ header, data }) => {
   return (
     <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-      <Row flexArr={[2, 5, 1, 2]} data={header} style={styles.head} textStyle={styles.text} />
-      <Rows flexArr={[2, 5, 1, 2]} data={data} textStyle={styles.text} />
+      <Row flexArr={[1.8, 5, 0.8, 2.1]} data={header} style={styles.head} textStyle={styles.text} />
+      <Rows flexArr={[1.8, 5, 0.8, 2.1]} data={data} textStyle={styles.text} />
     </Table>
   );
 };
@@ -15,7 +15,7 @@ const TableHocPhan = ({ header, data }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 6 },
+  text: { margin: 6, color: 'black' },
 });
 
 export default TableHocPhan;

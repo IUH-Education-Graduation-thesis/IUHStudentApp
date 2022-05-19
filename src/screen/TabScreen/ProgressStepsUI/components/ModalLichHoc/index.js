@@ -37,7 +37,6 @@ const ModalLichHoc = ({ data, isVisible, onClose }) => {
       const _time = `${_thoiGianBatDau.format(
         'DD/MM/YYYY',
       )} - ${_thoiGianKetThuc?.format('DD/MM/YYYY')}`;
-
       return (
         <View
           style={{
@@ -47,6 +46,7 @@ const ModalLichHoc = ({ data, isVisible, onClose }) => {
             paddingVertical: 10,
             marginTop: 10,
           }}>
+          <Text>{`${item?.lopHocPhan?.maLopHocPhan} - ${item?.lopHocPhan?.tenLopHocPhan}`}</Text>
           <Text>{`${_titleLicHoc} - ${_thu} (${_tiet})`}</Text>
           {_isThucHanh && <Text>{`Nhóm TH: ${item?.nhomThucHanh}`}</Text>}
           <Text>{`Phòng học: ${item?.phongHoc?.tenPhongHoc}`}</Text>

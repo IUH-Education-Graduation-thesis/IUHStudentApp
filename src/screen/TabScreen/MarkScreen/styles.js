@@ -61,10 +61,8 @@ export const styles = StyleSheet.create({
     subtitle1: {
         fontSize: 20,
         fontWeight: '500',
-        height: 30,
-        // backgroundColor: COLORS.lightBlue,
+        width: '93%',
         marginBottom: 10,
-        // borderWidth: 1
     }, styleBottom: {
         backgroundColor: '#fff',
         width: '100%',
@@ -72,7 +70,6 @@ export const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         paddingHorizontal: 10,
         maxHeight: deviceHeight * 3,
-        // alignItems: 'center',
     },
     viewContentAccordion:
     {

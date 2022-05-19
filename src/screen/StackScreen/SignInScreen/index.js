@@ -8,7 +8,6 @@ import {
 import React, { useState, useEffect } from 'react';
 import { BackgroundView } from '../../../components';
 import Text from '../../../components/Text';
-import TextInput from '../../../components/TextInput';
 import { styles } from './style';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
@@ -73,7 +72,7 @@ const SignInScreen = () => {
       if (isEmpty(dataGetProfile)) return;
       try {
         await AsyncStorage.removeItem('@token');
-      } catch (e) {}
+      } catch (e) { }
     };
 
     helloWorld();
@@ -152,7 +151,7 @@ const SignInScreen = () => {
           label="MSSV"
           placeholder="Nhập mssv"
           error={errors.mssv}
-          style={{ width: '86%', fontSize: 18 }}
+          style={{ width: '86%', fontSize: 18, color: 'black' }}
         />
         <Input
           onChangeText={(text) => handleOnchange(text, 'password')}
@@ -162,7 +161,7 @@ const SignInScreen = () => {
           placeholder="Nhập mật khẩu"
           error={errors.password}
           password
-          style={{ width: '80%', fontSize: 18 }}
+          style={{ width: '80%', fontSize: 18, color: 'black' }}
         />
         <TouchableOpacity style={styles.btnStyle} onPress={validate}>
           <Text style={styles.textBtn}>ĐĂNG NHẬP</Text>

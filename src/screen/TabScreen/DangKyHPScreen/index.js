@@ -137,7 +137,7 @@ const DangKyHPScreen = () => {
     return (
       <View key={section?.id} style={styles.item}>
         <Text style={styles.title}>{section?.hocPhan?.monHoc?.ten}</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', width: '18%' }}>
           {section?.hocPhan?.batBuoc ? (
             <AntDesign name="checkcircle" size={22} color={'green'} style={{ marginRight: 10 }} />
           ) : (
@@ -211,11 +211,10 @@ const DangKyHPScreen = () => {
         <View style={{ padding: 20 }}>
           <View>
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
-            <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
+            <Text >{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${
-              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-            }`}</Text>
+            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+              }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>
@@ -317,6 +316,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginHorizontal: 20
   },
   txtheader: { color: 'black', fontWeight: '600', fontSize: 18 },
   renderContent: {
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textAlign: 'center',
   },
-  title: { flex: 1, alignItems: 'flex-start' },
+  title: { flex: 1, alignItems: 'flex-start', fontSize: 18, width: '70%', paddingRight: 5 },
   text: {
     fontSize: 16,
     fontWeight: '600',
@@ -353,15 +353,13 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: 'white',
-    height: 40,
+    // height: 40,
     paddingHorizontal: 8,
     justifyContent: 'space-between',
     marginBottom: 2,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 18,
-  },
+
 });
 export default DangKyHPScreen;

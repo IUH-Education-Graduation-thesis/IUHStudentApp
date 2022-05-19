@@ -31,7 +31,7 @@ const MarkScreen = (props) => {
   const [isShow, setShow] = useState(false);
   const [activeSections, setActiveSections] = useState([]);
 
-  const { data: dataGetDiem, loading: loadingGetDiem, error } = useQuery(getDiemQuery);
+  const { data: dataGetDiem, loading: loadingGetDiem, error: errorData } = useQuery(getDiemQuery);
   const listDiem = dataGetDiem?.getDiem?.data || [];
   /**
    * useEffect
@@ -97,7 +97,7 @@ const MarkScreen = (props) => {
         </View>
       );
     }
-    if (error) {
+    if (isEmpty(dataGetDiem)) {
       return (
         <View>
           <Text>Error data...</Text>
@@ -116,7 +116,7 @@ const MarkScreen = (props) => {
     );
   }, [
     loadingGetDiem,
-    error,
+    errorData,
     dataGetDiem,
     listDiem,
     _renderContent,

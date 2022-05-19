@@ -1,17 +1,19 @@
 import { TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { styles } from './style';
 import BackgroundView from '../../../components/BackgroundView';
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component';
+import { Table, TableWrapper, Row, Rows, Col, Cell, Cols } from 'react-native-table-component';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getSinhVienSelectors } from '../../../redux/selectors/selectorStudents';
 import Text from '../../../components/Text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getSinhVienSuccess } from '../../../redux/actions/studentActions';
 
 const ProfileScreen = () => {
   const nav = useNavigation();
+  const dispatch = useDispatch()
   const sv = useSelector(getSinhVienSelectors);
 
   const date = new Date(sv?.ngaySinh);
@@ -48,6 +50,7 @@ const ProfileScreen = () => {
     const deleteToken = async () => {
       try {
         await AsyncStorage.removeItem('@token');
+        dispatch(getSinhVienSuccess(""))
         nav.navigate(screenName.signIn);
       } catch (e) {
         console.log('e', e);
@@ -56,6 +59,24 @@ const ProfileScreen = () => {
 
     deleteToken();
   };
+  const tableRender = useMemo(() => {
+    return <Table>
+      <TableWrapper style={styles.wrapper}>
+        <Col
+          data={table[0].tableTitle}
+          style={styles.title}
+          heightArr={[35, 35, 35, 35, 35, 35, 35, 35, 35, 35]}
+          textStyle={styles.text}
+        />
+        <Col
+          data={student.slice(1)}
+          style={styles.title}
+          heightArr={[35, 35, 35, 35, 35, 35, 35, 35, 35, 35]}
+          textStyle={styles.text}
+        />
+      </TableWrapper>
+    </Table>
+  }, [table, student])
   return (
     <BackgroundView>
       <View style={styles.headerView}>
@@ -64,22 +85,7 @@ const ProfileScreen = () => {
         <Text style={styles.textSVHeader}>{table[0].student.name}</Text>
       </View>
       <View style={styles.contentView}>
-        <Table>
-          <TableWrapper style={styles.wrapper}>
-            <Col
-              data={table[0].tableTitle}
-              style={styles.title}
-              heightArr={[35, 35, 35, 35, 35, 35, 35, 35, 35, 35]}
-              textStyle={styles.text}
-            />
-            <Col
-              data={student.slice(1)}
-              style={styles.title}
-              heightArr={[35, 35, 35, 35, 35, 35, 35, 35, 35, 35]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
+        {tableRender}
         <View style={styles.btnView}>
           <TouchableOpacity style={styles.btnStyle} onPress={onPress}>
             <Text style={styles.textBtn}>Đăng xuất</Text>

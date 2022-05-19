@@ -37,9 +37,9 @@ export const styles = StyleSheet.create({
     },
     head: { height: 40 },
     wrapper: { flexDirection: 'row' },
-    title: { flex: 1, alignItems: 'flex-start' },
+    title: { alignItems: 'flex-start', },
     row: { height: 28 },
-    text: { textAlign: 'center', color: 'black', fontSize: 20 },
+    text: { textAlign: 'center', color: 'black', fontSize: 16 },
     btnStyle: {
         width: "90%",
         height: 60,
