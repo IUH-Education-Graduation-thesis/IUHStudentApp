@@ -1,3 +1,18 @@
+export const DKHP_FRAGMENT = `
+sinhVienLopHocPhans {
+  nhomThucHanh
+  lopHocPhan {
+    tenLopHocPhan
+  }
+}
+lopHocPhanFailures {
+  lopHocPhan {
+    tenLopHocPhan
+  }
+  message
+}
+`;
+
 export const GETLOPHOCPHANFRAGMENT = `
 id
 maHocPhan

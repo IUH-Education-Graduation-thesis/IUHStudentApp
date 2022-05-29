@@ -7,20 +7,20 @@ import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../../utils/constantScreenName';
 import LopHocPhan from './components/LopHocPhan';
 import queries from '../../../core/GraphQl';
-import { GETLOPHOCPHANFRAGMENT } from './fragment';
-import { useMutation, useQuery } from '@apollo/client';
+import { DKHP_FRAGMENT, GETLOPHOCPHANFRAGMENT } from './fragment';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import Step3 from './components/Step3Render';
 import { isEmpty } from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Modal from 'react-native-modal';
 import { COLORS } from '../../../themes/color';
 import ModalLichHoc from './components/ModalLichHoc';
 import ModalLichTrung from './components/ModalLichTrung';
 import { fragmentLichTrung } from './fragment.LichTrung';
 import Loader from '../../../components/Loader';
+import ModalSuccess from './ModalSuccess';
 
 const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(GETLOPHOCPHANFRAGMENT);
-const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan();
+const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan(DKHP_FRAGMENT);
 const checkLichTrungMutation = queries.mutation.checkLichTrung(fragmentLichTrung);
 const ProgressStepsUI = ({ route }) => {
   const { currentHocKy } = route.params;
@@ -30,19 +30,10 @@ const ProgressStepsUI = ({ route }) => {
    * ===========================================
    */
 
-  const { data: dataGetHocPhanDangKy, loading: loadingGetHocPhanDangKy } = useQuery(
-    getHocPhanForDKHP,
-    {
-      skip: !currentHocKy,
-      variables: {
-        hocKyNormalId: currentHocKy,
-        kieu: 'HOC_MOI',
-      },
-    },
-  );
+  const [actGetHocPhanDangKy, { data: dataGetHocPhanDangKy, loading: loadingGetHocPhanDangKy }] =
+    useLazyQuery(getHocPhanForDKHP);
 
-  const [actDangKyHocPhan, { data: dataDangKyHocPhan, loading: loadingDangKyHocPhan }] =
-    useMutation(dangKyHocPhanMutation);
+  const [actDangKyHocPhan, { loading: loadingDangKyHocPhan }] = useMutation(dangKyHocPhanMutation);
 
   const [actLichTrung, { data: dataLichTrung, loading: loadingLichTrung }] =
     useMutation(checkLichTrungMutation);
@@ -61,14 +52,30 @@ const ProgressStepsUI = ({ route }) => {
   const [currentActive, setCurrentActive] = useState(0);
   const [hocPhanSelected, setHocPhanSelected] = useState([]);
   const [lopHocPhanSelected, setLopHocPhanSelected] = useState([]);
-  const [dataSubmit, setDataSubmit] = useState([]);
   const [isVisibleModalThanhCong, setIsVisibleModalThanhCong] = useState(false);
   const [isVisibleModalLichTrung, setIsVisibleModalLichHoc] = useState(false);
   const [listLichTrung, setListLichTrung] = useState([]);
+  const [dataDKHPResponse, setDataDKHPResponse] = useState({});
 
   const [state, setState] = useState({
     isValid: false,
     errors: false,
+  });
+
+  const lopHocPhanSelectedFormat = lopHocPhanSelected?.map((item) => {
+    if (item?.nhomThucHanhChoose === null || item?.nhomThucHanhChoose === undefined) {
+      const _nhomThucHanh = item?.lichHocs?.filter((_item) => !_item?.isLyThuyet)?.[0]
+        ?.nhomThucHanh;
+
+      return {
+        ...item,
+        nhomThucHanhChoose: _nhomThucHanh,
+      };
+    }
+
+    return {
+      ...item,
+    };
   });
 
   /**
@@ -78,12 +85,29 @@ const ProgressStepsUI = ({ route }) => {
 
   const [isTrung, setIsTrung] = useState(false);
 
+  useEffect(() => {
+    if (currentHocKy === null || currentHocKy === undefined) return;
+
+    actGetHocPhanDangKy({
+      variables: {
+        hocKyNormalId: currentHocKy,
+        kieu: 'HOC_MOI',
+      },
+    });
+  }, [currentHocKy]);
+
   /**
    * function
    * ===========================================================================
    */
+  const handleCloseModalSuccess = () => {
+    setIsVisibleModalThanhCong(false);
+
+    nav.navigate(screenName.dkhp);
+  };
+
   const handleStep3Change = (payload) => {
-    setDataSubmit(payload);
+    setLopHocPhanSelected(payload);
   };
 
   const handleLopHocPhanChange = (payload) => {
@@ -129,7 +153,10 @@ const ProgressStepsUI = ({ route }) => {
   };
 
   const onSubmitSteps = async () => {
-    const _inputs = dataSubmit;
+    const _inputs = lopHocPhanSelectedFormat?.map((item) => ({
+      lopHocPhanId: item?.id,
+      nhomThucHanh: item?.nhomThucHanhChoose,
+    }));
 
     const _dataLichTrungRes = await actLichTrung({
       variables: {
@@ -152,6 +179,14 @@ const ProgressStepsUI = ({ route }) => {
       const _errors = _dataRes?.data?.dangKyHocPhan?.errors || [];
 
       if (!isEmpty(_errors)) {
+        _errors?.map((item) => {
+          Alert.alert(
+            'Lỗi',
+            item?.message,
+            [{ text: 'Ok', onPress: () => console.log('Ok Pressed') }],
+            { cancelable: false },
+          );
+        });
         return;
       }
 
@@ -161,6 +196,7 @@ const ProgressStepsUI = ({ route }) => {
         return;
       }
 
+      setDataDKHPResponse(_data?.[0]);
       setIsVisibleModalThanhCong(true);
     } else {
       setState({ errors: true });
@@ -171,13 +207,16 @@ const ProgressStepsUI = ({ route }) => {
         { cancelable: false },
       );
     }
-
-    // nav.navigate(screenName.dkhp);
   };
   const onPress = async () => {
+    const _inputs = lopHocPhanSelectedFormat?.map((item) => ({
+      lopHocPhanId: item?.id,
+      nhomThucHanh: item?.nhomThucHanhChoose,
+    }));
+
     const _dataLichTrung = await actLichTrung({
       variables: {
-        listLopHocPhanPrepareDangKy: dataSubmit,
+        listLopHocPhanPrepareDangKy: _inputs,
         hocKyNormalId: currentHocKy,
       },
     });
@@ -264,36 +303,15 @@ const ProgressStepsUI = ({ route }) => {
             data={listLichTrung}
             isTrung={isTrung}
           />
-          <Step3 onChange={handleStep3Change} data={lopHocPhanSelected} />
+          <Step3 onChange={handleStep3Change} data={lopHocPhanSelectedFormat} />
         </ProgressStep>
       </ProgressSteps>
-      <Modal isVisible={isVisibleModalThanhCong}>
-        <View
-          style={{
-            flex: 0.2,
-            backgroundColor: 'white',
-            borderRadius: 10,
-            overflow: 'hidden',
-            flexDirection: 'column',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đăng ký học phần thành công.</Text>
-          <TouchableOpacity
-            onPress={() => nav.navigate(screenName.dkhp)}
-            style={{
-              backgroundColor: '#B9F8D3',
-              paddingHorizontal: 50,
-              paddingVertical: 10,
-              borderRadius: 5,
-            }}
-          >
-            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Ok</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
       <Loader visible={loadingGetHocPhanDangKy || loadingDangKyHocPhan} />
+      <ModalSuccess
+        data={dataDKHPResponse}
+        visible={isVisibleModalThanhCong}
+        closeModal={handleCloseModalSuccess}
+      />
     </BackgroundView>
   );
 };

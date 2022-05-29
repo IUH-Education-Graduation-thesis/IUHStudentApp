@@ -105,9 +105,9 @@ const LopHocPhan = (props) => {
     }
   }, [data]);
   useEffect(() => {
-    const _ids = data.map((item, index) => index)
+    const _ids = data.map((item, index) => index);
     setActiveSections(_ids);
-  }, [data, setActiveSections])
+  }, [data, setActiveSections]);
 
   /**
    * Render view
@@ -127,7 +127,7 @@ const LopHocPhan = (props) => {
     const { lopHocPhans } = item;
     return lopHocPhans.map((lhp) => {
       return (
-        <View>
+        <View style={{ paddingTop: 10 }} key={lhp?.id}>
           <View
             style={{
               backgroundColor: 'white',
@@ -163,7 +163,7 @@ const LopHocPhan = (props) => {
                   paddingLeft: 10,
                   marginTop: 10,
                   borderRadius: 5,
-                  width: 110
+                  width: 110,
                 }}
               >
                 <Text style={{ color: 'white' }}>Xem lịch học</Text>
