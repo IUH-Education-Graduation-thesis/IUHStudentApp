@@ -69,13 +69,15 @@ const DangKyHPScreen = () => {
    */
 
   useEffect(() => {
-    if (isEmpty(currentHocKy) || !currentHocKy?.id) return;
+    if (currentHocKy?.id === null || currentHocKy?.id === undefined) return;
 
     const unsubscribe = nav.addListener('focus', () => {
       // The screen is focused
       // Call any action
       actGetHocPhanDaDangKy({
-        hocKyId: currentHocKy?.id,
+        variables: {
+          hocKyId: currentHocKy?.id,
+        },
       });
     });
 
@@ -214,10 +216,11 @@ const DangKyHPScreen = () => {
         <View style={{ padding: 20 }}>
           <View>
             <Text>{`Mã LHP: ${item?.maLopHocPhan}`}</Text>
-            <Text >{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
+            <Text>{`Tên môn học: ${item?.tenLopHocPhan}`}</Text>
             <Text>{`Lớp dự kiên: ${item?.lopDuKien}`}</Text>
-            <Text>{`Số tín chỉ: ${item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
-              }`}</Text>
+            <Text>{`Số tín chỉ: ${
+              item?.hocPhan?.soTinChiLyThuyet + item?.hocPhan?.soTinChiThucHanh
+            }`}</Text>
             <Text>{`Nhóm thực hành: ${item?.soNhomThucHanh}`}</Text>
             <Text>{`Trạng thái LHP: ${item?.trangThaiLopHocPhan}`}</Text>
           </View>
@@ -320,7 +323,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   txtheader: { color: 'black', fontWeight: '600', fontSize: 18 },
   renderContent: {
@@ -364,6 +367,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
 });
 export default DangKyHPScreen;
