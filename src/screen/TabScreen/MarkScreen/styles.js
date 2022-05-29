@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     textHeaderBottom: {
         fontSize: 22,
         fontWeight: '900',
-        height: 50,
         paddingTop: 10,
         textAlign: 'center'
     },
@@ -61,7 +60,6 @@ export const styles = StyleSheet.create({
     subtitle1: {
         fontSize: 20,
         fontWeight: '500',
-        width: '93%',
         marginBottom: 10,
     }, styleBottom: {
         backgroundColor: '#fff',

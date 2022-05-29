@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { BackgroundView } from '../../../components';
 import Accordion from 'react-native-collapsible/Accordion';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -43,6 +37,7 @@ const ChuongTrinhKhungScreen = (props) => {
 
   useEffect(() => {
     if (isEmpty(listHocKy)) return;
+
     const _keys = listHocKy?.map((item, index) => index) || [];
 
     setActiveSections([..._keys]);

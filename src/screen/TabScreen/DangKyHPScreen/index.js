@@ -17,6 +17,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { isEmpty } from 'lodash';
 import ModalLichHoc from '../ProgressStepsUI/components/ModalLichHoc';
 import { fragmentHuyLHP } from './fragment.huyLHP';
+import Loader from '../../../components/Loader';
 
 const getListHocKyQuery = queries.query.getListHocKy(GET_LIST_HOC_KY_FRAGMENT);
 const getLopHocPhanDaDangKy = queries.query.getLopHocPhanDaDangKy(GET_LOP_HOC_PHAN_DA_DANG_KY);
@@ -44,13 +45,15 @@ const DangKyHPScreen = () => {
     },
   });
 
-  const [actHuyDKHP, { data: dataHuy }] = useMutation(huyDangKyHocPhanMutation);
-  const [actGetHocPhanDaDangKy, { data: dataGetLopHocPhanDaDangKy }] = useLazyQuery(
-    getLopHocPhanDaDangKy,
-    {
-      fetchPolicy: 'network-only',
-    },
-  );
+  const [actHuyDKHP, { data: dataHuy, loading: loadingHuyHocPhan }] =
+    useMutation(huyDangKyHocPhanMutation);
+
+  const [
+    actGetHocPhanDaDangKy,
+    { data: dataGetLopHocPhanDaDangKy, loading: loadingHocPhanDaDangKy },
+  ] = useLazyQuery(getLopHocPhanDaDangKy, {
+    fetchPolicy: 'network-only',
+  });
 
   const dataForDropdown = dataGetListHocKy?.getListHocKy?.data?.map((item) => ({
     ...item,
@@ -285,6 +288,7 @@ const DangKyHPScreen = () => {
         data={currentLopHocPhan}
         isVisible={isVisibleModalLicHoc}
       />
+      <Loader visible={loadingGetListHocKy || loadingHocPhanDaDangKy || loadingHuyHocPhan} />
     </BackgroundView>
   );
 };

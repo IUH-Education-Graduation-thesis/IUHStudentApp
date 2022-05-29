@@ -15,6 +15,7 @@ import { isEmpty } from 'lodash';
 import { useDispatch } from 'react-redux';
 import { getSinhVienSuccess } from '../../../redux/actions/studentActions';
 import { GlobalContext } from '../../../contexts/GlobalContext';
+import Loader from '../../../components/Loader';
 
 const getProfileQuery = queries.query.getProfile(` id
 userName
@@ -57,7 +58,11 @@ const HomeScreen = () => {
    * ===============================================================
    */
 
-  const { data: dataGetProfile, error: errorData } = useQuery(getProfileQuery, {
+  const {
+    data: dataGetProfile,
+    loading: loadingGetProfile,
+    error: errorData,
+  } = useQuery(getProfileQuery, {
     onCompleted: (data) => {
       const _sv = data?.getProfile?.data[0]?.sinhVien;
       if (!isEmpty(_sv)) {
@@ -147,6 +152,7 @@ const HomeScreen = () => {
           type={tpyeIcon.octicons}
         />
       </View>
+      <Loader visible={loadingGetProfile} />
     </BackgroundView>
   );
 };

@@ -11,13 +11,14 @@ import queries from '../../../core/GraphQl';
 import { useMutation } from '@apollo/client';
 import { screenName } from '../../../utils/constantScreenName';
 import { COLORS } from '../../../themes/color';
+import Loader from '../../../components/Loader';
 
 const suaNotificationMutation = queries.mutation.suaNotification('id');
 
 const NotificationScreen = () => {
   const nav = useNavigation();
 
-  const { listNotification } = useContext(GlobalContext);
+  const { listNotification, loadingNotification } = useContext(GlobalContext);
 
   const totalNotificationUnread = listNotification?.filter((item) => !item?.isRead)?.length;
 
@@ -68,8 +69,10 @@ const NotificationScreen = () => {
         </View>
         <View style={{ width: 20 }} />
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: '600', color: 'black' }}>{item?.message}</Text>
-          <Text style={{ color: 'black' }} >{_createDate}</Text>
+          <Text style={{ fontSize: 17, marginBottom: 10, fontWeight: '600', color: 'black' }}>
+            {item?.message}
+          </Text>
+          <Text style={{ color: 'black' }}>{_createDate}</Text>
         </View>
         <View style={{ width: 10 }} />
         <TouchableOpacity style={{ padding: 10 }}>
@@ -113,6 +116,7 @@ const NotificationScreen = () => {
           <FlatList data={listNotification} renderItem={handleRenderListItem} />
         </ScrollView>
       </View>
+      <Loader visible={loadingNotification} />
     </BackgroundView>
   );
 };
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
     wrap_head: {
       paddingHorizontal: 20,
       height: 60,
-      backgroundColor: "#4baef9",
+      backgroundColor: '#4baef9',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',

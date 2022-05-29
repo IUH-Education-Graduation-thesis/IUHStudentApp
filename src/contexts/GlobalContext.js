@@ -12,17 +12,23 @@ const GlobalConsumer = GlobalContext.Consumer;
 const getNotificationSubscription = queries.subscription.getNotification(GET_NOTIFICATION_FRAGMENT);
 const GlobalProvider = (props) => {
   const sv = useSelector(getSinhVienSelectors);
-  const { data: dataGetNotification } = useSubscription(getNotificationSubscription, {
-    skip: !sv?.id,
-    variables: {
-      sinhVienId: 1,
+
+  const { data: dataGetNotification, loading: loadingGetNotification } = useSubscription(
+    getNotificationSubscription,
+    {
+      skip: !sv?.id,
+      variables: {
+        sinhVienId: sv?.id,
+      },
     },
-  });
+  );
 
   const listNotification = dataGetNotification?.getNotification?.data || [];
 
   return (
-    <GlobalContext.Provider value={{ listNotification }}>{props.children}</GlobalContext.Provider>
+    <GlobalContext.Provider value={{ listNotification, loadingGetNotification }}>
+      {props.children}
+    </GlobalContext.Provider>
   );
 };
 

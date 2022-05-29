@@ -17,6 +17,7 @@ import { COLORS } from '../../../themes/color';
 import ModalLichHoc from './components/ModalLichHoc';
 import ModalLichTrung from './components/ModalLichTrung';
 import { fragmentLichTrung } from './fragment.LichTrung';
+import Loader from '../../../components/Loader';
 
 const getHocPhanForDKHP = queries.query.getListHocPhanDKHP(GETLOPHOCPHANFRAGMENT);
 const dangKyHocPhanMutation = queries.mutation.dangKyHocPhan();
@@ -29,13 +30,22 @@ const ProgressStepsUI = ({ route }) => {
    * ===========================================
    */
 
-  const { data: dataGetHocPhanDangKy } = useQuery(getHocPhanForDKHP, {
-    skip: !currentHocKy,
-    variables: {
-      hocKyNormalId: currentHocKy,
-      kieu: 'HOC_MOI',
+  const { data: dataGetHocPhanDangKy, loading: loadingGetHocPhanDangKy } = useQuery(
+    getHocPhanForDKHP,
+    {
+      skip: !currentHocKy,
+      variables: {
+        hocKyNormalId: currentHocKy,
+        kieu: 'HOC_MOI',
+      },
     },
-  });
+  );
+
+  const [actDangKyHocPhan, { data: dataDangKyHocPhan, loading: loadingDangKyHocPhan }] =
+    useMutation(dangKyHocPhanMutation);
+
+  const [actLichTrung, { data: dataLichTrung, loading: loadingLichTrung }] =
+    useMutation(checkLichTrungMutation);
 
   const listHocPhanDangKy = dataGetHocPhanDangKy?.getListHocPhanDKHP?.data || [];
 
@@ -44,8 +54,6 @@ const ProgressStepsUI = ({ route }) => {
    * ==========================================
    */
 
-  const [actDangKyHocPhan, { data: dataDangKyHocPhan }] = useMutation(dangKyHocPhanMutation);
-  const [actLichTrung, { data: dataLichTrung }] = useMutation(checkLichTrungMutation);
   /**
    *  const
    */
@@ -285,6 +293,7 @@ const ProgressStepsUI = ({ route }) => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Loader visible={loadingGetHocPhanDangKy || loadingDangKyHocPhan} />
     </BackgroundView>
   );
 };
