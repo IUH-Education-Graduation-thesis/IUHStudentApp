@@ -360,8 +360,8 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: 'white',
-    // height: 40,
     paddingHorizontal: 8,
+    paddingVertical: 10,
     justifyContent: 'space-between',
     marginBottom: 2,
     flexDirection: 'row',
